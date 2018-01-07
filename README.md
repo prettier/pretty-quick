@@ -39,9 +39,13 @@ With `yarn`:
 yarn pretty-quick
 ```
 
+With [`npx`](https://npm.im/npx): (No install required)
+
+```shellsession
+npx pretty-quick
+```
+
 With `npm`:
 
 1. Add `"pretty-quick": "pretty-quick"` to the scripts section of `package.json`.
-2. ```shellsession
-   npm run pretty-quick
-   ```
+2. `npm run pretty-quick`
