@@ -5,7 +5,7 @@
   "repository": "azz/pretty-quick",
   "author": "Lucas Azzola <@azz>",
   "main": "./dist",
-  "bin": "./bin/pretty-quick",
+  "bin": "./bin/pretty-quick.js",
   "license": "MIT",
   "files": [
     "bin",
