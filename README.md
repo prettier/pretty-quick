@@ -20,13 +20,13 @@ Supported source control managers:
 With `yarn`:
 
 ```shellsession
-yarn add --dev pretty-quick
+yarn add --dev prettier pretty-quick
 ```
 
 With `npm`:
 
 ```shellsession
-npm install --save-dev pretty-quick
+npm install --save-dev prettier pretty-quick
 ```
 
 ## Usage
