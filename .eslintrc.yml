@@ -1,0 +1,13 @@
+extends:
+- eslint:recommended
+- plugin:jest/recommended
+- plugin:prettier/recommended
+env:
+  es6: true
+  node: true
+rules:
+  no-console: off
+overrides:
+- files: "src/**/*.js"
+  parserOptions:
+    sourceType: module

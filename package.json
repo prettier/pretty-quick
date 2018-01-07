@@ -4,12 +4,36 @@
   "description": "Get Pretty Quick",
   "repository": "azz/pretty-quick",
   "author": "Lucas Azzola <@azz>",
+  "main": "./dist",
   "bin": "./bin/pretty-quick",
   "license": "MIT",
+  "files": [
+    "bin",
+    "dist"
+  ],
   "dependencies": {
+    "chalk": "^2.3.0",
+    "execa": "^0.8.0",
+    "ignore": "^3.3.7",
     "mri": "^1.1.0"
   },
+  "scripts": {
+    "prepublishOnly": "yarn build",
+    "build": "babel src -d dist --copy-files",
+    "test": "jest"
+  },
   "peerDependencies": {
-    "prettier": "^1.9.2"
+    "prettier": ">=1.8.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.15.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-jest": "^21.5.0",
+    "eslint-plugin-prettier": "^2.4.0",
+    "jest": "^22.0.4",
+    "prettier": "1.9.2"
   }
 }
