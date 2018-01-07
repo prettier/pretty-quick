@@ -1,0 +1,15 @@
+{
+  "name": "pretty-quick",
+  "version": "0.0.0-development",
+  "description": "Get Pretty Quick",
+  "repository": "azz/pretty-quick",
+  "author": "Lucas Azzola <@azz>",
+  "bin": "./bin/pretty-quick",
+  "license": "MIT",
+  "dependencies": {
+    "mri": "^1.1.0"
+  },
+  "peerDependencies": {
+    "prettier": "^1.9.2"
+  }
+}
