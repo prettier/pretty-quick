@@ -19,8 +19,10 @@
   },
   "scripts": {
     "prepublishOnly": "yarn build",
+    "pretty-quick": "./bin/pretty-quick.js",
     "build": "babel src -d dist --copy-files --ignore __tests__",
     "test": "jest",
+    "lint": "eslint . --ignore-path=.gitignore",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "peerDependencies": {

@@ -10,6 +10,8 @@
 
 Runs [Prettier](https://prettier.io) on your changed files.
 
+![](http://g.recordit.co/eEOOyI2v1r.gif)
+
 Supported source control managers:
 
 * Git
