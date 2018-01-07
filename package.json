@@ -23,7 +23,7 @@
     "build": "babel src -d dist --copy-files --ignore __tests__",
     "test": "jest",
     "lint": "eslint . --ignore-path=.gitignore",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release"
   },
   "peerDependencies": {
     "prettier": ">=1.8.0"
