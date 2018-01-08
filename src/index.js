@@ -14,7 +14,7 @@ export default (
     onFoundSinceRevision,
     onFoundChangedFiles,
     onWriteFile,
-  }
+  } = {}
 ) => {
   const scm = scms(directory);
   if (!scm) {
@@ -27,17 +27,16 @@ export default (
 
   const changedFiles = scm
     .getChangedFiles(directory, revision)
-    .map(file => relative(directory, file))
     .filter(isSupportedExtension)
     .filter(createIgnorer(directory));
 
   onFoundChangedFiles && onFoundChangedFiles(changedFiles);
 
-  formatFiles(changedFiles, {
+  formatFiles(directory, changedFiles, {
     config,
     onWriteFile: file => {
-      onWriteFile(file);
-      scm.stageFile(directory, file);
+      onWriteFile && onWriteFile(file);
+      staged && scm.stageFile(directory, file);
     },
   });
 };
