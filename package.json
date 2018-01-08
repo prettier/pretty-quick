@@ -9,7 +9,8 @@
   "license": "MIT",
   "files": [
     "bin",
-    "dist"
+    "dist",
+    "img"
   ],
   "dependencies": {
     "chalk": "^2.3.0",
