@@ -19,7 +19,10 @@ const runGit = (directory, args) =>
 
 const getLines = execaResult => execaResult.stdout.split('\n');
 
-export const getSinceRevision = directory => {
+export const getSinceRevision = (directory, { staged }) => {
+  if (staged) {
+    return 'HEAD';
+  }
   return runGit(directory, ['merge-base', 'HEAD', 'master']).stdout.trim();
 };
 
@@ -37,4 +40,8 @@ export const getChangedFiles = (directory, revision) => {
       runGit(directory, ['ls-files', '--others', '--exclude-standard'])
     ),
   ].filter(Boolean);
+};
+
+export const stageFile = (directory, file) => {
+  runGit(directory, ['add', file]);
 };

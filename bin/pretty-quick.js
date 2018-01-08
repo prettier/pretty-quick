@@ -16,9 +16,10 @@ prettyQuick(
       console.log(
         `🔍  Finding changed files since ${chalk.bold(
           scm
-        )} revision ${chalk.bold(revision)}`
+        )} revision ${chalk.bold(revision)}.`
       );
     },
+
     onFoundChangedFiles: changedFiles => {
       console.log(
         `🎯  Found ${changedFiles.length} ${
@@ -26,6 +27,7 @@ prettyQuick(
         } changed.`
       );
     },
+
     onWriteFile: file => {
       console.log(`✍️  Fixing up ${chalk.bold(file)}.`);
     },

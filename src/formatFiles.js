@@ -13,8 +13,8 @@ export default (files, { config, onWriteFile }) => {
     );
 
     if (output !== input) {
-      onWriteFile && onWriteFile(file);
       writeFileSync(file, output);
+      onWriteFile && onWriteFile(file);
     }
   }
 };
