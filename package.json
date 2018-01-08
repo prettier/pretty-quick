@@ -24,7 +24,7 @@
     "test": "jest",
     "lint": "eslint . --ignore-path=.gitignore",
     "semantic-release": "semantic-release",
-    "precommit": "pretty-quick --since HEAD"
+    "precommit": "./bin/pretty-quick.js --staged"
   },
   "peerDependencies": {
     "prettier": ">=1.8.0"

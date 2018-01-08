@@ -7,14 +7,21 @@ import isSupportedExtension from './isSupportedExtension';
 
 export default (
   directory,
-  { since, config, onFoundSinceRevision, onFoundChangedFiles, onWriteFile }
+  {
+    config,
+    since,
+    staged,
+    onFoundSinceRevision,
+    onFoundChangedFiles,
+    onWriteFile,
+  }
 ) => {
   const scm = scms(directory);
   if (!scm) {
     throw new Error('Unable to detect a source control manager.');
   }
 
-  const revision = since || scm.getSinceRevision(directory);
+  const revision = since || scm.getSinceRevision(directory, { staged });
 
   onFoundSinceRevision && onFoundSinceRevision(scm.name, revision);
 
@@ -26,5 +33,11 @@ export default (
 
   onFoundChangedFiles && onFoundChangedFiles(changedFiles);
 
-  formatFiles(changedFiles, { config, onWriteFile });
+  formatFiles(changedFiles, {
+    config,
+    onWriteFile: file => {
+      onWriteFile(file);
+      scm.stageFile(directory, file);
+    },
+  });
 };

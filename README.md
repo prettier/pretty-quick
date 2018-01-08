@@ -61,12 +61,20 @@ yarn add --dev husky
 In `package.json`'s `"scripts"` section, add:
 
 ```
-"precommit": "pretty-quick --since HEAD"
+"precommit": "pretty-quick --staged"
 ```
 
-
-
 ## CLI Flags
+
+### `--staged`
+
+Pre-commit mode. Under this flag only staged files will be formatted, and they will be re-staged after formatting.
+
+<!-- Undocumented = Unsupported :D
+
+### `--add`
+
+Restage files that are formatted.
 
 ### `--since`
 
@@ -74,3 +82,4 @@ A SCM revision such as a git commit hash or ref.
 
 For example `pretty-quick --since HEAD` will format only staged files.
 
+-->
