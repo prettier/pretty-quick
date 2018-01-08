@@ -63,3 +63,14 @@ In `package.json`'s `"scripts"` section, add:
 ```
 "precommit": "pretty-quick --since HEAD"
 ```
+
+
+
+## CLI Flags
+
+### `--since`
+
+A SCM revision such as a git commit hash or ref.
+
+For example `pretty-quick --since HEAD` will format only staged files.
+
