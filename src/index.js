@@ -1,5 +1,3 @@
-import { relative } from 'path';
-
 import scms from './scms';
 import formatFiles from './formatFiles';
 import createIgnorer from './createIgnorer';
