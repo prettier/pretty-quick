@@ -49,3 +49,17 @@ With `npm`:
 
 1. Add `"pretty-quick": "pretty-quick"` to the scripts section of `package.json`.
 2. `npm run pretty-quick`
+
+## Pre-Commit Hook
+
+You can run `pretty-quick` as a pre-commit hook using [`husky`](https://github.com/typicode/husky).
+
+```shellstream
+yarn add --dev husky
+```
+
+In `package.json`'s `"scripts"` section, add:
+
+```
+"precommit": "pretty-quick --since HEAD"
+```
