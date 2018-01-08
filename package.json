@@ -23,7 +23,8 @@
     "build": "babel src -d dist --copy-files --ignore __tests__",
     "test": "jest",
     "lint": "eslint . --ignore-path=.gitignore",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "precommit": "pretty-quick"
   },
   "peerDependencies": {
     "prettier": ">=1.8.0"
@@ -36,6 +37,7 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-jest": "^21.5.0",
     "eslint-plugin-prettier": "^2.4.0",
+    "husky": "^0.14.3",
     "jest": "^22.0.4",
     "prettier": "1.9.2",
     "semantic-release": "^11.0.2"
