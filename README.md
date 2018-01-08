@@ -64,13 +64,13 @@ In `package.json`'s `"scripts"` section, add:
 "precommit": "pretty-quick --staged"
 ```
 
+![demo](./img/precommit.gif)
+
 ## CLI Flags
 
 ### `--staged`
 
 Pre-commit mode. Under this flag only staged files will be formatted, and they will be re-staged after formatting.
-
-![demo](./img/precommit.gif)
 
 <!-- Undocumented = Unsupported :D
 
@@ -85,3 +85,7 @@ A SCM revision such as a git commit hash or ref.
 For example `pretty-quick --since HEAD` will format only staged files.
 
 -->
+
+## Configuration and Ignore Files
+
+`pretty-quick` will respect your [`.prettierrc`](https://prettier.io/docs/en/configuration) and [`.prettierignore`](https://prettier.io/docs/en/ignore#ignoring-files) files, so there's no additional setup required.
