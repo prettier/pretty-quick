@@ -10,7 +10,7 @@
 
 Runs [Prettier](https://prettier.io) on your changed files.
 
-![](http://g.recordit.co/eEOOyI2v1r.gif)
+![demo](./img/demo.gif)
 
 Supported source control managers:
 
@@ -69,6 +69,8 @@ In `package.json`'s `"scripts"` section, add:
 ### `--staged`
 
 Pre-commit mode. Under this flag only staged files will be formatted, and they will be re-staged after formatting.
+
+![demo](./img/precommit.gif)
 
 <!-- Undocumented = Unsupported :D
 
