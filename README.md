@@ -74,9 +74,9 @@ Pre-commit mode. Under this flag only staged files will be formatted, and they w
 
 <!-- Undocumented = Unsupported :D
 
-### `--add`
+### `--config`
 
-Restage files that are formatted.
+Path to a `.prettierrc` file.
 
 ### `--since`
 
