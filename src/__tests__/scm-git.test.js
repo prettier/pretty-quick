@@ -13,9 +13,9 @@ afterEach(() => {
 
 const mockGitFs = () => {
   mock({
-    'root/.git': {},
-    'root/foo.js': 'foo()',
-    'root/bar.md': '# foo',
+    '/.git': {},
+    '/foo.js': 'foo()',
+    '/bar.md': '# foo',
   });
   execa.sync.mockImplementation((command, args) => {
     if (command !== 'git') {
@@ -37,7 +37,7 @@ const mockGitFs = () => {
 describe('with git', () => {
   test('calls `git merge-base`', () => {
     mock({
-      'root/.git': {},
+      '/.git': {},
     });
 
     prettyQuick('root');
@@ -45,13 +45,28 @@ describe('with git', () => {
     expect(execa.sync).toHaveBeenCalledWith(
       'git',
       ['merge-base', 'HEAD', 'master'],
-      { cwd: 'root' }
+      { cwd: '/' }
+    );
+  });
+
+  test('calls `git merge-base` with root git directory', () => {
+    mock({
+      '/.git': {},
+      '/other-dir': {},
+    });
+
+    prettyQuick('/other-dir');
+
+    expect(execa.sync).toHaveBeenCalledWith(
+      'git',
+      ['merge-base', 'HEAD', 'master'],
+      { cwd: '/' }
     );
   });
 
   test('with --staged does NOT call `git merge-base`', () => {
     mock({
-      'root/.git': {},
+      '/.git': {},
     });
 
     prettyQuick('root');
@@ -65,7 +80,7 @@ describe('with git', () => {
 
   test('calls `git diff --name-only` with revision', () => {
     mock({
-      'root/.git': {},
+      '/.git': {},
     });
 
     prettyQuick('root', { since: 'banana' });
@@ -73,13 +88,13 @@ describe('with git', () => {
     expect(execa.sync).toHaveBeenCalledWith(
       'git',
       ['diff', '--name-only', '--diff-filter=ACMRTUB', 'banana'],
-      { cwd: 'root' }
+      { cwd: '/' }
     );
   });
 
   test('calls `git ls-files`', () => {
     mock({
-      'root/.git': {},
+      '/.git': {},
     });
 
     prettyQuick('root', { since: 'banana' });
@@ -87,7 +102,7 @@ describe('with git', () => {
     expect(execa.sync).toHaveBeenCalledWith(
       'git',
       ['ls-files', '--others', '--exclude-standard'],
-      { cwd: 'root' }
+      { cwd: '/' }
     );
   });
 
@@ -95,7 +110,7 @@ describe('with git', () => {
     const onFoundSinceRevision = jest.fn();
 
     mock({
-      'root/.git': {},
+      '/.git': {},
     });
     execa.sync.mockReturnValue({ stdout: 'banana' });
 
@@ -130,8 +145,8 @@ describe('with git', () => {
 
     prettyQuick('root', { since: 'banana', onWriteFile });
 
-    expect(fs.readFileSync('root/foo.js', 'utf8')).toEqual('formatted:foo()');
-    expect(fs.readFileSync('root/bar.md', 'utf8')).toEqual('formatted:# foo');
+    expect(fs.readFileSync('/foo.js', 'utf8')).toEqual('formatted:foo()');
+    expect(fs.readFileSync('/bar.md', 'utf8')).toEqual('formatted:# foo');
   });
 
   test('with --staged stages changed files', () => {
@@ -140,10 +155,10 @@ describe('with git', () => {
     prettyQuick('root', { since: 'banana', staged: true });
 
     expect(execa.sync).toHaveBeenCalledWith('git', ['add', './foo.js'], {
-      cwd: 'root',
+      cwd: '/',
     });
     expect(execa.sync).toHaveBeenCalledWith('git', ['add', './bar.md'], {
-      cwd: 'root',
+      cwd: '/',
     });
   });
 
@@ -153,10 +168,10 @@ describe('with git', () => {
     prettyQuick('root', { since: 'banana' });
 
     expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
-      cwd: 'root',
+      cwd: '/',
     });
     expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
-      cwd: 'root',
+      cwd: '/',
     });
   });
 });

@@ -1,15 +1,13 @@
-import { statSync } from 'fs';
-import { join } from 'path';
 import findUp from 'find-up';
 import execa from 'execa';
+import { dirname } from 'path';
 
 export const name = 'git';
 
 export const detect = directory => {
-  try {
-    return !!findUp.sync('.git', { cwd: directory });
-  } catch (error) {
-    return false;
+  const gitDirectory = findUp.sync('.git', { cwd: directory });
+  if (gitDirectory) {
+    return dirname(gitDirectory);
   }
 };
 
@@ -21,10 +19,10 @@ const runGit = (directory, args) =>
 const getLines = execaResult => execaResult.stdout.split('\n');
 
 export const getSinceRevision = (directory, { staged }) => {
-  if (staged) {
-    return 'HEAD';
-  }
-  return runGit(directory, ['merge-base', 'HEAD', 'master']).stdout.trim();
+  const revision = staged
+    ? 'HEAD'
+    : runGit(directory, ['merge-base', 'HEAD', 'master']).stdout.trim();
+  return runGit(directory, ['rev-parse', '--short', revision]).stdout.trim();
 };
 
 export const getChangedFiles = (directory, revision) => {

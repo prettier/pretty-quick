@@ -4,8 +4,9 @@ const scms = [gitScm];
 
 export default directory => {
   for (const scm of scms) {
-    if (scm.detect(directory)) {
-      return scm;
+    const rootDirectory = scm.detect(directory);
+    if (rootDirectory) {
+      return Object.assign({ rootDirectory }, scm);
     }
   }
 };
