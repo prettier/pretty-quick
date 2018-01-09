@@ -22,9 +22,9 @@ prettyQuick(
 
     onFoundChangedFiles: changedFiles => {
       console.log(
-        `🎯  Found ${changedFiles.length} ${
+        `🎯  Found ${chalk.bold(changedFiles.length)} changed ${
           changedFiles.length === 1 ? 'file' : 'files'
-        } changed.`
+        }.`
       );
     },
 
