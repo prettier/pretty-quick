@@ -4,7 +4,7 @@ import createIgnorer from './createIgnorer';
 import isSupportedExtension from './isSupportedExtension';
 
 export default (
-  directory,
+  currentDirectory,
   {
     config,
     since,
@@ -14,10 +14,11 @@ export default (
     onWriteFile,
   } = {}
 ) => {
-  const scm = scms(directory);
+  const scm = scms(currentDirectory);
   if (!scm) {
     throw new Error('Unable to detect a source control manager.');
   }
+  const directory = scm.rootDirectory;
 
   const revision = since || scm.getSinceRevision(directory, { staged });
 
