@@ -1,12 +1,13 @@
 import { statSync } from 'fs';
 import { join } from 'path';
+import findUp from 'find-up';
 import execa from 'execa';
 
 export const name = 'git';
 
 export const detect = directory => {
   try {
-    return statSync(join(directory, '.git')).isDirectory();
+    return !!findUp.sync('.git', { cwd: directory });
   } catch (error) {
     return false;
   }
