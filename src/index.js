@@ -25,7 +25,7 @@ export default (
   onFoundSinceRevision && onFoundSinceRevision(scm.name, revision);
 
   const changedFiles = scm
-    .getChangedFiles(directory, revision)
+    .getChangedFiles(directory, revision, staged)
     .filter(isSupportedExtension)
     .filter(createIgnorer(directory));
 

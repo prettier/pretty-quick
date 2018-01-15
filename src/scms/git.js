@@ -25,20 +25,23 @@ export const getSinceRevision = (directory, { staged }) => {
   return runGit(directory, ['rev-parse', '--short', revision]).stdout.trim();
 };
 
-export const getChangedFiles = (directory, revision) => {
-  return [
-    ...getLines(
-      runGit(directory, [
-        'diff',
-        '--name-only',
-        '--diff-filter=ACMRTUB',
-        revision,
-      ])
-    ),
-    ...getLines(
-      runGit(directory, ['ls-files', '--others', '--exclude-standard'])
-    ),
-  ].filter(Boolean);
+export const getChangedFiles = (directory, revision, staged) => {
+  return (staged
+    ? getLines(runGit(directory, ['diff', '--name-only', '--cached', revision]))
+    : [
+        ...getLines(
+          runGit(directory, [
+            'diff',
+            '--name-only',
+            '--diff-filter=ACMRTUB',
+            revision,
+          ])
+        ),
+        ...getLines(
+          runGit(directory, ['ls-files', '--others', '--exclude-standard'])
+        ),
+      ]
+  ).filter(Boolean);
 };
 
 export const stageFile = (directory, file) => {
