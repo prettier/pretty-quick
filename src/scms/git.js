@@ -27,7 +27,15 @@ export const getSinceRevision = (directory, { staged }) => {
 
 export const getChangedFiles = (directory, revision, staged) => {
   return (staged
-    ? getLines(runGit(directory, ['diff', '--name-only', '--cached', revision]))
+    ? getLines(
+        runGit(directory, [
+          'diff',
+          '--name-only',
+          '--cached',
+          '--diff-filter=ACMRTUB',
+          revision,
+        ])
+      )
     : [
         ...getLines(
           runGit(directory, [
