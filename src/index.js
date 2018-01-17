@@ -1,5 +1,4 @@
 import scms from './scms';
-import fileExists from './fileExists';
 import formatFiles from './formatFiles';
 import createIgnorer from './createIgnorer';
 import isSupportedExtension from './isSupportedExtension';
@@ -28,7 +27,6 @@ export default (
   const changedFiles = scm
     .getChangedFiles(directory, revision, staged)
     .filter(isSupportedExtension)
-    .filter(fileExists)
     .filter(createIgnorer(directory));
 
   onFoundChangedFiles && onFoundChangedFiles(changedFiles);
