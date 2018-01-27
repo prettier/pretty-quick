@@ -19,37 +19,42 @@ const runGit = (directory, args) =>
 const getLines = execaResult => execaResult.stdout.split('\n');
 
 export const getSinceRevision = (directory, { staged }) => {
-  const revision = staged
-    ? 'HEAD'
-    : runGit(directory, ['merge-base', 'HEAD', 'master']).stdout.trim();
-  return runGit(directory, ['rev-parse', '--short', revision]).stdout.trim();
+  try {
+    const revision = staged
+      ? 'HEAD'
+      : runGit(directory, ['merge-base', 'HEAD', 'master']).stdout.trim();
+    return runGit(directory, ['rev-parse', '--short', revision]).stdout.trim();
+  } catch (error) {
+    if (
+      /HEAD/.test(error.message) ||
+      (staged && /Needed a single revision/.test(error.message))
+    ) {
+      return null;
+    }
+    throw error;
+  }
 };
 
 export const getChangedFiles = (directory, revision, staged) => {
-  return (staged
-    ? getLines(
-        runGit(directory, [
+  return [
+    ...getLines(
+      runGit(
+        directory,
+        [
           'diff',
           '--name-only',
-          '--cached',
+          staged ? '--cached' : null,
           '--diff-filter=ACMRTUB',
           revision,
-        ])
+        ].filter(Boolean)
       )
-    : [
-        ...getLines(
-          runGit(directory, [
-            'diff',
-            '--name-only',
-            '--diff-filter=ACMRTUB',
-            revision,
-          ])
-        ),
-        ...getLines(
+    ),
+    ...(staged
+      ? []
+      : getLines(
           runGit(directory, ['ls-files', '--others', '--exclude-standard'])
-        ),
-      ]
-  ).filter(Boolean);
+        )),
+  ].filter(Boolean);
 };
 
 export const stageFile = (directory, file) => {
