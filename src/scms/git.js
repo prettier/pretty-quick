@@ -18,11 +18,15 @@ const runGit = (directory, args) =>
 
 const getLines = execaResult => execaResult.stdout.split('\n');
 
-export const getSinceRevision = (directory, { staged }) => {
+export const getSinceRevision = (directory, { staged, branch }) => {
   try {
     const revision = staged
       ? 'HEAD'
-      : runGit(directory, ['merge-base', 'HEAD', 'master']).stdout.trim();
+      : runGit(directory, [
+          'merge-base',
+          'HEAD',
+          branch || 'master',
+        ]).stdout.trim();
     return runGit(directory, ['rev-parse', '--short', revision]).stdout.trim();
   } catch (error) {
     if (
