@@ -74,7 +74,7 @@ Pre-commit mode. Under this flag only staged files will be formatted, and they w
 
 ### `--branch`
 
-When in `staged` pre-commit mode, use this flag to compare changes with the specified branch. Defaults to `master` branch.
+When not in `staged` pre-commit mode, use this flag to compare changes with the specified branch. Defaults to `master` branch.
 
 <!-- Undocumented = Unsupported :D
 
