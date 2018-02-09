@@ -15,7 +15,7 @@ Runs [Prettier](https://prettier.io) on your changed files.
 Supported source control managers:
 
 * Git
-* _Add more_
+* Mercurial
 
 ## Install
 
