@@ -25,7 +25,9 @@ const mockGitFs = () => {
       case 'ls-files':
         return { stdout: '' };
       case 'diff':
-        return { stdout: './foo.js\n' + './bar.md\n' };
+        return args[2] === '--cached'
+          ? { stdout: './foo.js\n' }
+          : { stdout: './foo.js\n' + './bar.md\n' };
       case 'add':
         return { stdout: '' };
       default:
@@ -149,7 +151,7 @@ describe('with git', () => {
     expect(fs.readFileSync('/bar.md', 'utf8')).toEqual('formatted:# foo');
   });
 
-  test('with --staged stages changed files', () => {
+  test('with --staged stages staged files', () => {
     mockGitFs();
 
     prettyQuick('root', { since: 'banana', staged: true });
@@ -157,7 +159,7 @@ describe('with git', () => {
     expect(execa.sync).toHaveBeenCalledWith('git', ['add', './foo.js'], {
       cwd: '/',
     });
-    expect(execa.sync).toHaveBeenCalledWith('git', ['add', './bar.md'], {
+    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
       cwd: '/',
     });
   });

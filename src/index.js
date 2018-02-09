@@ -9,6 +9,7 @@ export default (
     config,
     since,
     staged,
+    branch,
     onFoundSinceRevision,
     onFoundChangedFiles,
     onWriteFile,
@@ -20,12 +21,12 @@ export default (
   }
   const directory = scm.rootDirectory;
 
-  const revision = since || scm.getSinceRevision(directory, { staged });
+  const revision = since || scm.getSinceRevision(directory, { staged, branch });
 
   onFoundSinceRevision && onFoundSinceRevision(scm.name, revision);
 
   const changedFiles = scm
-    .getChangedFiles(directory, revision)
+    .getChangedFiles(directory, revision, staged)
     .filter(isSupportedExtension)
     .filter(createIgnorer(directory));
 
