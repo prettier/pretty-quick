@@ -23,7 +23,7 @@ const mockHgFs = () => {
     }
     switch (args[0]) {
       case 'status':
-        return { stdout: '' };
+        return { stdout: './foo.js\n' + './bar.md\n' };
       case 'diff':
         return { stdout: './foo.js\n' + './bar.md\n' };
       case 'add':
@@ -46,7 +46,7 @@ describe('with hg', () => {
 
     expect(execa.sync).toHaveBeenCalledWith(
       'hg',
-      ['debugancestor', 'HEAD', 'master'],
+      ['debugancestor', 'tip', 'default'],
       { cwd: '/' }
     );
   });
@@ -60,24 +60,12 @@ describe('with hg', () => {
     prettyQuick('/other-dir');
     expect(execa.sync).toHaveBeenCalledWith(
       'hg',
-      ['debugancestor', 'HEAD', 'master'],
+      ['debugancestor', 'tip', 'default'],
       { cwd: '/' }
     );
   });
 
-  test('calls `hg diff -r` with revision', () => {
-    mock({
-      '/.hg': {},
-    });
-
-    prettyQuick('root', { since: 'banana' });
-
-    expect(execa.sync).toHaveBeenCalledWith('hg', ['diff', '-r banana'], {
-      cwd: '/',
-    });
-  });
-
-  test('calls `hg status`', () => {
+  test('calls `hg status` with revision', () => {
     mock({
       '/.hg': {},
     });
@@ -86,7 +74,7 @@ describe('with hg', () => {
 
     expect(execa.sync).toHaveBeenCalledWith(
       'hg',
-      ['status', 're', '-n', '-a', '-m'],
+      ['status', '-n', '-a', '-m', '--rev', 'banana'],
       { cwd: '/' }
     );
   });

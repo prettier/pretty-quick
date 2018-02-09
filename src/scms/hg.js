@@ -21,16 +21,17 @@ const getLines = execaResult => execaResult.stdout.split('\n');
 export const getSinceRevision = (directory, { branch }) => {
   const revision = runHg(directory, [
     'debugancestor',
-    'HEAD',
-    branch || 'master',
+    'tip',
+    branch || 'default',
   ]).stdout.trim();
-  return runHg(directory, ['id', '-r', revision]).stdout.trim();
+  return runHg(directory, ['id', '-i', '-r', revision]).stdout.trim();
 };
 
 export const getChangedFiles = (directory, revision) => {
   return [
-    ...getLines(runHg(directory, ['diff', `-r ${revision}`])),
-    ...getLines(runHg(directory, ['status', 're', '-n', '-a', '-m'])),
+    ...getLines(
+      runHg(directory, ['status', '-n', '-a', '-m', '--rev', revision])
+    ),
   ].filter(Boolean);
 };
 
