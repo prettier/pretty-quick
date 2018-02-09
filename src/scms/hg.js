@@ -18,14 +18,16 @@ const runHg = (directory, args) =>
 
 const getLines = execaResult => execaResult.stdout.split('\n');
 
-export const getSinceRevision = (directory, { staged }) => {
-  const revision = staged
-    ? 'HEAD'
-    : runHg(directory, ['debugancestor', 'HEAD', 'master']).stdout.trim();
+export const getSinceRevision = (directory, { staged, branch }) => {
+  const revision = runHg(directory, [
+    'debugancestor',
+    'HEAD',
+    branch || 'master',
+  ]).stdout.trim();
   return runHg(directory, ['id', '-r', revision]).stdout.trim();
 };
 
-export const getChangedFiles = (directory, revision) => {
+export const getChangedFiles = (directory, revision, staged) => {
   return [
     ...getLines(runHg(directory, ['diff', `-r ${revision}`])),
     ...getLines(runHg(directory, ['status', 're', '-n', '-a', '-m'])),
