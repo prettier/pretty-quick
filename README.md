@@ -70,13 +70,13 @@ In `package.json`'s `"scripts"` section, add:
 
 ## CLI Flags
 
-### `--staged`
+### `--staged` (only git)
 
 Pre-commit mode. Under this flag only staged files will be formatted, and they will be re-staged after formatting.
 
 ### `--branch`
 
-When not in `staged` pre-commit mode, use this flag to compare changes with the specified branch. Defaults to `master` branch.
+When not in `staged` pre-commit mode, use this flag to compare changes with the specified branch. Defaults to `master` (git) / `default` (hg) branch.
 
 <!-- Undocumented = Unsupported :D
 
