@@ -7,6 +7,17 @@
   "main": "./dist",
   "bin": "./bin/pretty-quick.js",
   "license": "MIT",
+  "keywords": [
+    "git",
+    "mercurial",
+    "hg",
+    "prettier",
+    "pretty-quick",
+    "formatting",
+    "code",
+    "vcs",
+    "precommit"
+  ],
   "files": [
     "bin",
     "dist",

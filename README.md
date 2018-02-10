@@ -15,7 +15,7 @@ Runs [Prettier](https://prettier.io) on your changed files.
 Supported source control managers:
 
 * Git
-* _Add more_
+* Mercurial
 
 ## Install
 
@@ -53,6 +53,8 @@ With `npm`:
 ## Pre-Commit Hook
 
 You can run `pretty-quick` as a pre-commit hook using [`husky`](https://github.com/typicode/husky).
+
+> For Mercurial have a look at [`husky-hg`](https://github.com/TobiasTimm/husky-hg)
 
 ```shellstream
 yarn add --dev husky
