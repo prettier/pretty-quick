@@ -94,4 +94,4 @@ For example `pretty-quick --since HEAD` will format only staged files.
 
 ## Configuration and Ignore Files
 
-`pretty-quick` will respect your [`.prettierrc`](https://prettier.io/docs/en/configuration) and [`.prettierignore`](https://prettier.io/docs/en/ignore#ignoring-files) files, so there's no additional setup required. Configuration files will be found by searching up the file system. `.prettierignore` files are only found from the working directory that the command was executed from.
+`pretty-quick` will respect your [`.prettierrc`](https://prettier.io/docs/en/configuration), [`.prettierignore`](https://prettier.io/docs/en/ignore#ignoring-files), and [`.editorconfig`](http://editorconfig.org/) files, so there's no additional setup required. Configuration files will be found by searching up the file system. `.prettierignore` files are only found from the working directory that the command was executed from.
