@@ -7,6 +7,7 @@ export default (
   currentDirectory,
   {
     config,
+    eslintFix,
     since,
     staged,
     branch,
@@ -16,6 +17,16 @@ export default (
     onWriteFile,
   } = {}
 ) => {
+  if (eslintFix) {
+    try {
+      require.resolve('eslint');
+    } catch (e) {
+      throw new Error(
+        'Eslint should be installed in order to use --eslintFix.'
+      );
+    }
+  }
+
   const scm = scms(currentDirectory);
   if (!scm) {
     throw new Error('Unable to detect a source control manager.');
@@ -44,6 +55,7 @@ export default (
 
   formatFiles(directory, changedFiles, {
     config,
+    eslintFix,
     onWriteFile: file => {
       onWriteFile && onWriteFile(file);
       if (staged) {
