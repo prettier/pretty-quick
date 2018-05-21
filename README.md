@@ -78,6 +78,10 @@ Pre-commit mode. Under this flag only staged files will be formatted, and they w
 
 When not in `staged` pre-commit mode, use this flag to compare changes with the specified branch. Defaults to `master` (git) / `default` (hg) branch.
 
+### `--eslintFix`
+
+Apply `eslint --fix` to `.js` and `.jsx` files after prittier.
+
 <!-- Undocumented = Unsupported :D
 
 ### `--config`
