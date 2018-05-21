@@ -12,7 +12,6 @@ export default (
     branch,
     onFoundSinceRevision,
     onFoundChangedFiles,
-    onPartiallyStagedFile,
     onWriteFile,
   } = {}
 ) => {
@@ -31,28 +30,13 @@ export default (
     .filter(isSupportedExtension)
     .filter(createIgnorer(directory));
 
-  const unstagedFiles = staged
-    ? scm
-        .getUnstagedChangedFiles(directory, revision)
-        .filter(isSupportedExtension)
-        .filter(createIgnorer(directory))
-    : [];
-
-  const wasFullyStaged = f => unstagedFiles.indexOf(f) < 0;
-
   onFoundChangedFiles && onFoundChangedFiles(changedFiles);
 
   formatFiles(directory, changedFiles, {
     config,
     onWriteFile: file => {
       onWriteFile && onWriteFile(file);
-      if (staged) {
-        if (wasFullyStaged(file)) {
-          scm.stageFile(directory, file);
-        } else {
-          onPartiallyStagedFile && onPartiallyStagedFile(file);
-        }
-      }
+      staged && scm.stageFile(directory, file);
     },
   });
 };

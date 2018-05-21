@@ -74,8 +74,6 @@ In `package.json`'s `"scripts"` section, add:
 
 Pre-commit mode. Under this flag only staged files will be formatted, and they will be re-staged after formatting.
 
-Partially staged files will not be re-staged after formatting and pretty-quick will exit with a non-zero exit code. The intent is to abort the git commit and allow the user to amend their selective staging to include formatting fixes.
-
 ### `--branch`
 
 When not in `staged` pre-commit mode, use this flag to compare changes with the specified branch. Defaults to `master` (git) / `default` (hg) branch.

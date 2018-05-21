@@ -35,10 +35,6 @@ export const getChangedFiles = (directory, revision) => {
   ].filter(Boolean);
 };
 
-export const getUnstagedChangedFiles = () => {
-  return [];
-};
-
 export const stageFile = (directory, file) => {
   runHg(directory, ['add', file]);
 };

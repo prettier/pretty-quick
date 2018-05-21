@@ -61,10 +61,6 @@ export const getChangedFiles = (directory, revision, staged) => {
   ].filter(Boolean);
 };
 
-export const getUnstagedChangedFiles = (directory, revision) => {
-  return getChangedFiles(directory, revision, false);
-};
-
 export const stageFile = (directory, file) => {
   runGit(directory, ['add', file]);
 };
