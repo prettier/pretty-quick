@@ -9,7 +9,6 @@ const prettyQuick = require('..').default;
 
 const args = mri(process.argv.slice(2));
 
-let success = true;
 prettyQuick(
   process.cwd(),
   Object.assign({}, args, {
@@ -29,23 +28,10 @@ prettyQuick(
       );
     },
 
-    onPartiallyStagedFile: file => {
-      console.log(`✗ Found ${chalk.bold('partially')} staged file ${file}.`);
-      success = false;
-    },
-
     onWriteFile: file => {
       console.log(`✍️  Fixing up ${chalk.bold(file)}.`);
     },
   })
 );
 
-if (success) {
-  console.log('✅  Everything is awesome!');
-} else {
-  console.log(
-    '✗ Partially staged files were fixed up.' +
-      ` ${chalk.bold('Please update stage before committing')}.`
-  );
-  process.exit(1); // ensure git hooks abort
-}
+console.log('✅  Everything is awesome!');
