@@ -61,8 +61,8 @@ export const getChangedFiles = (directory, revision, staged) => {
   ].filter(Boolean);
 };
 
-export const getUnstagedChangedFiles = (directory, revision) => {
-  return getChangedFiles(directory, revision, false);
+export const getUnstagedChangedFiles = directory => {
+  return getChangedFiles(directory, null, false);
 };
 
 export const stageFile = (directory, file) => {

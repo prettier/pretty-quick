@@ -81,6 +81,20 @@ describe('with git', () => {
     ]);
   });
 
+  test('with --staged calls diff without revision', () => {
+    mock({
+      '/.git': {},
+    });
+
+    prettyQuick('root', { since: 'banana', staged: true });
+
+    expect(execa.sync).toHaveBeenCalledWith(
+      'git',
+      ['diff', '--name-only', '--diff-filter=ACMRTUB'],
+      { cwd: '/' }
+    );
+  });
+
   test('calls `git diff --name-only` with revision', () => {
     mock({
       '/.git': {},
