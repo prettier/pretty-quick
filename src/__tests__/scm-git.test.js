@@ -11,9 +11,10 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-const mockGitFs = () => {
+const mockGitFs = (additionalUnstaged = '') => {
   mock({
     '/.git': {},
+    '/raz.js': 'raz()',
     '/foo.js': 'foo()',
     '/bar.md': '# foo',
   });
@@ -26,8 +27,8 @@ const mockGitFs = () => {
         return { stdout: '' };
       case 'diff':
         return args[2] === '--cached'
-          ? { stdout: './foo.js\n' }
-          : { stdout: './foo.js\n' + './bar.md\n' };
+          ? { stdout: './raz.js\n' }
+          : { stdout: './foo.js\n' + './bar.md\n' + additionalUnstaged };
       case 'add':
         return { stdout: '' };
       default:
@@ -78,6 +79,20 @@ describe('with git', () => {
       'HEAD',
       'master',
     ]);
+  });
+
+  test('with --staged calls diff without revision', () => {
+    mock({
+      '/.git': {},
+    });
+
+    prettyQuick('root', { since: 'banana', staged: true });
+
+    expect(execa.sync).toHaveBeenCalledWith(
+      'git',
+      ['diff', '--name-only', '--diff-filter=ACMRTUB'],
+      { cwd: '/' }
+    );
   });
 
   test('calls `git diff --name-only` with revision', () => {
@@ -151,15 +166,29 @@ describe('with git', () => {
     expect(fs.readFileSync('/bar.md', 'utf8')).toEqual('formatted:# foo');
   });
 
-  test('with --staged stages staged files', () => {
+  test('with --staged stages fully-staged files', () => {
     mockGitFs();
 
     prettyQuick('root', { since: 'banana', staged: true });
 
-    expect(execa.sync).toHaveBeenCalledWith('git', ['add', './foo.js'], {
+    expect(execa.sync).toHaveBeenCalledWith('git', ['add', './raz.js'], {
+      cwd: '/',
+    });
+    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './foo.md'], {
       cwd: '/',
     });
     expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
+      cwd: '/',
+    });
+  });
+
+  test('with --staged does not stage previously partially staged files AND aborts commit', () => {
+    const additionalUnstaged = './raz.js\n'; // raz.js is partly staged and partly not staged
+    mockGitFs(additionalUnstaged);
+
+    prettyQuick('root', { since: 'banana', staged: true });
+
+    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './raz.js'], {
       cwd: '/',
     });
   });
