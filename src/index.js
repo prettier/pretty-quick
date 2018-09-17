@@ -9,6 +9,7 @@ export default (
     config,
     since,
     staged,
+    restage,
     branch,
     onFoundSinceRevision,
     onFoundChangedFiles,
@@ -46,7 +47,7 @@ export default (
     config,
     onWriteFile: file => {
       onWriteFile && onWriteFile(file);
-      if (staged) {
+      if (staged && restage) {
         if (wasFullyStaged(file)) {
           scm.stageFile(directory, file);
         } else {
