@@ -9,7 +9,7 @@ export default (
     config,
     since,
     staged,
-    restage,
+    restage = true,
     branch,
     onFoundSinceRevision,
     onFoundChangedFiles,
