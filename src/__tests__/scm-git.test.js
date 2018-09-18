@@ -174,7 +174,7 @@ describe('with git', () => {
     expect(execa.sync).toHaveBeenCalledWith('git', ['add', './raz.js'], {
       cwd: '/',
     });
-    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './foo.md'], {
+    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
       cwd: '/',
     });
     expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
@@ -190,7 +190,7 @@ describe('with git', () => {
     expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './raz.js'], {
       cwd: '/',
     });
-    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './foo.md'], {
+    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
       cwd: '/',
     });
     expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
