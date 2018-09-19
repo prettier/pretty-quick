@@ -174,7 +174,23 @@ describe('with git', () => {
     expect(execa.sync).toHaveBeenCalledWith('git', ['add', './raz.js'], {
       cwd: '/',
     });
-    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './foo.md'], {
+    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
+      cwd: '/',
+    });
+    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
+      cwd: '/',
+    });
+  });
+
+  test('with --staged AND --no-restage does not re-stage any files', () => {
+    mockGitFs();
+
+    prettyQuick('root', { since: 'banana', staged: true, restage: false });
+
+    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './raz.js'], {
+      cwd: '/',
+    });
+    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
       cwd: '/',
     });
     expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {

@@ -76,6 +76,10 @@ Pre-commit mode. Under this flag only staged files will be formatted, and they w
 
 Partially staged files will not be re-staged after formatting and pretty-quick will exit with a non-zero exit code. The intent is to abort the git commit and allow the user to amend their selective staging to include formatting fixes.
 
+### `--no-restage` (only git)
+
+Use with the `--staged` flag to skip re-staging files after formatting.
+
 ### `--branch`
 
 When not in `staged` pre-commit mode, use this flag to compare changes with the specified branch. Defaults to `master` (git) / `default` (hg) branch.
