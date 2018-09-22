@@ -60,10 +60,14 @@ You can run `pretty-quick` as a pre-commit hook using [`husky`](https://github.c
 yarn add --dev husky
 ```
 
-In `package.json`'s `"scripts"` section, add:
+In `package.json`, add:
 
 ```
-"precommit": "pretty-quick --staged"
+"husky": {
+  "hooks": {
+    "pre-commit": "pretty-quick --staged"
+  }
+}
 ```
 
 ![demo](./img/precommit.gif)
