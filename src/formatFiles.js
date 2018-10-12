@@ -2,8 +2,13 @@ import { readFileSync, writeFileSync } from 'fs';
 import { resolveConfig, format } from 'prettier';
 import { join } from 'path';
 
-export default (directory, files, { config, onWriteFile } = {}) => {
+export default (
+  directory,
+  files,
+  { config, onWriteFile, onExamineFile, onUnchangedFile } = {}
+) => {
   for (const relative of files) {
+    onExamineFile && onExamineFile(relative);
     const file = join(directory, relative);
     const options = resolveConfig.sync(file, { config, editorconfig: true });
     const input = readFileSync(file, 'utf8');
@@ -17,6 +22,8 @@ export default (directory, files, { config, onWriteFile } = {}) => {
     if (output !== input) {
       writeFileSync(file, output);
       onWriteFile && onWriteFile(relative);
+    } else {
+      onUnchangedFile && onUnchangedFile(relative);
     }
   }
 };
