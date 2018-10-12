@@ -88,6 +88,10 @@ Use with the `--staged` flag to skip re-staging files after formatting.
 
 When not in `staged` pre-commit mode, use this flag to compare changes with the specified branch. Defaults to `master` (git) / `default` (hg) branch.
 
+### `--verbose`
+
+Outputs the name of each file right before it is proccessed. This can be useful if Prettier throws an error and you can't identify which file is causing the problem.
+
 <!-- Undocumented = Unsupported :D
 
 ### `--config`
