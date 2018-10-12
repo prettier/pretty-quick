@@ -37,6 +37,10 @@ prettyQuick(
     onWriteFile: file => {
       console.log(`✍️  Fixing up ${chalk.bold(file)}.`);
     },
+
+    onExamineFile: file => {
+      console.log(`🔍  Examining ${chalk.bold(file)}.`);
+    },
   })
 );
 

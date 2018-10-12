@@ -11,10 +11,12 @@ export default (
     staged,
     restage = true,
     branch,
+    verbose,
     onFoundSinceRevision,
     onFoundChangedFiles,
     onPartiallyStagedFile,
     onWriteFile,
+    onExamineFile,
   } = {}
 ) => {
   const scm = scms(currentDirectory);
@@ -55,5 +57,6 @@ export default (
         }
       }
     },
+    onExamineFile: verbose && onExamineFile,
   });
 };
