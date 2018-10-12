@@ -221,4 +221,24 @@ describe('with git', () => {
       cwd: '/',
     });
   });
+
+  test('with --verbose calls onExamineFile', () => {
+    const onExamineFile = jest.fn();
+    mockGitFs();
+
+    prettyQuick('root', { since: 'banana', verbose: true, onExamineFile });
+
+    expect(onExamineFile).toHaveBeenCalledWith('./foo.js');
+    expect(onExamineFile).toHaveBeenCalledWith('./bar.md');
+  });
+
+  test('without --verbose does NOT call onExamineFile', () => {
+    const onExamineFile = jest.fn();
+    mockGitFs();
+
+    prettyQuick('root', { since: 'banana', onExamineFile });
+
+    expect(onExamineFile).not.toHaveBeenCalledWith('./foo.js');
+    expect(onExamineFile).not.toHaveBeenCalledWith('./bar.md');
+  });
 });
