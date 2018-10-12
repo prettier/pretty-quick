@@ -17,7 +17,6 @@ export default (
     onPartiallyStagedFile,
     onWriteFile,
     onExamineFile,
-    onUnchangedFile,
   } = {}
 ) => {
   const scm = scms(currentDirectory);
@@ -59,6 +58,5 @@ export default (
       }
     },
     onExamineFile: verbose && onExamineFile,
-    onUnchangedFile: verbose && onUnchangedFile,
   });
 };

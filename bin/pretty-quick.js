@@ -41,10 +41,6 @@ prettyQuick(
     onExamineFile: file => {
       console.log(`🔍  Examining ${chalk.bold(file)}.`);
     },
-
-    onUnchangedFile: file => {
-      console.log(`👌  No changes made to ${chalk.bold(file)}.`);
-    },
   })
 );
 
