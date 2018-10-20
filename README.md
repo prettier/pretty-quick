@@ -39,7 +39,7 @@ With `yarn`:
 yarn pretty-quick
 ```
 
-With [`npx`](https://npm.im/npx): (No install required)
+With [`npx`](https://npm.im/npx):
 
 ```shellsession
 npx pretty-quick
