@@ -9,8 +9,7 @@ const prettyQuick = require('..').default;
 
 const args = mri(process.argv.slice(2));
 
-let success = true;
-prettyQuick(
+const prettyQuickResult = prettyQuick(
   process.cwd(),
   Object.assign({}, args, {
     onFoundSinceRevision: (scm, revision) => {
@@ -31,7 +30,6 @@ prettyQuick(
 
     onPartiallyStagedFile: file => {
       console.log(`✗ Found ${chalk.bold('partially')} staged file ${file}.`);
-      success = false;
     },
 
     onWriteFile: file => {
@@ -44,12 +42,19 @@ prettyQuick(
   })
 );
 
-if (success) {
+if (prettyQuickResult.success) {
   console.log('✅  Everything is awesome!');
 } else {
-  console.log(
-    '✗ Partially staged files were fixed up.' +
-      ` ${chalk.bold('Please update stage before committing')}.`
-  );
+  if (prettyQuickResult.errors.indexOf('PARTIALLY_STAGED_FILE') !== -1) {
+    console.log(
+      '✗ Partially staged files were fixed up.' +
+        ` ${chalk.bold('Please update stage before committing')}.`
+    );
+  }
+  if (prettyQuickResult.errors.indexOf('BAIL_ON_WRITE') !== -1) {
+    console.log(
+      '✗ File had to be prettified and prettyQuick was set to bail mode.'
+    );
+  }
   process.exit(1); // ensure git hooks abort
 }

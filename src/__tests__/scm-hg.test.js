@@ -156,6 +156,22 @@ describe('with hg', () => {
     expect(fs.readFileSync('/bar.md', 'utf8')).toEqual('formatted:# foo');
   });
 
+  test('succeeds if a file was changed and bail is not set', () => {
+    mockHgFs();
+
+    const result = prettyQuick('root', { since: 'banana' });
+
+    expect(result).toEqual({ errors: [], success: true });
+  });
+
+  test('fails if a file was changed and bail is set to true', () => {
+    mockHgFs();
+
+    const result = prettyQuick('root', { since: 'banana', bail: true });
+
+    expect(result).toEqual({ errors: ['BAIL_ON_WRITE'], success: false });
+  });
+
   test('calls onWriteFile with changed files for an array of globstar patterns', () => {
     const onWriteFile = jest.fn();
     mockHgFs();
