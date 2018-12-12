@@ -36,6 +36,7 @@ prettyQuick(
 
     onWriteFile: file => {
       console.log(`✍️  Fixing up ${chalk.bold(file)}.`);
+      if (args.bail) success = false;
     },
 
     onExamineFile: file => {
