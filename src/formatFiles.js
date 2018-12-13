@@ -3,13 +3,13 @@ import { resolveConfig, format } from 'prettier';
 import { join } from 'path';
 
 export default (
-  directory,
+  rootDirectory,
   files,
   { config, onWriteFile, onExamineFile } = {}
 ) => {
   for (const relative of files) {
     onExamineFile && onExamineFile(relative);
-    const file = join(directory, relative);
+    const file = join(rootDirectory, relative);
     const options = resolveConfig.sync(file, { config, editorconfig: true });
     const input = readFileSync(file, 'utf8');
     const output = format(
