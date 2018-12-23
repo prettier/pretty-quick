@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs';
-import { resolveConfig, format as prettierFormat } from 'prettier';
+import { resolveConfig, getFileInfo, format as prettierFormat } from 'prettier';
 import { join } from 'path';
 
 export default (
@@ -17,9 +17,10 @@ export default (
     const file = join(rootDirectory, relative);
     const input = readFileSync(file, 'utf8');
 
+    const parser = getFileInfo.sync(file).inferredParser;
     const format =
-      (/\.(mjs|jsx?)$/.test(file) && (eslintFormat || tslintFormat)) ||
-      (/\.tsx?$/.test(file) && (tslintFormat || eslintFormat)) ||
+      (parser === 'babylon' && (eslintFormat || tslintFormat)) ||
+      (parser === 'typescript' && (tslintFormat || eslintFormat)) ||
       prettierFormat;
 
     const options = resolveConfig.sync(file, { config, editorconfig: true });
