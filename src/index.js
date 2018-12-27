@@ -1,7 +1,7 @@
 import scms from './scms';
 import formatFiles from './formatFiles';
 import createIgnorer from './createIgnorer';
-import isSupportedExtension from './isSupportedExtension';
+import isFileSupported from './isFileSupported';
 
 export default (
   currentDirectory,
@@ -32,13 +32,13 @@ export default (
 
   const changedFiles = scm
     .getChangedFiles(rootDirectory, revision, staged)
-    .filter(isSupportedExtension)
+    .filter(isFileSupported)
     .filter(createIgnorer(rootDirectory));
 
   const unstagedFiles = staged
     ? scm
         .getUnstagedChangedFiles(rootDirectory, revision)
-        .filter(isSupportedExtension)
+        .filter(isFileSupported)
         .filter(createIgnorer(rootDirectory))
     : [];
 
