@@ -88,6 +88,11 @@ Use with the `--staged` flag to skip re-staging files after formatting.
 
 When not in `staged` pre-commit mode, use this flag to compare changes with the specified branch. Defaults to `master` (git) / `default` (hg) branch.
 
+### `--pattern`
+
+Filters the files for the given [minimatch](https://github.com/isaacs/minimatch) pattern.  
+For example `pretty-quick --pattern "**/*.*(js|jsx)"` or `pretty-quick --pattern "**/*.js" --pattern "**/*.jsx"`
+
 ### `--verbose`
 
 Outputs the name of each file right before it is proccessed. This can be useful if Prettier throws an error and you can't identify which file is causing the problem.

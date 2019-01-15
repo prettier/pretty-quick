@@ -158,6 +158,47 @@ describe('with git', () => {
 
     expect(onWriteFile).toHaveBeenCalledWith('./foo.js');
     expect(onWriteFile).toHaveBeenCalledWith('./bar.md');
+    expect(onWriteFile.mock.calls.length).toBe(2);
+  });
+
+  test('calls onWriteFile with changed files for the given pattern', () => {
+    const onWriteFile = jest.fn();
+    mockGitFs();
+    prettyQuick('root', { pattern: '*.md', since: 'banana', onWriteFile });
+    expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
+  });
+
+  test('calls onWriteFile with changed files for the given globstar pattern', () => {
+    const onWriteFile = jest.fn();
+    mockGitFs();
+    prettyQuick('root', {
+      pattern: '**/*.md',
+      since: 'banana',
+      onWriteFile,
+    });
+    expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
+  });
+
+  test('calls onWriteFile with changed files for the given extglob pattern', () => {
+    const onWriteFile = jest.fn();
+    mockGitFs();
+    prettyQuick('root', {
+      pattern: '*.*(md|foo|bar)',
+      since: 'banana',
+      onWriteFile,
+    });
+    expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
+  });
+
+  test('calls onWriteFile with changed files for an array of globstar patterns', () => {
+    const onWriteFile = jest.fn();
+    mockGitFs();
+    prettyQuick('root', {
+      pattern: ['**/*.foo', '**/*.md', '**/*.bar'],
+      since: 'banana',
+      onWriteFile,
+    });
+    expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
   });
 
   test('writes formatted files to disk', () => {
