@@ -11,13 +11,18 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-const mockGitFs = (additionalUnstaged = '') => {
-  mock({
-    '/.git': {},
-    '/raz.js': 'raz()',
-    '/foo.js': 'foo()',
-    '/bar.md': '# foo',
-  });
+const mockGitFs = (additionalUnstaged = '', additionalFiles = {}) => {
+  mock(
+    Object.assign(
+      {
+        '/.git': {},
+        '/raz.js': 'raz()',
+        '/foo.js': 'foo()',
+        '/bar.md': '# foo',
+      },
+      additionalFiles
+    )
+  );
   execa.sync.mockImplementation((command, args) => {
     if (command !== 'git') {
       throw new Error(`unexpected command: ${command}`);
@@ -240,5 +245,23 @@ describe('with git', () => {
 
     expect(onExamineFile).not.toHaveBeenCalledWith('./foo.js');
     expect(onExamineFile).not.toHaveBeenCalledWith('./bar.md');
+  });
+
+  test('ignore files matching patterns from the repositories root .prettierignore', () => {
+    const onWriteFile = jest.fn();
+    mockGitFs('', {
+      '/.prettierignore': '*.md',
+    });
+    prettyQuick('/sub-directory/', { since: 'banana', onWriteFile });
+    expect(onWriteFile.mock.calls).toEqual([['./foo.js']]);
+  });
+
+  test('ignore files matching patterns from the working directories .prettierignore', () => {
+    const onWriteFile = jest.fn();
+    mockGitFs('', {
+      '/sub-directory/.prettierignore': '*.md',
+    });
+    prettyQuick('/sub-directory/', { since: 'banana', onWriteFile });
+    expect(onWriteFile.mock.calls).toEqual([['./foo.js']]);
   });
 });

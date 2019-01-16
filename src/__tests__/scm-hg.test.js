@@ -11,12 +11,17 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-const mockHgFs = () => {
-  mock({
-    '/.hg': {},
-    '/foo.js': 'foo()',
-    '/bar.md': '# foo',
-  });
+const mockHgFs = (additionalFiles = {}) => {
+  mock(
+    Object.assign(
+      {
+        '/.hg': {},
+        '/foo.js': 'foo()',
+        '/bar.md': '# foo',
+      },
+      additionalFiles
+    )
+  );
   execa.sync.mockImplementation((command, args) => {
     if (command !== 'hg') {
       throw new Error(`unexpected command: ${command}`);
@@ -151,5 +156,23 @@ describe('with hg', () => {
 
     expect(onExamineFile).not.toHaveBeenCalledWith('./foo.js');
     expect(onExamineFile).not.toHaveBeenCalledWith('./bar.md');
+  });
+
+  test('ignore files matching patterns from the repositories root .prettierignore', () => {
+    const onWriteFile = jest.fn();
+    mockHgFs({
+      '/.prettierignore': '*.md',
+    });
+    prettyQuick('/sub-directory/', { since: 'banana', onWriteFile });
+    expect(onWriteFile.mock.calls).toEqual([['./foo.js']]);
+  });
+
+  test('ignore files matching patterns from the working directories .prettierignore', () => {
+    const onWriteFile = jest.fn();
+    mockHgFs({
+      '/sub-directory/.prettierignore': '*.md',
+    });
+    prettyQuick('/sub-directory/', { since: 'banana', onWriteFile });
+    expect(onWriteFile.mock.calls).toEqual([['./foo.js']]);
   });
 });

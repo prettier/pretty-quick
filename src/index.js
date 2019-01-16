@@ -29,16 +29,24 @@ export default (
 
   onFoundSinceRevision && onFoundSinceRevision(scm.name, revision);
 
+  const rootIgnorer = createIgnorer(directory);
+  const cwdIgnorer =
+    currentDirectory !== directory
+      ? createIgnorer(currentDirectory)
+      : () => true;
+
   const changedFiles = scm
     .getChangedFiles(directory, revision, staged)
     .filter(isSupportedExtension)
-    .filter(createIgnorer(directory));
+    .filter(rootIgnorer)
+    .filter(cwdIgnorer);
 
   const unstagedFiles = staged
     ? scm
         .getUnstagedChangedFiles(directory, revision)
         .filter(isSupportedExtension)
-        .filter(createIgnorer(directory))
+        .filter(rootIgnorer)
+        .filter(cwdIgnorer)
     : [];
 
   const wasFullyStaged = f => unstagedFiles.indexOf(f) < 0;
