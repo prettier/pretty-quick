@@ -1,6 +1,7 @@
 import scms from './scms';
 import formatFiles from './formatFiles';
 import createIgnorer from './createIgnorer';
+import createMatcher from './createMatcher';
 import isSupportedExtension from './isSupportedExtension';
 
 export default (
@@ -9,6 +10,7 @@ export default (
     config,
     since,
     staged,
+    pattern,
     restage = true,
     branch,
     verbose,
@@ -38,6 +40,7 @@ export default (
   const changedFiles = scm
     .getChangedFiles(directory, revision, staged)
     .filter(isSupportedExtension)
+    .filter(createMatcher(pattern))
     .filter(rootIgnorer)
     .filter(cwdIgnorer);
 
@@ -45,6 +48,7 @@ export default (
     ? scm
         .getUnstagedChangedFiles(directory, revision)
         .filter(isSupportedExtension)
+        .filter(createMatcher(pattern))
         .filter(rootIgnorer)
         .filter(cwdIgnorer)
     : [];

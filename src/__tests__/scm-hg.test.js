@@ -116,6 +116,35 @@ describe('with hg', () => {
     expect(onWriteFile).toHaveBeenCalledWith('./bar.md');
   });
 
+  test('calls onWriteFile with changed files for the given pattern', () => {
+    const onWriteFile = jest.fn();
+    mockHgFs();
+    prettyQuick('root', { pattern: '*.md', since: 'banana', onWriteFile });
+    expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
+  });
+
+  test('calls onWriteFile with changed files for the given globstar pattern', () => {
+    const onWriteFile = jest.fn();
+    mockHgFs();
+    prettyQuick('root', {
+      pattern: '**/*.md',
+      since: 'banana',
+      onWriteFile,
+    });
+    expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
+  });
+
+  test('calls onWriteFile with changed files for the given extglob pattern', () => {
+    const onWriteFile = jest.fn();
+    mockHgFs();
+    prettyQuick('root', {
+      pattern: '*.*(md|foo|bar)',
+      since: 'banana',
+      onWriteFile,
+    });
+    expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
+  });
+
   test('writes formatted files to disk', () => {
     const onWriteFile = jest.fn();
 
@@ -125,6 +154,17 @@ describe('with hg', () => {
 
     expect(fs.readFileSync('/foo.js', 'utf8')).toEqual('formatted:foo()');
     expect(fs.readFileSync('/bar.md', 'utf8')).toEqual('formatted:# foo');
+  });
+
+  test('calls onWriteFile with changed files for an array of globstar patterns', () => {
+    const onWriteFile = jest.fn();
+    mockHgFs();
+    prettyQuick('root', {
+      pattern: ['**/*.foo', '**/*.md', '**/*.bar'],
+      since: 'banana',
+      onWriteFile,
+    });
+    expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
   });
 
   test('without --staged does NOT stage changed files', () => {
