@@ -13,6 +13,7 @@ export default (
     pattern,
     restage = true,
     branch,
+    bail,
     verbose,
     onFoundSinceRevision,
     onFoundChangedFiles,
@@ -57,18 +58,29 @@ export default (
 
   onFoundChangedFiles && onFoundChangedFiles(changedFiles);
 
+  const failReasons = new Set();
+
   formatFiles(directory, changedFiles, {
     config,
     onWriteFile: file => {
       onWriteFile && onWriteFile(file);
+      if (bail) {
+        failReasons.add('BAIL_ON_WRITE');
+      }
       if (staged && restage) {
         if (wasFullyStaged(file)) {
           scm.stageFile(directory, file);
         } else {
           onPartiallyStagedFile && onPartiallyStagedFile(file);
+          failReasons.add('PARTIALLY_STAGED_FILE');
         }
       }
     },
     onExamineFile: verbose && onExamineFile,
   });
+
+  return {
+    success: failReasons.size === 0,
+    errors: Array.from(failReasons),
+  };
 };

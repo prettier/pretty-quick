@@ -212,6 +212,22 @@ describe('with git', () => {
     expect(fs.readFileSync('/bar.md', 'utf8')).toEqual('formatted:# foo');
   });
 
+  test('succeeds if a file was changed and bail is not set', () => {
+    mockGitFs();
+
+    const result = prettyQuick('root', { since: 'banana' });
+
+    expect(result).toEqual({ errors: [], success: true });
+  });
+
+  test('fails if a file was changed and bail is set to true', () => {
+    mockGitFs();
+
+    const result = prettyQuick('root', { since: 'banana', bail: true });
+
+    expect(result).toEqual({ errors: ['BAIL_ON_WRITE'], success: false });
+  });
+
   test('with --staged stages fully-staged files', () => {
     mockGitFs();
 
@@ -252,6 +268,17 @@ describe('with git', () => {
 
     expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './raz.js'], {
       cwd: '/',
+    });
+  });
+
+  test('with --staged returns false', () => {
+    const additionalUnstaged = './raz.js\n'; // raz.js is partly staged and partly not staged
+    mockGitFs(additionalUnstaged);
+
+    const result = prettyQuick('root', { since: 'banana', staged: true });
+    expect(result).toEqual({
+      errors: ['PARTIALLY_STAGED_FILE'],
+      success: false,
     });
   });
 
