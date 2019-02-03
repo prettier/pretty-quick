@@ -38,7 +38,7 @@
     "test": "jest",
     "lint": "eslint . --ignore-path=.gitignore",
     "semantic-release": "semantic-release",
-    "precommit": "./bin/pretty-quick.js --staged"
+    "precommit": "./bin/pretty-quick.js --staged --custom-extensions=babelrc"
   },
   "peerDependencies": {
     "prettier": ">=1.8.0"
