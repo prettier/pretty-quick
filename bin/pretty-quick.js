@@ -12,6 +12,10 @@ const args = mri(process.argv.slice(2));
 const prettyQuickResult = prettyQuick(
   process.cwd(),
   Object.assign({}, args, {
+    customExtensions: args['custom-extensions']
+      ? args['custom-extensions'].split(',')
+      : [],
+
     onFoundSinceRevision: (scm, revision) => {
       console.log(
         `🔍  Finding changed files since ${chalk.bold(

@@ -101,6 +101,23 @@ Outputs the name of each file right before it is proccessed. This can be useful 
 
 Prevent `git commit` if any files are fixed.
 
+## `--custom-extensions`
+
+If you want to prettify your `.babelrc` or `.eslintrc` files with `json` parser, you can update your `.prettierrc` with
+
+```
+{
+  "overrides": [
+    {
+      "files": ".(eslintrc|babelrc)",
+      "options": { "parser": "json" }
+    }
+  ]
+}
+```
+
+and then run `pretty-quick --custom-extensions=eslintrc,babelrc`
+
 <!-- Undocumented = Unsupported :D
 
 ### `--config`

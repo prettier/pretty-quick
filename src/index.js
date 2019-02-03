@@ -13,6 +13,7 @@ export default (
     pattern,
     restage = true,
     branch,
+    customExtensions,
     bail,
     verbose,
     onFoundSinceRevision,
@@ -38,9 +39,29 @@ export default (
       ? createIgnorer(currentDirectory)
       : () => true;
 
+  const isValidExtension = file => {
+    if (isSupportedExtension(file)) {
+      return true;
+    }
+
+    if (!customExtensions.length) {
+      return false;
+    }
+
+    const dotIndex = file.lastIndexOf('.');
+
+    if (dotIndex === -1 || dotIndex === file.length - 1) {
+      return false;
+    }
+
+    const ext = file.slice(dotIndex + 1);
+
+    return customExtensions.includes(ext);
+  };
+
   const changedFiles = scm
     .getChangedFiles(directory, revision, staged)
-    .filter(isSupportedExtension)
+    .filter(isValidExtension)
     .filter(createMatcher(pattern))
     .filter(rootIgnorer)
     .filter(cwdIgnorer);
@@ -48,7 +69,7 @@ export default (
   const unstagedFiles = staged
     ? scm
         .getUnstagedChangedFiles(directory, revision)
-        .filter(isSupportedExtension)
+        .filter(isValidExtension)
         .filter(createMatcher(pattern))
         .filter(rootIgnorer)
         .filter(cwdIgnorer)
