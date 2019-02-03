@@ -13,7 +13,7 @@ export default (
     pattern,
     restage = true,
     branch,
-    customExtensions,
+    customExtensions = [],
     bail,
     verbose,
     onFoundSinceRevision,
