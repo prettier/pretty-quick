@@ -1,5 +1,5 @@
 import scms from './scms';
-import formatFiles from './formatFiles';
+import processFiles from './processFiles';
 import createIgnorer from './createIgnorer';
 import createMatcher from './createMatcher';
 import isSupportedExtension from './isSupportedExtension';
@@ -18,7 +18,7 @@ export default (
     onFoundSinceRevision,
     onFoundChangedFiles,
     onPartiallyStagedFile,
-    onWriteFile,
+    onProcessFile,
     onExamineFile,
   } = {}
 ) => {
@@ -60,10 +60,10 @@ export default (
 
   const failReasons = new Set();
 
-  formatFiles(directory, changedFiles, {
+  processFiles(directory, changedFiles, {
     config,
-    onWriteFile: file => {
-      onWriteFile && onWriteFile(file);
+    onProcessFile: file => {
+      onProcessFile && onProcessFile(file);
       if (bail) {
         failReasons.add('BAIL_ON_WRITE');
       }

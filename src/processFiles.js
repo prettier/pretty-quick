@@ -5,7 +5,7 @@ import { join } from 'path';
 export default (
   directory,
   files,
-  { config, onWriteFile, onExamineFile } = {}
+  { config, onProcessFile, onExamineFile } = {}
 ) => {
   for (const relative of files) {
     onExamineFile && onExamineFile(relative);
@@ -21,7 +21,7 @@ export default (
 
     if (output !== input) {
       writeFileSync(file, output);
-      onWriteFile && onWriteFile(relative);
+      onProcessFile && onProcessFile(relative);
     }
   }
 };

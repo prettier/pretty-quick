@@ -32,7 +32,7 @@ const prettyQuickResult = prettyQuick(
       console.log(`✗ Found ${chalk.bold('partially')} staged file ${file}.`);
     },
 
-    onWriteFile: file => {
+    onProcessFile: file => {
       console.log(`✍️  Fixing up ${chalk.bold(file)}.`);
     },
 

@@ -150,63 +150,63 @@ describe('with git', () => {
     expect(onFoundChangedFiles).toHaveBeenCalledWith(['./foo.js', './bar.md']);
   });
 
-  test('calls onWriteFile with changed files', () => {
-    const onWriteFile = jest.fn();
+  test('calls onProcessFile with changed files', () => {
+    const onProcessFile = jest.fn();
     mockGitFs();
 
-    prettyQuick('root', { since: 'banana', onWriteFile });
+    prettyQuick('root', { since: 'banana', onProcessFile });
 
-    expect(onWriteFile).toHaveBeenCalledWith('./foo.js');
-    expect(onWriteFile).toHaveBeenCalledWith('./bar.md');
-    expect(onWriteFile.mock.calls.length).toBe(2);
+    expect(onProcessFile).toHaveBeenCalledWith('./foo.js');
+    expect(onProcessFile).toHaveBeenCalledWith('./bar.md');
+    expect(onProcessFile.mock.calls.length).toBe(2);
   });
 
-  test('calls onWriteFile with changed files for the given pattern', () => {
-    const onWriteFile = jest.fn();
+  test('calls onProcessFile with changed files for the given pattern', () => {
+    const onProcessFile = jest.fn();
     mockGitFs();
-    prettyQuick('root', { pattern: '*.md', since: 'banana', onWriteFile });
-    expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
+    prettyQuick('root', { pattern: '*.md', since: 'banana', onProcessFile });
+    expect(onProcessFile.mock.calls).toEqual([['./bar.md']]);
   });
 
-  test('calls onWriteFile with changed files for the given globstar pattern', () => {
-    const onWriteFile = jest.fn();
+  test('calls onProcessFile with changed files for the given globstar pattern', () => {
+    const onProcessFile = jest.fn();
     mockGitFs();
     prettyQuick('root', {
       pattern: '**/*.md',
       since: 'banana',
-      onWriteFile,
+      onProcessFile,
     });
-    expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
+    expect(onProcessFile.mock.calls).toEqual([['./bar.md']]);
   });
 
-  test('calls onWriteFile with changed files for the given extglob pattern', () => {
-    const onWriteFile = jest.fn();
+  test('calls onProcessFile with changed files for the given extglob pattern', () => {
+    const onProcessFile = jest.fn();
     mockGitFs();
     prettyQuick('root', {
       pattern: '*.*(md|foo|bar)',
       since: 'banana',
-      onWriteFile,
+      onProcessFile,
     });
-    expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
+    expect(onProcessFile.mock.calls).toEqual([['./bar.md']]);
   });
 
-  test('calls onWriteFile with changed files for an array of globstar patterns', () => {
-    const onWriteFile = jest.fn();
+  test('calls onProcessFile with changed files for an array of globstar patterns', () => {
+    const onProcessFile = jest.fn();
     mockGitFs();
     prettyQuick('root', {
       pattern: ['**/*.foo', '**/*.md', '**/*.bar'],
       since: 'banana',
-      onWriteFile,
+      onProcessFile,
     });
-    expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
+    expect(onProcessFile.mock.calls).toEqual([['./bar.md']]);
   });
 
   test('writes formatted files to disk', () => {
-    const onWriteFile = jest.fn();
+    const onProcessFile = jest.fn();
 
     mockGitFs();
 
-    prettyQuick('root', { since: 'banana', onWriteFile });
+    prettyQuick('root', { since: 'banana', onProcessFile });
 
     expect(fs.readFileSync('/foo.js', 'utf8')).toEqual('formatted:foo()');
     expect(fs.readFileSync('/bar.md', 'utf8')).toEqual('formatted:# foo');
@@ -316,20 +316,20 @@ describe('with git', () => {
   });
 
   test('ignore files matching patterns from the repositories root .prettierignore', () => {
-    const onWriteFile = jest.fn();
+    const onProcessFile = jest.fn();
     mockGitFs('', {
       '/.prettierignore': '*.md',
     });
-    prettyQuick('/sub-directory/', { since: 'banana', onWriteFile });
-    expect(onWriteFile.mock.calls).toEqual([['./foo.js']]);
+    prettyQuick('/sub-directory/', { since: 'banana', onProcessFile });
+    expect(onProcessFile.mock.calls).toEqual([['./foo.js']]);
   });
 
   test('ignore files matching patterns from the working directories .prettierignore', () => {
-    const onWriteFile = jest.fn();
+    const onProcessFile = jest.fn();
     mockGitFs('', {
       '/sub-directory/.prettierignore': '*.md',
     });
-    prettyQuick('/sub-directory/', { since: 'banana', onWriteFile });
-    expect(onWriteFile.mock.calls).toEqual([['./foo.js']]);
+    prettyQuick('/sub-directory/', { since: 'banana', onProcessFile });
+    expect(onProcessFile.mock.calls).toEqual([['./foo.js']]);
   });
 });
