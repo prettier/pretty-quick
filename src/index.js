@@ -14,6 +14,7 @@ export default (
     restage = true,
     branch,
     bail,
+    check,
     verbose,
     onFoundSinceRevision,
     onFoundChangedFiles,
@@ -61,9 +62,14 @@ export default (
   const failReasons = new Set();
 
   processFiles(directory, changedFiles, {
+    check,
     config,
     onProcessFile: file => {
       onProcessFile && onProcessFile(file);
+      if (check) {
+        failReasons.add('CHECK_FAILED');
+        return;
+      }
       if (bail) {
         failReasons.add('BAIL_ON_WRITE');
       }

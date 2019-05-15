@@ -1,23 +1,31 @@
 import { readFileSync, writeFileSync } from 'fs';
-import { resolveConfig, format } from 'prettier';
+import * as prettier from 'prettier';
 import { join } from 'path';
 
 export default (
   directory,
   files,
-  { config, onProcessFile, onExamineFile } = {}
+  { check, config, onProcessFile, onExamineFile } = {}
 ) => {
   for (const relative of files) {
     onExamineFile && onExamineFile(relative);
     const file = join(directory, relative);
-    const options = resolveConfig.sync(file, { config, editorconfig: true });
-    const input = readFileSync(file, 'utf8');
-    const output = format(
-      input,
-      Object.assign({}, options, {
-        filepath: file,
-      })
+    const options = Object.assign(
+      {},
+      prettier.resolveConfig.sync(file, {
+        config,
+        editorconfig: true,
+      }),
+      { filepath: file }
     );
+    const input = readFileSync(file, 'utf8');
+
+    if (check && !prettier.check(input, options)) {
+      onProcessFile && onProcessFile(relative);
+      return;
+    }
+
+    const output = prettier.format(input, options);
 
     if (output !== input) {
       writeFileSync(file, output);
