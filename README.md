@@ -101,6 +101,10 @@ Outputs the name of each file right before it is proccessed. This can be useful 
 
 Prevent `git commit` if any files are fixed.
 
+### `--check`
+
+Check that files are correctly formatted, but don't format them. This is useful on CI to verify that all changed files in the current branch were correctly formatted.
+
 <!-- Undocumented = Unsupported :D
 
 ### `--config`
