@@ -20,7 +20,8 @@ export default (
     onFoundChangedFiles,
     onPartiallyStagedFile,
     onProcessFile,
-    onExamineFile,
+    onCheckFile,
+    onWriteFile,
   } = {}
 ) => {
   const scm = scms(currentDirectory);
@@ -64,12 +65,8 @@ export default (
   processFiles(directory, changedFiles, {
     check,
     config,
-    onProcessFile: file => {
-      onProcessFile && onProcessFile(file);
-      if (check) {
-        failReasons.add('CHECK_FAILED');
-        return;
-      }
+    onWriteFile: file => {
+      onWriteFile && onWriteFile(file);
       if (bail) {
         failReasons.add('BAIL_ON_WRITE');
       }
@@ -82,7 +79,13 @@ export default (
         }
       }
     },
-    onExamineFile: verbose && onExamineFile,
+    onCheckFile: (file, isFormatted) => {
+      onCheckFile && onCheckFile(file, isFormatted);
+      if (!isFormatted) {
+        failReasons.add('CHECK_FAILED');
+      }
+    },
+    onProcessFile: verbose && onProcessFile,
   });
 
   return {

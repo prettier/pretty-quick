@@ -5,10 +5,10 @@ import { join } from 'path';
 export default (
   directory,
   files,
-  { check, config, onProcessFile, onExamineFile } = {}
+  { check, config, onProcessFile, onCheckFile, onWriteFile } = {}
 ) => {
   for (const relative of files) {
-    onExamineFile && onExamineFile(relative);
+    onProcessFile && onProcessFile(relative);
     const file = join(directory, relative);
     const options = Object.assign(
       {},
@@ -20,16 +20,17 @@ export default (
     );
     const input = readFileSync(file, 'utf8');
 
-    if (check && !prettier.check(input, options)) {
-      onProcessFile && onProcessFile(relative);
-      return;
+    if (check) {
+      const isFormatted = prettier.check(input, options);
+      onCheckFile && onCheckFile(relative, isFormatted);
+      continue;
     }
 
     const output = prettier.format(input, options);
 
     if (output !== input) {
       writeFileSync(file, output);
-      onProcessFile && onProcessFile(relative);
+      onWriteFile && onWriteFile(relative);
     }
   }
 };

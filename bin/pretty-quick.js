@@ -32,15 +32,17 @@ const prettyQuickResult = prettyQuick(
       console.log(`✗ Found ${chalk.bold('partially')} staged file ${file}.`);
     },
 
-    onProcessFile: file => {
-      if (args.check) {
-        console.log(`👀  Checking ${chalk.bold(file)}.`);
-      } else {
-        console.log(`✍️  Fixing up ${chalk.bold(file)}.`);
+    onWriteFile: file => {
+      console.log(`✍️  Fixing up ${chalk.bold(file)}.`);
+    },
+
+    onCheckFile: (file, isFormatted) => {
+      if (!isFormatted) {
+        console.log(`⛔️  Check failed: ${chalk.bold(file)}`);
       }
     },
 
-    onExamineFile: file => {
+    onProcessFile: file => {
       console.log(`🔍  Examining ${chalk.bold(file)}.`);
     },
   })
