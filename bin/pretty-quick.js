@@ -36,6 +36,12 @@ const prettyQuickResult = prettyQuick(
       console.log(`✍️  Fixing up ${chalk.bold(file)}.`);
     },
 
+    onCheckFile: (file, isFormatted) => {
+      if (!isFormatted) {
+        console.log(`⛔️  Check failed: ${chalk.bold(file)}`);
+      }
+    },
+
     onExamineFile: file => {
       console.log(`🔍  Examining ${chalk.bold(file)}.`);
     },
@@ -54,6 +60,11 @@ if (prettyQuickResult.success) {
   if (prettyQuickResult.errors.indexOf('BAIL_ON_WRITE') !== -1) {
     console.log(
       '✗ File had to be prettified and prettyQuick was set to bail mode.'
+    );
+  }
+  if (prettyQuickResult.errors.indexOf('CHECK_FAILED') !== -1) {
+    console.log(
+      '✗ Code style issues found in the above file(s). Forgot to run Prettier?'
     );
   }
   process.exit(1); // ensure git hooks abort

@@ -1,5 +1,5 @@
 import scms from './scms';
-import formatFiles from './formatFiles';
+import processFiles from './processFiles';
 import createIgnorer from './createIgnorer';
 import createMatcher from './createMatcher';
 import isSupportedExtension from './isSupportedExtension';
@@ -14,12 +14,14 @@ export default (
     restage = true,
     branch,
     bail,
+    check,
     verbose,
     onFoundSinceRevision,
     onFoundChangedFiles,
     onPartiallyStagedFile,
-    onWriteFile,
     onExamineFile,
+    onCheckFile,
+    onWriteFile,
   } = {}
 ) => {
   const scm = scms(currentDirectory);
@@ -60,7 +62,8 @@ export default (
 
   const failReasons = new Set();
 
-  formatFiles(directory, changedFiles, {
+  processFiles(directory, changedFiles, {
+    check,
     config,
     onWriteFile: file => {
       onWriteFile && onWriteFile(file);
@@ -74,6 +77,12 @@ export default (
           onPartiallyStagedFile && onPartiallyStagedFile(file);
           failReasons.add('PARTIALLY_STAGED_FILE');
         }
+      }
+    },
+    onCheckFile: (file, isFormatted) => {
+      onCheckFile && onCheckFile(file, isFormatted);
+      if (!isFormatted) {
+        failReasons.add('CHECK_FAILED');
       }
     },
     onExamineFile: verbose && onExamineFile,
