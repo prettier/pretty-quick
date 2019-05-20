@@ -5,10 +5,10 @@ import { join } from 'path';
 export default (
   directory,
   files,
-  { check, config, onProcessFile, onCheckFile, onWriteFile } = {}
+  { check, config, onExamineFile, onCheckFile, onWriteFile } = {}
 ) => {
   for (const relative of files) {
-    onProcessFile && onProcessFile(relative);
+    onExamineFile && onExamineFile(relative);
     const file = join(directory, relative);
     const options = Object.assign(
       {},

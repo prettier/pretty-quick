@@ -42,7 +42,7 @@ const prettyQuickResult = prettyQuick(
       }
     },
 
-    onProcessFile: file => {
+    onExamineFile: file => {
       console.log(`🔍  Examining ${chalk.bold(file)}.`);
     },
   })

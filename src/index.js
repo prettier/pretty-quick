@@ -19,7 +19,7 @@ export default (
     onFoundSinceRevision,
     onFoundChangedFiles,
     onPartiallyStagedFile,
-    onProcessFile,
+    onExamineFile,
     onCheckFile,
     onWriteFile,
   } = {}
@@ -85,7 +85,7 @@ export default (
         failReasons.add('CHECK_FAILED');
       }
     },
-    onProcessFile: verbose && onProcessFile,
+    onExamineFile: verbose && onExamineFile,
   });
 
   return {

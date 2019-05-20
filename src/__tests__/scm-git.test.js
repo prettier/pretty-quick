@@ -295,24 +295,24 @@ describe('with git', () => {
     });
   });
 
-  test('with --verbose calls onProcessFile', () => {
-    const onProcessFile = jest.fn();
+  test('with --verbose calls onExamineFile', () => {
+    const onExamineFile = jest.fn();
     mockGitFs();
 
-    prettyQuick('root', { since: 'banana', verbose: true, onProcessFile });
+    prettyQuick('root', { since: 'banana', verbose: true, onExamineFile });
 
-    expect(onProcessFile).toHaveBeenCalledWith('./foo.js');
-    expect(onProcessFile).toHaveBeenCalledWith('./bar.md');
+    expect(onExamineFile).toHaveBeenCalledWith('./foo.js');
+    expect(onExamineFile).toHaveBeenCalledWith('./bar.md');
   });
 
-  test('without --verbose does NOT call onProcessFile', () => {
-    const onProcessFile = jest.fn();
+  test('without --verbose does NOT call onExamineFile', () => {
+    const onExamineFile = jest.fn();
     mockGitFs();
 
-    prettyQuick('root', { since: 'banana', onProcessFile });
+    prettyQuick('root', { since: 'banana', onExamineFile });
 
-    expect(onProcessFile).not.toHaveBeenCalledWith('./foo.js');
-    expect(onProcessFile).not.toHaveBeenCalledWith('./bar.md');
+    expect(onExamineFile).not.toHaveBeenCalledWith('./foo.js');
+    expect(onExamineFile).not.toHaveBeenCalledWith('./bar.md');
   });
 
   test('ignore files matching patterns from the repositories root .prettierignore', () => {
