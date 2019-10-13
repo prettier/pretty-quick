@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@azz/prettier-config@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@azz/prettier-config/-/prettier-config-1.0.0.tgz#ecd38a9e4152fbd03043e020ee73cd14c0e3c112"
+  integrity sha512-2R3F5XWq8YoBXEbqjlraRt8c6Z8GnV4X/gOw0kAi9dn5aCCFHqqDuprQD0UBds4heH6tRp6ZGSeXyG6YZJUgAQ==
+
 "@babel/cli@^7.6 .4":
   version "7.6.4"
   resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.6.4.tgz#9b35a4e15fa7d8f487418aaa8229c8b0bc815f20"

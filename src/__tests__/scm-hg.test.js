@@ -19,8 +19,8 @@ const mockHgFs = (additionalFiles = {}) => {
         '/foo.js': 'foo()',
         '/bar.md': '# foo',
       },
-      additionalFiles
-    )
+      additionalFiles,
+    ),
   );
   execa.sync.mockImplementation((command, args) => {
     if (command !== 'hg') {
@@ -52,7 +52,7 @@ describe('with hg', () => {
     expect(execa.sync).toHaveBeenCalledWith(
       'hg',
       ['debugancestor', 'tip', 'default'],
-      { cwd: '/' }
+      { cwd: '/' },
     );
   });
 
@@ -66,7 +66,7 @@ describe('with hg', () => {
     expect(execa.sync).toHaveBeenCalledWith(
       'hg',
       ['debugancestor', 'tip', 'default'],
-      { cwd: '/' }
+      { cwd: '/' },
     );
   });
 
@@ -80,7 +80,7 @@ describe('with hg', () => {
     expect(execa.sync).toHaveBeenCalledWith(
       'hg',
       ['status', '-n', '-a', '-m', '--rev', 'banana'],
-      { cwd: '/' }
+      { cwd: '/' },
     );
   });
 

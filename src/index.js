@@ -22,7 +22,7 @@ export default (
     onExamineFile,
     onCheckFile,
     onWriteFile,
-  } = {}
+  } = {},
 ) => {
   const scm = scms(currentDirectory);
   if (!scm) {

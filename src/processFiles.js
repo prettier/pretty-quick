@@ -5,7 +5,7 @@ import { join } from 'path';
 export default (
   directory,
   files,
-  { check, config, onExamineFile, onCheckFile, onWriteFile } = {}
+  { check, config, onExamineFile, onCheckFile, onWriteFile } = {},
 ) => {
   for (const relative of files) {
     onExamineFile && onExamineFile(relative);
@@ -16,7 +16,7 @@ export default (
         config,
         editorconfig: true,
       }),
-      { filepath: file }
+      { filepath: file },
     );
     const input = readFileSync(file, 'utf8');
 

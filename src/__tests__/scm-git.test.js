@@ -20,8 +20,8 @@ const mockGitFs = (additionalUnstaged = '', additionalFiles = {}) => {
         '/foo.js': 'foo()',
         '/bar.md': '# foo',
       },
-      additionalFiles
-    )
+      additionalFiles,
+    ),
   );
   execa.sync.mockImplementation((command, args) => {
     if (command !== 'git') {
@@ -53,7 +53,7 @@ describe('with git', () => {
     expect(execa.sync).toHaveBeenCalledWith(
       'git',
       ['merge-base', 'HEAD', 'master'],
-      { cwd: '/' }
+      { cwd: '/' },
     );
   });
 
@@ -68,7 +68,7 @@ describe('with git', () => {
     expect(execa.sync).toHaveBeenCalledWith(
       'git',
       ['merge-base', 'HEAD', 'master'],
-      { cwd: '/' }
+      { cwd: '/' },
     );
   });
 
@@ -96,7 +96,7 @@ describe('with git', () => {
     expect(execa.sync).toHaveBeenCalledWith(
       'git',
       ['diff', '--name-only', '--diff-filter=ACMRTUB'],
-      { cwd: '/' }
+      { cwd: '/' },
     );
   });
 
@@ -110,7 +110,7 @@ describe('with git', () => {
     expect(execa.sync).toHaveBeenCalledWith(
       'git',
       ['diff', '--name-only', '--diff-filter=ACMRTUB', 'banana'],
-      { cwd: '/' }
+      { cwd: '/' },
     );
   });
 
@@ -124,7 +124,7 @@ describe('with git', () => {
     expect(execa.sync).toHaveBeenCalledWith(
       'git',
       ['ls-files', '--others', '--exclude-standard'],
-      { cwd: '/' }
+      { cwd: '/' },
     );
   });
 
