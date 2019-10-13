@@ -6,7 +6,8 @@ cache:
 notifications:
   email: false
 node_js:
-  - '9'
+  - '12'
+  - '10'
   - '8'
   - '6'
 install:
@@ -16,7 +17,7 @@ script:
   - yarn build
   - yarn test
 after_success:
-  - npm install -g travis-deploy-once@4
+  - npm install -g semantic-release@11 travis-deploy-once@4
   - travis-deploy-once "yarn semantic-release"
 branches:
   except:
