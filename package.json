@@ -24,11 +24,11 @@
     "img"
   ],
   "dependencies": {
-    "chalk": "^2.3.0",
-    "execa": "^0.8.0",
+    "chalk": "^2.4.2",
+    "execa": "^2.1.0",
     "find-up": "^2.1.0",
-    "ignore": "^3.3.7",
-    "mri": "^1.1.0",
+    "ignore": "^5.1.4",
+    "mri": "^1.1.4",
     "multimatch": "^3.0.0"
   },
   "scripts": {
@@ -37,24 +37,28 @@
     "build": "babel src -d dist --copy-files --ignore __tests__",
     "test": "jest",
     "lint": "eslint . --ignore-path=.gitignore",
-    "semantic-release": "semantic-release",
-    "precommit": "./bin/pretty-quick.js --staged"
+    "semantic-release": "semantic-release"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "./bin/pretty-quick.js --staged"
+    }
+  },  
   "peerDependencies": {
     "prettier": ">=1.8.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "eslint": "^4.15.0",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-jest": "^21.5.0",
-    "eslint-plugin-prettier": "^2.4.0",
-    "husky": "^0.14.3",
-    "jest": "^22.0.4",
-    "mock-fs": "^4.4.2",
-    "prettier": "1.9.2",
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "eslint": "^6.5.1",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-plugin-jest": "^22.19.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "husky": "^3.0.9",
+    "jest": "^24.9.0",
+    "mock-fs": "^4.10.1",
+    "prettier": "1.18.2",
     "semantic-release": "^11.0.2"
   }
 }
