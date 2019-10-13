@@ -33,7 +33,7 @@ export const getSinceRevision = (directory, { branch }) => {
 export const getChangedFiles = (directory, revision) => {
   return [
     ...getLines(
-      runHg(directory, ['status', '-n', '-a', '-m', '--rev', revision])
+      runHg(directory, ['status', '-n', '-a', '-m', '--rev', revision]),
     ),
   ].filter(Boolean);
 };

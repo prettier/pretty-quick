@@ -1,13 +1,15 @@
 extends:
-- eslint:recommended
-- plugin:jest/recommended
-- plugin:prettier/recommended
+  - eslint:recommended
+  - plugin:jest/recommended
+  - plugin:prettier/recommended
 env:
   es6: true
   node: true
+parserOptions:
+  ecmaVersion: 2019
 rules:
-  no-console: off
+  no-console: 0
 overrides:
-- files: "src/**/*.js"
-  parserOptions:
-    sourceType: module
+  - files: 'src/**/*.js'
+    parserOptions:
+      sourceType: module

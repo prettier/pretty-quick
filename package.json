@@ -46,11 +46,13 @@
     "hooks": {
       "pre-commit": "./bin/pretty-quick.js --staged"
     }
-  },  
+  },
+  "prettier": "@azz/prettier-config",
   "peerDependencies": {
     "prettier": ">=1.8.0"
   },
   "devDependencies": {
+    "@azz/prettier-config": "^1.0.0",
     "@babel/cli": "^7.6 .4",
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",

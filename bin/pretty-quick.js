@@ -15,8 +15,8 @@ const prettyQuickResult = prettyQuick(
     onFoundSinceRevision: (scm, revision) => {
       console.log(
         `🔍  Finding changed files since ${chalk.bold(
-          scm
-        )} revision ${chalk.bold(revision)}.`
+          scm,
+        )} revision ${chalk.bold(revision)}.`,
       );
     },
 
@@ -24,7 +24,7 @@ const prettyQuickResult = prettyQuick(
       console.log(
         `🎯  Found ${chalk.bold(changedFiles.length)} changed ${
           changedFiles.length === 1 ? 'file' : 'files'
-        }.`
+        }.`,
       );
     },
 
@@ -45,7 +45,7 @@ const prettyQuickResult = prettyQuick(
     onExamineFile: file => {
       console.log(`🔍  Examining ${chalk.bold(file)}.`);
     },
-  })
+  }),
 );
 
 if (prettyQuickResult.success) {
@@ -54,17 +54,17 @@ if (prettyQuickResult.success) {
   if (prettyQuickResult.errors.indexOf('PARTIALLY_STAGED_FILE') !== -1) {
     console.log(
       '✗ Partially staged files were fixed up.' +
-        ` ${chalk.bold('Please update stage before committing')}.`
+        ` ${chalk.bold('Please update stage before committing')}.`,
     );
   }
   if (prettyQuickResult.errors.indexOf('BAIL_ON_WRITE') !== -1) {
     console.log(
-      '✗ File had to be prettified and prettyQuick was set to bail mode.'
+      '✗ File had to be prettified and prettyQuick was set to bail mode.',
     );
   }
   if (prettyQuickResult.errors.indexOf('CHECK_FAILED') !== -1) {
     console.log(
-      '✗ Code style issues found in the above file(s). Forgot to run Prettier?'
+      '✗ Code style issues found in the above file(s). Forgot to run Prettier?',
     );
   }
   process.exit(1); // ensure git hooks abort

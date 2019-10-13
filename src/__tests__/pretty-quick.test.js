@@ -12,6 +12,6 @@ test('throws an error when no vcs is found', () => {
   });
 
   expect(() => prettyQuick('root')).toThrow(
-    'Unable to detect a source control manager.'
+    'Unable to detect a source control manager.',
   );
 });
