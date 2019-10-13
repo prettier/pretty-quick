@@ -5,7 +5,10 @@ import { dirname } from 'path';
 export const name = 'hg';
 
 export const detect = directory => {
-  const hgDirectory = findUp.sync('.hg', { cwd: directory });
+  const hgDirectory = findUp.sync('.hg', {
+    cwd: directory,
+    type: 'directory',
+  });
   if (hgDirectory) {
     return dirname(hgDirectory);
   }
