@@ -47,7 +47,7 @@ npx pretty-quick
 
 With `npm`:
 
-1. Add `"pretty-quick": "pretty-quick"` to the scripts section of `package.json`.
+1. Add `"pretty-quick": "pretty-quick"` to the `"scripts"` section of `package.json`.
 2. `npm run pretty-quick`
 
 ## Pre-Commit Hook
