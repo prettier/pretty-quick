@@ -5,7 +5,10 @@ import { dirname } from 'path';
 export const name = 'git';
 
 export const detect = directory => {
-  const gitDirectory = findUp.sync('.git', { cwd: directory });
+  const gitDirectory = findUp.sync('.git', {
+    cwd: directory,
+    type: 'directory',
+  });
   if (gitDirectory) {
     return dirname(gitDirectory);
   }

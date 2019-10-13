@@ -7,6 +7,9 @@
   "main": "./dist",
   "bin": "./bin/pretty-quick.js",
   "license": "MIT",
+  "engines": {
+    "node": ">=8"
+  },
   "keywords": [
     "git",
     "mercurial",
@@ -26,10 +29,10 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "execa": "^2.1.0",
-    "find-up": "^2.1.0",
+    "find-up": "^4.1.0",
     "ignore": "^5.1.4",
     "mri": "^1.1.4",
-    "multimatch": "^3.0.0"
+    "multimatch": "^4.0.0"
   },
   "scripts": {
     "prepublishOnly": "yarn build",
