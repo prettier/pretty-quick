@@ -11,7 +11,7 @@ test('throws an error when no vcs is found', () => {
     'root/README.md': '',
   });
 
-  expect(() => prettyQuick('root')).toThrowError(
+  expect(() => prettyQuick('root')).toThrow(
     'Unable to detect a source control manager.'
   );
 });

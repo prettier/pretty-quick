@@ -48,10 +48,10 @@
     "prettier": ">=1.8.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.6.4",
+    "@babel/cli": "^7.6 .4",
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
-    "eslint": "^6.5.1",
+    "eslint": "^5.16.0",
     "eslint-config-prettier": "^6.4.0",
     "eslint-plugin-jest": "^22.19.0",
     "eslint-plugin-prettier": "^3.1.1",
