@@ -1,10 +1,15 @@
 import findUp from 'find-up';
 import execa from 'execa';
-import { dirname } from 'path';
+import { dirname, join } from 'path';
+import * as fs from 'fs';
 
 export const name = 'git';
 
 export const detect = directory => {
+  if (fs.existsSync(join(directory, '.git'))) {
+    return directory;
+  }
+
   const gitDirectory = findUp.sync('.git', {
     cwd: directory,
     type: 'directory',
