@@ -6,4 +6,4 @@ const extensions = getSupportInfo().languages.reduce(
   [],
 );
 
-export default file => extensions.includes(extname(file));
+export default (file) => extensions.includes(extname(file));

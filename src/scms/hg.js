@@ -4,7 +4,7 @@ import { dirname } from 'path';
 
 export const name = 'hg';
 
-export const detect = directory => {
+export const detect = (directory) => {
   const hgDirectory = findUp.sync('.hg', {
     cwd: directory,
     type: 'directory',
@@ -19,7 +19,7 @@ const runHg = (directory, args) =>
     cwd: directory,
   });
 
-const getLines = execaResult => execaResult.stdout.split('\n');
+const getLines = (execaResult) => execaResult.stdout.split('\n');
 
 export const getSinceRevision = (directory, { branch }) => {
   const revision = runHg(directory, [
