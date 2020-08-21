@@ -1,4 +1,3 @@
-import { extname } from 'path';
 import { getSupportInfo } from 'prettier';
 
 const extensions = getSupportInfo().languages.reduce(
@@ -6,4 +5,4 @@ const extensions = getSupportInfo().languages.reduce(
   [],
 );
 
-export default (file) => extensions.includes(extname(file));
+export default (file) => extensions.some((ext) => file.endsWith(ext));
