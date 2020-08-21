@@ -20,7 +20,7 @@ const prettyQuickResult = prettyQuick(
       );
     },
 
-    onFoundChangedFiles: changedFiles => {
+    onFoundChangedFiles: (changedFiles) => {
       console.log(
         `🎯  Found ${chalk.bold(changedFiles.length)} changed ${
           changedFiles.length === 1 ? 'file' : 'files'
@@ -28,11 +28,11 @@ const prettyQuickResult = prettyQuick(
       );
     },
 
-    onPartiallyStagedFile: file => {
+    onPartiallyStagedFile: (file) => {
       console.log(`✗ Found ${chalk.bold('partially')} staged file ${file}.`);
     },
 
-    onWriteFile: file => {
+    onWriteFile: (file) => {
       console.log(`✍️  Fixing up ${chalk.bold(file)}.`);
     },
 
@@ -42,7 +42,7 @@ const prettyQuickResult = prettyQuick(
       }
     },
 
-    onExamineFile: file => {
+    onExamineFile: (file) => {
       console.log(`🔍  Examining ${chalk.bold(file)}.`);
     },
   }),

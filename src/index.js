@@ -56,7 +56,7 @@ export default (
         .filter(cwdIgnorer)
     : [];
 
-  const wasFullyStaged = f => unstagedFiles.indexOf(f) < 0;
+  const wasFullyStaged = (f) => unstagedFiles.indexOf(f) < 0;
 
   onFoundChangedFiles && onFoundChangedFiles(changedFiles);
 
@@ -65,7 +65,7 @@ export default (
   processFiles(directory, changedFiles, {
     check,
     config,
-    onWriteFile: file => {
+    onWriteFile: (file) => {
       onWriteFile && onWriteFile(file);
       if (bail) {
         failReasons.add('BAIL_ON_WRITE');

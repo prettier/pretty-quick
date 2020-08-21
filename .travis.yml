@@ -6,9 +6,9 @@ cache:
 notifications:
   email: false
 node_js:
-  - '12'
-  - '10'
-  - '8'
+  - 10.13
+  - 12
+  - node
 install:
   - yarn
 script:

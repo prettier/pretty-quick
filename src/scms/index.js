@@ -3,7 +3,7 @@ import * as hgScm from './hg';
 
 const scms = [gitScm, hgScm];
 
-export default directory => {
+export default (directory) => {
   for (const scm of scms) {
     const rootDirectory = scm.detect(directory);
     if (rootDirectory) {
