@@ -8,6 +8,7 @@ notifications:
 node_js:
   - 10.13
   - 12
+  - 14
   - node
 install:
   - yarn
@@ -22,7 +23,7 @@ deploy:
     - npx semantic-release@15
   on:
     branch: master
-    node_js: '12'
+    node_js: '14'
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
