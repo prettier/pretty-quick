@@ -1,20 +1,20 @@
+const path = require('path');
+
 const prettierMock = {
   format: jest.fn().mockImplementation((input) => 'formatted:' + input),
   resolveConfig: {
     sync: jest.fn().mockImplementation((file) => ({ file })),
   },
-  getSupportInfo: jest.fn().mockReturnValue({
-    languages: [
-      {
-        name: 'JavaScript',
-        extensions: ['.js'],
-      },
-      {
-        name: 'Markdown',
-        extensions: ['.md'],
-      },
-    ],
-  }),
+  getFileInfo: {
+    sync: jest.fn().mockImplementation((file) => {
+      const ext = path.extname(file);
+      if (ext === '.js' || ext === '.md') {
+        return { ignored: false, inferredParser: 'babel' };
+      } else {
+        return { ignored: false, inferredParser: null };
+      }
+    }),
+  },
 };
 
 module.exports = prettierMock;
