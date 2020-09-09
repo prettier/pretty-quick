@@ -37,7 +37,7 @@
   "scripts": {
     "prepublishOnly": "yarn build",
     "pretty-quick": "./bin/pretty-quick.js",
-    "build": "babel src -d dist --copy-files --ignore __tests__",
+    "build": "babel src -d dist --copy-files --no-copy-ignored --ignore '**/__tests__/*.js'",
     "test": "jest",
     "lint": "eslint . --ignore-path=.gitignore",
     "semantic-release": "semantic-release"
