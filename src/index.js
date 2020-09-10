@@ -22,6 +22,7 @@ export default (
     onExamineFile,
     onCheckFile,
     onWriteFile,
+    resolveConfig = true,
   } = {},
 ) => {
   const scm = scms(currentDirectory);
@@ -42,7 +43,7 @@ export default (
 
   const changedFiles = scm
     .getChangedFiles(directory, revision, staged)
-    .filter(isSupportedExtension)
+    .filter(isSupportedExtension(resolveConfig))
     .filter(createMatcher(pattern))
     .filter(rootIgnorer)
     .filter(cwdIgnorer);

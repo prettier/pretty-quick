@@ -105,6 +105,27 @@ Prevent `git commit` if any files are fixed.
 
 Check that files are correctly formatted, but don't format them. This is useful on CI to verify that all changed files in the current branch were correctly formatted.
 
+### `--no-resolve-config`
+
+Do not resolve prettier config when determining which files to format, just use standard set of supported file types & extensions prettier supports. This may be useful if you do not need any customization and see performance issues.
+
+By default, pretty-quick will check your prettier configuration file for any overrides you define to support formatting of additional file extensions.
+
+Example `.prettierrc` file to support formatting files with `.cmp` or `.page` extensions as html.
+
+```
+{
+    "printWidth": 120,
+    "bracketSpacing": false,
+    "overrides": [
+        {
+            "files": "*.{cmp,page}",
+            "options": {"parser": "html"}
+        }
+    ],
+}
+```
+
 <!-- Undocumented = Unsupported :D
 
 ### `--config`

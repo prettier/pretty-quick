@@ -7,7 +7,11 @@ const mri = require('mri');
 
 const prettyQuick = require('..').default;
 
-const args = mri(process.argv.slice(2));
+const args = mri(process.argv.slice(2), {
+  alias: {
+    'resolve-config': 'resolveConfig',
+  },
+});
 
 const prettyQuickResult = prettyQuick(
   process.cwd(),
