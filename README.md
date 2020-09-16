@@ -42,8 +42,10 @@ yarn pretty-quick
 With [`npx`](https://npm.im/npx):
 
 ```shellsession
-npx pretty-quick
+npx -p prettier@latest -p pretty-quick pretty-quick
 ```
+
+> Note: You can (_should_) change `latest` to a specific version of Prettier.
 
 With `npm`:
 
@@ -62,7 +64,7 @@ yarn add --dev husky
 
 In `package.json`, add:
 
-```
+```json
 "husky": {
   "hooks": {
     "pre-commit": "pretty-quick --staged"
