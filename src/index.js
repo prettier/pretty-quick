@@ -15,7 +15,7 @@ export default (
     branch,
     bail,
     check,
-    ignorePath = '.prettierignore',
+    ignorePath,
     verbose,
     onFoundSinceRevision,
     onFoundChangedFiles,
@@ -39,7 +39,7 @@ export default (
   const rootIgnorer = createIgnorer(directory, ignorePath);
   const cwdIgnorer =
     currentDirectory !== directory
-      ? createIgnorer(currentDirectory)
+      ? createIgnorer(currentDirectory, ignorePath)
       : () => true;
 
   const changedFiles = scm
