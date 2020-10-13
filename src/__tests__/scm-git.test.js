@@ -332,4 +332,30 @@ describe('with git', () => {
     prettyQuick('/sub-directory/', { since: 'banana', onWriteFile });
     expect(onWriteFile.mock.calls).toEqual([['./foo.js']]);
   });
+
+  test('with --ignore-path to ignore files matching patterns from the repositories root .ignorePath', () => {
+    const onWriteFile = jest.fn();
+    mockGitFs('', {
+      '/.ignorePath': '*.md',
+    });
+    prettyQuick('/sub-directory/', {
+      since: 'banana',
+      onWriteFile,
+      ignorePath: '/.ignorePath',
+    });
+    expect(onWriteFile.mock.calls).toEqual([['./foo.js']]);
+  });
+
+  test('with --ignore-path to ignore files matching patterns from the working directories .ignorePath', () => {
+    const onWriteFile = jest.fn();
+    mockGitFs('', {
+      '/sub-directory/.ignorePath': '*.md',
+    });
+    prettyQuick('/sub-directory/', {
+      since: 'banana',
+      onWriteFile,
+      ignorePath: '/.ignorePath',
+    });
+    expect(onWriteFile.mock.calls).toEqual([['./foo.js']]);
+  });
 });
