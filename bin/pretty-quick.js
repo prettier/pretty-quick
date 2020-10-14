@@ -10,6 +10,7 @@ const prettyQuick = require('..').default;
 const args = mri(process.argv.slice(2), {
   alias: {
     'resolve-config': 'resolveConfig',
+    'ignore-path': 'ignorePath',
   },
 });
 
