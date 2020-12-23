@@ -145,7 +145,7 @@ For example `pretty-quick --since HEAD` will format only staged files.
 ### `--ignore-path`
 
 Check an alternative file for ignoring files with the same format as [`.prettierignore`](https://prettier.io/docs/en/ignore#ignoring-files).
-For example `pretty-quick --ignore-path=.gitignore`
+For example `pretty-quick --ignore-path .gitignore`
 
 ## Configuration and Ignore Files
 
