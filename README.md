@@ -62,6 +62,37 @@ You can run `pretty-quick` as a pre-commit hook using [`husky`](https://github.c
 yarn add --dev husky
 ```
 
+### Husky 6.0.0
+
+Add "husky install" as a prepare script to package.json:
+
+```json
+"scripts": {
+    "prepare": "husky install"
+}
+```
+
+Run the script:
+
+```shellsession
+yarn prepare
+```
+
+In npm, you can add the script and run it in one line:
+
+
+```shellsession
+npm set-script prepare "husky install" && npm run prepare
+```
+
+Then add "npx pretty-quick --staged" as a pre-commit hook:
+
+```shellsession
+npx husky add .husky/pre-commit "npx pretty-quick --staged"
+```
+
+### Older versions of Husky
+
 In `package.json`, add:
 
 ```json
