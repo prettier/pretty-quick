@@ -49,7 +49,7 @@
   },
   "prettier": "@azz/prettier-config",
   "peerDependencies": {
-    "prettier": ">=2.0.0"
+    "prettier": ">=2.3.1"
   },
   "devDependencies": {
     "@azz/prettier-config": "^1.0.0",
@@ -63,6 +63,6 @@
     "husky": "^4.2.3",
     "jest": "^25.2.3",
     "mock-fs": "^4.11.0",
-    "prettier": "2.0.2"
+    "prettier": "2.3.1"
   }
 }
