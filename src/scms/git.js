@@ -17,6 +17,15 @@ export const detect = (directory) => {
   if (gitDirectory) {
     return dirname(gitDirectory);
   }
+
+  const gitWorktreeFile = findUp.sync('.git', {
+    cwd: directory,
+    type: 'file',
+  });
+
+  if (gitWorktreeFile) {
+    return dirname(gitWorktreeFile);
+  }
 };
 
 const runGit = (directory, args) =>
