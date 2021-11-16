@@ -44,10 +44,10 @@ export default (
 
   const changedFiles = scm
     .getChangedFiles(directory, revision, staged)
-    .filter(isSupportedExtension(resolveConfig))
     .filter(createMatcher(pattern))
     .filter(rootIgnorer)
-    .filter(cwdIgnorer);
+    .filter(cwdIgnorer)
+    .filter(isSupportedExtension(resolveConfig));
 
   const unstagedFiles = staged
     ? scm
