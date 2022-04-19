@@ -50,6 +50,10 @@ const prettyQuickResult = prettyQuick(
     onExamineFile: (file) => {
       console.log(`🔍  Examining ${chalk.bold(file)}.`);
     },
+
+    onStageFiles: () => {
+      console.log(`🏗️  Staging changed files.`);
+    },
   }),
 );
 
@@ -70,6 +74,11 @@ if (prettyQuickResult.success) {
   if (prettyQuickResult.errors.indexOf('CHECK_FAILED') !== -1) {
     console.log(
       '✗ Code style issues found in the above file(s). Forgot to run Prettier?',
+    );
+  }
+  if (prettyQuickResult.errors.indexOf('STAGE_FAILED') !== -1) {
+    console.log(
+      '✗ Could not stage files. Please stage files manually before committing.',
     );
   }
   process.exit(1); // ensure git hooks abort

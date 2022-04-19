@@ -23,6 +23,7 @@ export default (
     onExamineFile,
     onCheckFile,
     onWriteFile,
+    onStageFiles,
     resolveConfig = true,
   } = {},
 ) => {
@@ -64,6 +65,7 @@ export default (
 
   const failReasons = new Set();
 
+  const filesToStage = [];
   processFiles(directory, changedFiles, {
     check,
     config,
@@ -74,7 +76,7 @@ export default (
       }
       if (staged && restage) {
         if (wasFullyStaged(file)) {
-          scm.stageFile(directory, file);
+          filesToStage.push(file);
         } else {
           onPartiallyStagedFile && onPartiallyStagedFile(file);
           failReasons.add('PARTIALLY_STAGED_FILE');
@@ -89,6 +91,15 @@ export default (
     },
     onExamineFile: verbose && onExamineFile,
   });
+
+  if (filesToStage.length > 0) {
+    try {
+      onStageFiles && onStageFiles();
+      scm.stageFiles(directory, filesToStage);
+    } catch (e) {
+      failReasons.add('STAGE_FAILED');
+    }
+  }
 
   return {
     success: failReasons.size === 0,

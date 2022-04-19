@@ -82,6 +82,18 @@ export const getUnstagedChangedFiles = (directory) => {
   return getChangedFiles(directory, null, false);
 };
 
-export const stageFile = (directory, file) => {
-  runGit(directory, ['add', file]);
+export const stageFiles = (directory, files) => {
+  const maxArguments = 100;
+  const result = files.reduce((resultArray, file, index) => {
+    const chunkIndex = Math.floor(index / maxArguments);
+
+    if (!resultArray[chunkIndex]) {
+      resultArray[chunkIndex] = []; // start a new chunk
+    }
+
+    resultArray[chunkIndex].push(file);
+
+    return resultArray;
+  }, []);
+  result.forEach((batchedFiles) => runGit(directory, ['add', ...batchedFiles]));
 };
