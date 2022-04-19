@@ -4,7 +4,7 @@ import createIgnorer from './createIgnorer';
 import createMatcher from './createMatcher';
 import isSupportedExtension from './isSupportedExtension';
 
-export default (
+export default async (
   currentDirectory,
   {
     config,
@@ -26,32 +26,38 @@ export default (
     resolveConfig = true,
   } = {},
 ) => {
-  const scm = scms(currentDirectory);
+  console.log('SCM...');
+  const scm = await scms(currentDirectory);
   if (!scm) {
     throw new Error('Unable to detect a source control manager.');
   }
   const directory = scm.rootDirectory;
 
-  const revision = since || scm.getSinceRevision(directory, { staged, branch });
+  const revision =
+    since || (await scm.getSinceRevision(directory, { staged, branch }));
 
   onFoundSinceRevision && onFoundSinceRevision(scm.name, revision);
-
-  const rootIgnorer = createIgnorer(directory, ignorePath);
+  console.log('IGNORER...');
+  const rootIgnorer = await createIgnorer(directory, ignorePath);
   const cwdIgnorer =
     currentDirectory !== directory
-      ? createIgnorer(currentDirectory, ignorePath)
+      ? await createIgnorer(currentDirectory, ignorePath)
       : () => true;
+  console.log('CHANGED FILES...');
+  const rawChangedFiles = await scm.getChangedFiles(
+    directory,
+    revision,
+    staged,
+  );
 
-  const changedFiles = scm
-    .getChangedFiles(directory, revision, staged)
+  const changedFiles = rawChangedFiles
     .filter(createMatcher(pattern))
     .filter(rootIgnorer)
     .filter(cwdIgnorer)
     .filter(isSupportedExtension(resolveConfig));
-
+  console.log('UNSTAGED FILES...');
   const unstagedFiles = staged
-    ? scm
-        .getUnstagedChangedFiles(directory, revision)
+    ? (await scm.getUnstagedChangedFiles(directory, revision))
         .filter(isSupportedExtension)
         .filter(createMatcher(pattern))
         .filter(rootIgnorer)
@@ -63,25 +69,28 @@ export default (
   onFoundChangedFiles && onFoundChangedFiles(changedFiles);
 
   const failReasons = new Set();
-
-  processFiles(directory, changedFiles, {
+  console.log('PROCESSING...');
+  const filesToStage = [];
+  await processFiles(directory, changedFiles, {
     check,
     config,
-    onWriteFile: (file) => {
+    onWriteFile: async (file) => {
       onWriteFile && onWriteFile(file);
+
       if (bail) {
         failReasons.add('BAIL_ON_WRITE');
       }
       if (staged && restage) {
         if (wasFullyStaged(file)) {
-          scm.stageFile(directory, file);
+          filesToStage.push(file);
         } else {
           onPartiallyStagedFile && onPartiallyStagedFile(file);
           failReasons.add('PARTIALLY_STAGED_FILE');
         }
       }
     },
-    onCheckFile: (file, isFormatted) => {
+    onCheckFile: async (file, isFormatted) => {
+      console.log('ON CHECK...');
       onCheckFile && onCheckFile(file, isFormatted);
       if (!isFormatted) {
         failReasons.add('CHECK_FAILED');
@@ -89,6 +98,12 @@ export default (
     },
     onExamineFile: verbose && onExamineFile,
   });
+
+  try {
+    await scm.stageFiles(directory, filesToStage);
+  } catch (e) {
+    failReasons.add('STAGE_FAILED');
+  }
 
   return {
     success: failReasons.size === 0,
