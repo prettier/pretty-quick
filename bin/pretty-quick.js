@@ -51,6 +51,10 @@ const args = mri(process.argv.slice(2), {
       onExamineFile: (file) => {
         console.log(`🔍  Examining ${chalk.bold(file)}.`);
       },
+
+      onStageFiles: () => {
+        console.log(`🏗️  Staging changed files.`);
+      },
     }),
   );
 

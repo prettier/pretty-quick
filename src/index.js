@@ -23,6 +23,7 @@ export default async (
     onExamineFile,
     onCheckFile,
     onWriteFile,
+    onStageFiles,
     resolveConfig = true,
   } = {},
 ) => {
@@ -69,9 +70,9 @@ export default async (
   onFoundChangedFiles && onFoundChangedFiles(changedFiles);
 
   const failReasons = new Set();
-  console.log('PROCESSING...');
+
   const filesToStage = [];
-  await processFiles(directory, changedFiles, {
+  processFiles(directory, changedFiles, {
     check,
     config,
     onWriteFile: async (file) => {
@@ -99,10 +100,13 @@ export default async (
     onExamineFile: verbose && onExamineFile,
   });
 
-  try {
-    await scm.stageFiles(directory, filesToStage);
-  } catch (e) {
-    failReasons.add('STAGE_FAILED');
+  if (filesToStage.length > 0) {
+    try {
+      onStageFiles && onStageFiles();
+      await scm.stageFiles(directory, filesToStage);
+    } catch (e) {
+      failReasons.add('STAGE_FAILED');
+    }
   }
 
   return {
