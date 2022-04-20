@@ -42,7 +42,7 @@ export const getUnstagedChangedFiles = () => {
   return [];
 };
 
-export const stageFiles = (directory, files) => {
+export const stageFiles = async (directory, files) => {
   const maxArguments = 100;
   const result = files.reduce((resultArray, file, index) => {
     const chunkIndex = Math.floor(index / maxArguments);
@@ -55,5 +55,8 @@ export const stageFiles = (directory, files) => {
 
     return resultArray;
   }, []);
-  result.forEach((batchedFiles) => runHg(directory, ['add', ...batchedFiles]));
+
+  for (let batchedFiles of result) {
+    await runHg(directory, ['add', ...batchedFiles]);
+  }
 };

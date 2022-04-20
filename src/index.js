@@ -27,7 +27,6 @@ export default async (
     resolveConfig = true,
   } = {},
 ) => {
-  console.log('SCM...');
   const scm = await scms(currentDirectory);
   if (!scm) {
     throw new Error('Unable to detect a source control manager.');
@@ -38,13 +37,11 @@ export default async (
     since || (await scm.getSinceRevision(directory, { staged, branch }));
 
   onFoundSinceRevision && onFoundSinceRevision(scm.name, revision);
-  console.log('IGNORER...');
   const rootIgnorer = await createIgnorer(directory, ignorePath);
   const cwdIgnorer =
     currentDirectory !== directory
       ? await createIgnorer(currentDirectory, ignorePath)
       : () => true;
-  console.log('CHANGED FILES...');
   const rawChangedFiles = await scm.getChangedFiles(
     directory,
     revision,
@@ -56,7 +53,6 @@ export default async (
     .filter(rootIgnorer)
     .filter(cwdIgnorer)
     .filter(isSupportedExtension(resolveConfig));
-  console.log('UNSTAGED FILES...');
   const unstagedFiles = staged
     ? (await scm.getUnstagedChangedFiles(directory, revision))
         .filter(isSupportedExtension)
@@ -91,7 +87,6 @@ export default async (
       }
     },
     onCheckFile: async (file, isFormatted) => {
-      console.log('ON CHECK...');
       onCheckFile && onCheckFile(file, isFormatted);
       if (!isFormatted) {
         failReasons.add('CHECK_FAILED');

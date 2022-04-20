@@ -2,8 +2,6 @@ import * as fs from 'fs';
 import * as prettier from 'prettier';
 import { join } from 'path';
 
-const processInternal = async () => {};
-
 export default async (
   directory,
   files,

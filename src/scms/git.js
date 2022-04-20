@@ -88,7 +88,7 @@ export const getUnstagedChangedFiles = async (directory) => {
   return await getChangedFiles(directory, null, false);
 };
 
-export const stageFiles = (directory, files) => {
+export const stageFiles = async (directory, files) => {
   const maxArguments = 100;
   const result = files.reduce((resultArray, file, index) => {
     const chunkIndex = Math.floor(index / maxArguments);
@@ -101,5 +101,8 @@ export const stageFiles = (directory, files) => {
 
     return resultArray;
   }, []);
-  result.forEach((batchedFiles) => runGit(directory, ['add', ...batchedFiles]));
+
+  for (let batchedFiles of result) {
+    await runGit(directory, ['add', ...batchedFiles]);
+  }
 };
