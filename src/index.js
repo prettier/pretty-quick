@@ -68,7 +68,7 @@ export default async (
   const failReasons = new Set();
 
   const filesToStage = [];
-  processFiles(directory, changedFiles, {
+  await processFiles(directory, changedFiles, {
     check,
     config,
     onWriteFile: async (file) => {
