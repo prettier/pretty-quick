@@ -1,8 +1,8 @@
 {
-  "name": "@c-hess/pretty-quick",
-  "version": "0.3.0-development",
+  "name": "pretty-quick",
+  "version": "0.0.0-development",
   "description": "Get Pretty Quick",
-  "repository": "C-Hess/pretty-quick",
+  "repository": "azz/pretty-quick",
   "author": "Lucas Azzola <@azz>",
   "main": "./dist",
   "bin": "./bin/pretty-quick.js",
