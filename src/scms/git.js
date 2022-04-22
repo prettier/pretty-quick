@@ -39,11 +39,9 @@ export const getSinceRevision = async (directory, { staged, branch }) => {
   try {
     const revision = staged
       ? 'HEAD'
-      : await runGit(directory, [
-          'merge-base',
-          'HEAD',
-          branch || 'master',
-        ]).stdout.trim();
+      : (
+          await runGit(directory, ['merge-base', 'HEAD', branch || 'master'])
+        ).stdout.trim();
     return (
       await runGit(directory, ['rev-parse', '--short', revision])
     ).stdout.trim();

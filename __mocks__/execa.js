@@ -1,15 +1,10 @@
-const mockStream = () => ({
-  once: jest.fn(),
-  on: jest.fn(),
-  removeListener: jest.fn(),
-  pipe: jest.fn(),
-});
-
-const mockExeca = jest.fn().mockReturnValue({
-  stdout: mockStream(),
-  stderr: mockStream(),
-  kill: () => {},
-});
+const mockExeca = jest.fn().mockReturnValue(
+  Promise.resolve({
+    stdout: '',
+    stderr: '',
+    kill: () => {},
+  }),
+);
 
 const mockExecaSync = jest.fn().mockReturnValue({
   stdout: '',

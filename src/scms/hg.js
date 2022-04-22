@@ -1,10 +1,15 @@
 import findUp from 'find-up';
 import execa from 'execa';
-import { dirname } from 'path';
+import { dirname, join } from 'path';
+import * as fs from 'fs';
 
 export const name = 'hg';
 
 export const detect = async (directory) => {
+  if (fs.existsSync(join(directory, '.hg'))) {
+    return directory;
+  }
+
   const hgDirectory = await findUp('.hg', {
     cwd: directory,
     type: 'directory',
@@ -22,11 +27,9 @@ const runHg = async (directory, args) =>
 const getLines = (execaResult) => execaResult.stdout.split('\n');
 
 export const getSinceRevision = async (directory, { branch }) => {
-  const revision = await runHg(directory, [
-    'debugancestor',
-    'tip',
-    branch || 'default',
-  ]).stdout.trim();
+  const revision = (
+    await runHg(directory, ['debugancestor', 'tip', branch || 'default'])
+  ).stdout.trim();
   return (await runHg(directory, ['id', '-i', '-r', revision])).stdout.trim();
 };
 

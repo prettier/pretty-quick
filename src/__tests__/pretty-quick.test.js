@@ -6,12 +6,12 @@ jest.mock('execa');
 
 afterEach(() => mock.restore());
 
-test('throws an error when no vcs is found', () => {
+test('throws an error when no vcs is found', async () => {
   mock({
     'root/README.md': '',
   });
 
-  expect(() => prettyQuick('root')).toThrow(
+  await expect(prettyQuick('root')).rejects.toThrow(
     'Unable to detect a source control manager.',
   );
 });
