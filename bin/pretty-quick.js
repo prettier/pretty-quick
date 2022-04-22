@@ -79,7 +79,7 @@ const args = mri(process.argv.slice(2), {
     }
     if (prettyQuickResult.errors.indexOf('STAGE_FAILED') !== -1) {
       console.log(
-        '✗ Failed to stage the above file(s). Please stage changes made by Prettier before committing.',
+        '✗ Failed to stage some or all of the above file(s). Please stage changes made by Prettier before committing.',
       );
     }
     process.exit(1); // ensure git hooks abort
