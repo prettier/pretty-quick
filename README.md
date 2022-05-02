@@ -59,7 +59,7 @@ You can run `pretty-quick` as a pre-commit hook using [`husky`](https://github.c
 > For Mercurial have a look at [`husky-hg`](https://github.com/TobiasTimm/husky-hg)
 
 ```shellstream
-yarn add --dev husky
+yarn add --dev husky@4.x
 ```
 
 In `package.json`, add:
