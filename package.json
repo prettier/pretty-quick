@@ -27,7 +27,7 @@
     "img"
   ],
   "dependencies": {
-    "chalk": "^3.0.0",
+    "chalk": "^4.0.0",
     "execa": "^4.0.0",
     "find-up": "^4.1.0",
     "ignore": "^5.1.4",
