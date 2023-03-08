@@ -62,6 +62,12 @@ You can run `pretty-quick` as a pre-commit hook using [`husky`](https://github.c
 yarn add --dev husky
 ```
 
+```shellsession
+npx husky add .husky/pre-commit "npx pretty-quick --staged"
+```
+
+### Deprecated husky < 4
+
 In `package.json`, add:
 
 ```json
