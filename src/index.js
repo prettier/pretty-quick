@@ -4,7 +4,7 @@ import createIgnorer from './createIgnorer';
 import createMatcher from './createMatcher';
 import isSupportedExtension from './isSupportedExtension';
 
-export default (
+export default async (
   currentDirectory,
   {
     config,
@@ -64,7 +64,7 @@ export default (
 
   const failReasons = new Set();
 
-  processFiles(directory, changedFiles, {
+  await processFiles(directory, changedFiles, {
     check,
     config,
     onWriteFile: (file) => {

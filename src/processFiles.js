@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import * as prettier from 'prettier';
 import { join } from 'path';
 
-export default (
+export default async (
   directory,
   files,
   { check, config, onExamineFile, onCheckFile, onWriteFile } = {},
@@ -12,7 +12,7 @@ export default (
     const file = join(directory, relative);
     const options = Object.assign(
       {},
-      prettier.resolveConfig.sync(file, {
+      await prettier.resolveConfig(file, {
         config,
         editorconfig: true,
       }),

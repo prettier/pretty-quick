@@ -1,13 +1,15 @@
 import { getFileInfo, resolveConfig as prettierResolveConfig } from 'prettier';
 
-export default (resolveConfig) => (file) =>
+export default (resolveConfig) => async (file) =>
   Boolean(
-    getFileInfo.sync(file, {
-      resolveConfig,
-      ...prettierResolveConfig.sync(
-        file,
-        { editorconfig: true },
-        { filepath: file },
-      ),
-    }).inferredParser,
+    (
+      await getFileInfo(file, {
+        resolveConfig,
+        ...(await prettierResolveConfig(
+          file,
+          { editorconfig: true },
+          { filepath: file },
+        )),
+      })
+    ).inferredParser,
   );
