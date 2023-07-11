@@ -42,7 +42,7 @@ yarn pretty-quick
 With [`npx`](https://npm.im/npx):
 
 ```shellsession
-npx -p prettier@latest -p pretty-quick pretty-quick
+npx -p prettier@^2 -p pretty-quick pretty-quick
 ```
 
 > Note: You can (_should_) change `latest` to a specific version of Prettier.
