@@ -45,7 +45,7 @@ With [`npx`](https://npm.im/npx):
 npx -p prettier@^2 -p pretty-quick pretty-quick
 ```
 
-> Note: You can (_should_) change `latest` to a specific version of Prettier.
+> Note: You can (_should_) change `@^2` to a specific version of Prettier.
 
 With `npm`:
 
