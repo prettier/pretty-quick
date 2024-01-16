@@ -1,5 +1,11 @@
 # pretty-quick
 
+## 3.2.0
+
+### Minor Changes
+
+- [#175](https://github.com/prettier/pretty-quick/pull/175) [`4f5a345`](https://github.com/prettier/pretty-quick/commit/4f5a345f932a33c99da54f38dfbf78f2b23ae773) Thanks [@JounQin](https://github.com/JounQin)! - feat: migrate code base to TypeScript
+
 ## 3.1.4
 
 ### Patch Changes
