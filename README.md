@@ -47,7 +47,7 @@ yarn pretty-quick
 
 ## Pre-Commit Hook
 
-You can run `pretty-quick` as a pre-commit hook using [`simple-git-hooks`](https://github.com/toplenboren/simple-git-hooks).
+You can run `pretty-quick` as a `pre-commit` hook using [`simple-git-hooks`](https://github.com/toplenboren/simple-git-hooks).
 
 ```sh
 # npm
@@ -83,7 +83,7 @@ When not in `staged` pre-commit mode, use this flag to compare changes with the 
 
 ### `--pattern`
 
-Filters the files for the given [minimatch](https://github.com/isaacs/minimatch) pattern.  
+Filters the files for the given [minimatch](https://github.com/isaacs/minimatch) pattern.
 For example `pretty-quick --pattern "**/*.*(js|jsx)"` or `pretty-quick --pattern "**/*.js" --pattern "**/*.jsx"`
 
 ### `--verbose`
@@ -106,16 +106,16 @@ By default, pretty-quick will check your prettier configuration file for any ove
 
 Example `.prettierrc` file to support formatting files with `.cmp` or `.page` extensions as html.
 
-```
+```json
 {
-    "printWidth": 120,
-    "bracketSpacing": false,
-    "overrides": [
-        {
-            "files": "*.{cmp,page}",
-            "options": {"parser": "html"}
-        }
-    ],
+  "printWidth": 120,
+  "bracketSpacing": false,
+  "overrides": [
+    {
+      "files": "*.{cmp,page}",
+      "options": { "parser": "html" }
+    }
+  ]
 }
 ```
 
