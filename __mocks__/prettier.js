@@ -10,9 +10,8 @@ const prettierMock = {
       const ext = path.extname(file)
       if (ext === '.js' || ext === '.md') {
         return { ignored: false, inferredParser: 'babel' }
-      } else {
-        return { ignored: false, inferredParser: null }
       }
+      return { ignored: false, inferredParser: null }
     }),
   },
 }

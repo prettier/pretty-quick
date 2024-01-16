@@ -1,45 +1,55 @@
-import mock from 'mock-fs'
-import execa from 'execa'
+/* eslint-disable @typescript-eslint/unbound-method */
+
 import fs from 'fs'
 
-import prettyQuick from '..'
+import execa from 'execa'
+import mock from 'mock-fs'
+import type FileSystem from 'mock-fs/lib/filesystem'
+
+// eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
+// @ts-ignore -- No idea how to fix
+import prettyQuick from 'pretty-quick'
 
 jest.mock('execa')
+
+const mockHgFs = (additionalFiles?: FileSystem.DirectoryItems) => {
+  mock({
+    '/.hg': {},
+    '/foo.js': 'foo()',
+    '/bar.md': '# foo',
+    ...additionalFiles,
+  })
+
+  // @ts-expect-error -- Need to find a better way
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  execa.sync.mockImplementation((command: string, args: string[]) => {
+    if (command !== 'hg') {
+      throw new Error(`unexpected command: ${command}`)
+    }
+    switch (args[0]) {
+      case 'status': {
+        return { stdout: './foo.js\n' + './bar.md\n' }
+      }
+      case 'diff': {
+        return { stdout: './foo.js\n' + './bar.md\n' }
+      }
+      case 'add': {
+        return { stdout: '' }
+      }
+      case 'log': {
+        return { stdout: '' }
+      }
+      default: {
+        throw new Error(`unexpected arg0: ${args[0]}`)
+      }
+    }
+  })
+}
 
 afterEach(() => {
   mock.restore()
   jest.clearAllMocks()
 })
-
-const mockHgFs = (additionalFiles = {}) => {
-  mock(
-    Object.assign(
-      {
-        '/.hg': {},
-        '/foo.js': 'foo()',
-        '/bar.md': '# foo',
-      },
-      additionalFiles,
-    ),
-  )
-  execa.sync.mockImplementation((command, args) => {
-    if (command !== 'hg') {
-      throw new Error(`unexpected command: ${command}`)
-    }
-    switch (args[0]) {
-      case 'status':
-        return { stdout: './foo.js\n' + './bar.md\n' }
-      case 'diff':
-        return { stdout: './foo.js\n' + './bar.md\n' }
-      case 'add':
-        return { stdout: '' }
-      case 'log':
-        return { stdout: '' }
-      default:
-        throw new Error(`unexpected arg0: ${args[0]}`)
-    }
-  })
-}
 
 describe('with hg', () => {
   test('calls `hg debugancestor`', () => {
@@ -90,7 +100,10 @@ describe('with hg', () => {
     mock({
       '/.hg': {},
     })
-    execa.sync.mockReturnValue({ stdout: 'banana' })
+
+    // @ts-expect-error -- Need to find a better way
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    execa.sync.mockImplementation(() => ({ stdout: 'banana' }))
 
     prettyQuick('root', { onFoundSinceRevision })
 
@@ -219,6 +232,7 @@ describe('with hg', () => {
     mockHgFs({
       '/.prettierignore': '*.md',
     })
+    // eslint-disable-next-line sonarjs/no-duplicate-string
     prettyQuick('/sub-directory/', { since: 'banana', onWriteFile })
     expect(onWriteFile.mock.calls).toEqual([['./foo.js']])
   })

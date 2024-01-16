@@ -1,5 +1,10 @@
-import isSupportedExtension from '../isSupportedExtension'
+/* eslint-disable unicorn/filename-case */
+
 import prettier from 'prettier'
+
+// eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
+// @ts-ignore -- No idea how to fix
+import isSupportedExtension from 'pretty-quick/isSupportedExtension'
 
 afterEach(() => jest.clearAllMocks())
 
@@ -12,6 +17,7 @@ test('return true when file with supported extension passed in', () => {
 })
 
 test('return false when file with not supported extension passed in', () => {
+  // eslint-disable-next-line sonarjs/no-duplicate-string
   expect(isSupportedExtension(true)('banana.txt')).toEqual(false)
   expect(prettier.getFileInfo.sync).toHaveBeenCalledWith('banana.txt', {
     file: 'banana.txt',

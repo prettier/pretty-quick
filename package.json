@@ -12,8 +12,10 @@
   "engines": {
     "node": ">=10.13"
   },
-  "bin": "./bin/pretty-quick.js",
-  "main": "./dist",
+  "bin": "dist/cli.js",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.mjs",
+  "types": "dist/index.d.ts",
   "files": [
     "bin",
     "dist",
@@ -31,10 +33,13 @@
     "precommit"
   ],
   "scripts": {
-    "build": "babel src -d dist --copy-files --no-copy-ignored --ignore '**/__tests__/*.js'",
-    "lint": "eslint . --ignore-path=.gitignore",
+    "build": "run-p 'build:*'",
+    "build:r": "r -f esm -o dist",
+    "build:tsc": "tsc -b",
+    "lint": "run-p 'lint:*'",
+    "lint:es": "eslint . --cache",
+    "lint:tsc": "tsc --noEmit",
     "prepare": "simple-git-hooks",
-    "pretty-quick": "./bin/pretty-quick.js",
     "release": "yarn build && clean-pkg-json && changeset publish",
     "test": "jest"
   },
@@ -50,32 +55,70 @@
     "multimatch": "^5.0.0"
   },
   "devDependencies": {
-    "@1stg/prettier-config": "3.9.2",
-    "@babel/cli": "^7.23.4",
-    "@babel/core": "^7.23.7",
-    "@babel/preset-env": "^7.23.8",
+    "@1stg/lib-config": "^12.0.0",
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
+    "@commitlint/cli": "^17.8.1",
+    "@pkgr/rollup": "^4.1.1",
+    "@total-typescript/ts-reset": "^0.5.1",
+    "@types/jest": "^29.5.11",
+    "@types/mock-fs": "^4.13.4",
     "clean-pkg-json": "^1.2.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^27.6.3",
     "eslint-plugin-prettier": "^4.2.1",
     "jest": "^26.6.3",
+    "lint-staged": "^13.2.2",
     "mock-fs": "^4.14.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "2.8.8",
+    "prettier": "^2.8.8",
+    "pretty-quick": "link:.",
     "simple-git-hooks": "^2.9.0",
     "size-limit": "^11.0.1",
-    "size-limit-preset-node-lib": "^0.3.0"
+    "size-limit-preset-node-lib": "^0.3.0",
+    "ts-jest": "^26.5.6",
+    "ts-node": "^10.9.2",
+    "typescript": "~4.4.4"
   },
+  "resolutions": {
+    "typescript": "~4.4.4"
+  },
+  "commitlint": {
+    "extends": "@1stg"
+  },
+  "eslintConfig": {
+    "extends": "@1stg",
+    "rules": {
+      "unicorn/prefer-node-protocol": "off"
+    },
+    "overrides": [
+      {
+        "files": "__mocks__/*.*",
+        "env": {
+          "jest": true
+        }
+      }
+    ]
+  },
+  "eslintIgnore": [
+    "coverage",
+    "dist",
+    "test-dist",
+    "!/.*.js"
+  ],
   "jest": {
-    "collectCoverage": true
+    "preset": "ts-jest",
+    "testMatch": [
+      "<rootDir>/test/*.spec.ts"
+    ],
+    "collectCoverage": true,
+    "moduleNameMapper": {
+      "^pretty-quick$": "<rootDir>/src",
+      "^pretty-quick/(.+)$": "<rootDir>/src/$1"
+    }
   },
   "prettier": "@1stg/prettier-config",
-  "simple-git-hooks": {
-    "pre-commit": "./bin/pretty-quick.js --staged"
-  },
   "size-limit": [
     {
       "path": "src/index.js",

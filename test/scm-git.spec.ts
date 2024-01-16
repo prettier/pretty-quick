@@ -1,46 +1,58 @@
-import mock from 'mock-fs'
-import execa from 'execa'
+/* eslint-disable @typescript-eslint/unbound-method */
+
 import fs from 'fs'
 
-import prettyQuick from '..'
+import execa from 'execa'
+import mock from 'mock-fs'
+import type FileSystem from 'mock-fs/lib/filesystem'
+
+// eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
+// @ts-ignore -- No idea how to fix
+import prettyQuick from 'pretty-quick'
 
 jest.mock('execa')
+
+const mockGitFs = (
+  additionalUnstaged = '',
+  additionalFiles?: FileSystem.DirectoryItems,
+) => {
+  mock({
+    '/.git': {},
+    '/raz.js': 'raz()',
+    '/foo.js': 'foo()',
+    '/bar.md': '# foo',
+    ...additionalFiles,
+  })
+
+  // @ts-expect-error -- Need to find a better way
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  execa.sync.mockImplementation((command: string, args: string[]) => {
+    if (command !== 'git') {
+      throw new Error(`unexpected command: ${command}`)
+    }
+    switch (args[0]) {
+      case 'ls-files': {
+        return { stdout: '' }
+      }
+      case 'diff': {
+        return args[2] === '--cached'
+          ? { stdout: './raz.js\n' }
+          : { stdout: './foo.js\n' + './bar.md\n' + additionalUnstaged }
+      }
+      case 'add': {
+        return { stdout: '' }
+      }
+      default: {
+        throw new Error(`unexpected arg0: ${args[0]}`)
+      }
+    }
+  })
+}
 
 afterEach(() => {
   mock.restore()
   jest.clearAllMocks()
 })
-
-const mockGitFs = (additionalUnstaged = '', additionalFiles = {}) => {
-  mock(
-    Object.assign(
-      {
-        '/.git': {},
-        '/raz.js': 'raz()',
-        '/foo.js': 'foo()',
-        '/bar.md': '# foo',
-      },
-      additionalFiles,
-    ),
-  )
-  execa.sync.mockImplementation((command, args) => {
-    if (command !== 'git') {
-      throw new Error(`unexpected command: ${command}`)
-    }
-    switch (args[0]) {
-      case 'ls-files':
-        return { stdout: '' }
-      case 'diff':
-        return args[2] === '--cached'
-          ? { stdout: './raz.js\n' }
-          : { stdout: './foo.js\n' + './bar.md\n' + additionalUnstaged }
-      case 'add':
-        return { stdout: '' }
-      default:
-        throw new Error(`unexpected arg0: ${args[0]}`)
-    }
-  })
-}
 
 describe('with git', () => {
   test('calls `git merge-base`', () => {
@@ -52,6 +64,7 @@ describe('with git', () => {
 
     expect(execa.sync).toHaveBeenCalledWith(
       'git',
+      // eslint-disable-next-line sonarjs/no-duplicate-string
       ['merge-base', 'HEAD', 'master'],
       { cwd: '/' },
     )
@@ -134,7 +147,10 @@ describe('with git', () => {
     mock({
       '/.git': {},
     })
-    execa.sync.mockReturnValue({ stdout: 'banana' })
+
+    // @ts-expect-error -- Need to find a better way
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    execa.sync.mockImplementation(() => ({ stdout: 'banana' }))
 
     prettyQuick('root', { onFoundSinceRevision })
 
@@ -320,6 +336,7 @@ describe('with git', () => {
     mockGitFs('', {
       '/.prettierignore': '*.md',
     })
+    // eslint-disable-next-line sonarjs/no-duplicate-string
     prettyQuick('/sub-directory/', { since: 'banana', onWriteFile })
     expect(onWriteFile.mock.calls).toEqual([['./foo.js']])
   })
