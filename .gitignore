@@ -3,3 +3,4 @@ node_modules
 *.log
 /.yarn/*
 !/.yarn/plugins
+!/.yarn/releases

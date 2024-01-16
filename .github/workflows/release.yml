@@ -21,12 +21,6 @@ jobs:
         with:
           node-version: 18
           cache: yarn
-        env:
-          # https://github.com/actions/setup-node/issues/531#issuecomment-1819151412
-          SKIP_YARN_COREPACK_CHECK: 1
-
-      - name: Enable Corepack
-        run: corepack enable
 
       - name: Install Dependencies
         run: yarn --immutable

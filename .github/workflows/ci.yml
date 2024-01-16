@@ -15,10 +15,7 @@ jobs:
           - 14
           - 16
           - 18
-          - 20.7
         os:
-          - macos-latest
-          - windows-latest
           - ubuntu-latest
     runs-on: ${{ matrix.os }}
     steps:
@@ -30,19 +27,13 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: yarn
-        env:
-          # https://github.com/actions/setup-node/issues/531#issuecomment-1819151412
-          SKIP_YARN_COREPACK_CHECK: 1
-
-      - name: Enable Corepack
-        run: corepack enable
 
       - name: Install Dependencies
         run: yarn --immutable
 
-      - name: lint
+      - name: Lint
         run: yarn lint
-        if: matrix.node == '20.7'
+        if: matrix.node == 18
         env:
           EFF_NO_LINK_RULES: true
           PARSER_NO_WATCH: true
