@@ -1,6 +1,5 @@
 dist
 node_modules
-test-dist
 *.log
 /.yarn/*
 !/.yarn/plugins
