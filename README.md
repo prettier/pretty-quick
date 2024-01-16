@@ -1,10 +1,16 @@
 # `pretty-quick`
 
-[![Travis](https://img.shields.io/travis/com/azz/pretty-quick.svg?style=flat-square)](https://travis-ci.com/github/azz/pretty-quick)
-[![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-[![npm](https://img.shields.io/npm/v/pretty-quick.svg?style=flat-square)](https://npmjs.org/pretty-quick)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
+[![GitHub Actions](https://github.com/prettier/pretty-quick/workflows/CI/badge.svg)](https://github.com/prettier/pretty-quick/actions/workflows/ci.yml)
+[![Codecov](https://img.shields.io/codecov/c/github/prettier/pretty-quick.svg)](https://codecov.io/gh/prettier/pretty-quick)
+[![type-coverage](https://img.shields.io/badge/dynamic/json.svg?label=type-coverage&prefix=%E2%89%A5&suffix=%&query=$.typeCoverage.atLeast&uri=https%3A%2F%2Fraw.githubusercontent.com%2Fun-ts%2Flib-boilerplate%2Fmain%2Fpackage.json)](https://github.com/plantain-00/type-coverage)
+[![npm](https://img.shields.io/npm/v/pretty-quick.svg)](https://www.npmjs.com/package/pretty-quick)
+[![GitHub Release](https://img.shields.io/github/release/prettier/pretty-quick)](https://github.com/prettier/pretty-quick/releases)
+
+[![Conventional Commits](https://img.shields.io/badge/conventional%20commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+[![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![Code Style: Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![changesets](https://img.shields.io/badge/maintained%20with-changesets-176de3.svg)](https://github.com/changesets/changesets)
 
 > Get Pretty Quick
 
@@ -19,60 +25,45 @@ Supported source control managers:
 
 ## Install
 
-With `yarn`:
-
-```shellsession
-yarn add --dev prettier pretty-quick
+```sh
+# npm
+npm install -D prettier pretty-quick
 ```
 
-With `npm`:
-
-```shellsession
-npm install --save-dev prettier pretty-quick
+```sh
+# yarn
+yarn add -D prettier pretty-quick
 ```
 
 ## Usage
 
-With `yarn`:
+```sh
+# npx
+npx pretty-quick
 
-```shellsession
+# yarn
 yarn pretty-quick
 ```
 
-With [`npx`](https://npm.im/npx):
-
-```shellsession
-npx -p prettier@latest -p pretty-quick pretty-quick
-```
-
-> Note: You can (_should_) change `latest` to a specific version of Prettier.
-
-With `npm`:
-
-1. Add `"pretty-quick": "pretty-quick"` to the `"scripts"` section of `package.json`.
-2. `npm run pretty-quick`
-
 ## Pre-Commit Hook
 
-You can run `pretty-quick` as a pre-commit hook using [`husky`](https://github.com/typicode/husky).
+You can run `pretty-quick` as a pre-commit hook using [`simple-git-hooks`](https://github.com/toplenboren/simple-git-hooks).
 
-> For Mercurial have a look at [`husky-hg`](https://github.com/TobiasTimm/husky-hg)
+```sh
+# npm
+npm install -D simple-git-hooks
 
-```shellstream
-yarn add --dev husky
+# yarn
+yarn add -D simple-git-hooks
 ```
 
 In `package.json`, add:
 
 ```json
-"husky": {
-  "hooks": {
-    "pre-commit": "pretty-quick --staged"
-  }
+"simple-git-hooks": {
+  "pre-commit": "pretty-quick --staged"
 }
 ```
-
-![demo](./img/precommit.gif)
 
 ## CLI Flags
 
@@ -97,7 +88,7 @@ For example `pretty-quick --pattern "**/*.*(js|jsx)"` or `pretty-quick --pattern
 
 ### `--verbose`
 
-Outputs the name of each file right before it is proccessed. This can be useful if Prettier throws an error and you can't identify which file is causing the problem.
+Outputs the name of each file right before it is processed. This can be useful if Prettier throws an error and you can't identify which file is causing the problem.
 
 ### `--bail`
 

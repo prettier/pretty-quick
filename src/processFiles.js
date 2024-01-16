@@ -1,6 +1,6 @@
-import { readFileSync, writeFileSync } from 'fs';
-import * as prettier from 'prettier';
-import { join } from 'path';
+import { readFileSync, writeFileSync } from 'fs'
+import * as prettier from 'prettier'
+import { join } from 'path'
 
 export default (
   directory,
@@ -8,8 +8,8 @@ export default (
   { check, config, onExamineFile, onCheckFile, onWriteFile } = {},
 ) => {
   for (const relative of files) {
-    onExamineFile && onExamineFile(relative);
-    const file = join(directory, relative);
+    onExamineFile && onExamineFile(relative)
+    const file = join(directory, relative)
     const options = Object.assign(
       {},
       prettier.resolveConfig.sync(file, {
@@ -17,20 +17,20 @@ export default (
         editorconfig: true,
       }),
       { filepath: file },
-    );
-    const input = readFileSync(file, 'utf8');
+    )
+    const input = readFileSync(file, 'utf8')
 
     if (check) {
-      const isFormatted = prettier.check(input, options);
-      onCheckFile && onCheckFile(relative, isFormatted);
-      continue;
+      const isFormatted = prettier.check(input, options)
+      onCheckFile && onCheckFile(relative, isFormatted)
+      continue
     }
 
-    const output = prettier.format(input, options);
+    const output = prettier.format(input, options)
 
     if (output !== input) {
-      writeFileSync(file, output);
-      onWriteFile && onWriteFile(relative);
+      writeFileSync(file, output)
+      onWriteFile && onWriteFile(relative)
     }
   }
-};
+}

@@ -1,6 +1,6 @@
-import { getFileInfo, resolveConfig as prettierResolveConfig } from 'prettier';
+import { getFileInfo, resolveConfig as prettierResolveConfig } from 'prettier'
 
-export default (resolveConfig) => (file) =>
+export default resolveConfig => file =>
   Boolean(
     getFileInfo.sync(file, {
       resolveConfig,
@@ -10,4 +10,4 @@ export default (resolveConfig) => (file) =>
         { filepath: file },
       ),
     }).inferredParser,
-  );
+  )
