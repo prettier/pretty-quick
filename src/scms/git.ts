@@ -1,12 +1,13 @@
-import findUp from 'find-up'
+import fs from 'fs'
+import path from 'path'
+
 import execa from 'execa'
-import { dirname, join } from 'path'
-import * as fs from 'fs'
+import findUp from 'find-up'
 
 export const name = 'git'
 
-export const detect = directory => {
-  if (fs.existsSync(join(directory, '.git'))) {
+export const detect = (directory: string) => {
+  if (fs.existsSync(path.join(directory, '.git'))) {
     return directory
   }
 
@@ -14,28 +15,33 @@ export const detect = directory => {
     cwd: directory,
     type: 'directory',
   })
+
   if (gitDirectory) {
-    return dirname(gitDirectory)
+    return path.dirname(gitDirectory)
   }
 
-  const gitWorktreeFile = findUp.sync('.git', {
+  const gitWorkTreeFile = findUp.sync('.git', {
     cwd: directory,
     type: 'file',
   })
 
-  if (gitWorktreeFile) {
-    return dirname(gitWorktreeFile)
+  if (gitWorkTreeFile) {
+    return path.dirname(gitWorkTreeFile)
   }
 }
 
-const runGit = (directory, args) =>
+const runGit = (directory: string, args: string[]) =>
   execa.sync('git', args, {
     cwd: directory,
   })
 
-const getLines = execaResult => execaResult.stdout.split('\n')
+const getLines = (execaResult: execa.ExecaSyncReturnValue) =>
+  execaResult.stdout.split('\n')
 
-export const getSinceRevision = (directory, { staged, branch }) => {
+export const getSinceRevision = (
+  directory: string,
+  { staged, branch }: { staged?: boolean; branch?: string },
+) => {
   try {
     const revision = staged
       ? 'HEAD'
@@ -45,7 +51,8 @@ export const getSinceRevision = (directory, { staged, branch }) => {
           branch || 'master',
         ]).stdout.trim()
     return runGit(directory, ['rev-parse', '--short', revision]).stdout.trim()
-  } catch (error) {
+  } catch (err) {
+    const error = err as Error
     if (
       /HEAD/.test(error.message) ||
       (staged && /Needed a single revision/.test(error.message))
@@ -56,8 +63,12 @@ export const getSinceRevision = (directory, { staged, branch }) => {
   }
 }
 
-export const getChangedFiles = (directory, revision, staged) => {
-  return [
+export const getChangedFiles = (
+  directory: string,
+  revision: string | null,
+  staged?: boolean | undefined,
+) =>
+  [
     ...getLines(
       runGit(
         directory,
@@ -76,12 +87,11 @@ export const getChangedFiles = (directory, revision, staged) => {
           runGit(directory, ['ls-files', '--others', '--exclude-standard']),
         )),
   ].filter(Boolean)
-}
 
-export const getUnstagedChangedFiles = directory => {
+export const getUnstagedChangedFiles = (directory: string) => {
   return getChangedFiles(directory, null, false)
 }
 
-export const stageFile = (directory, file) => {
+export const stageFile = (directory: string, file: string) => {
   runGit(directory, ['add', file])
 }

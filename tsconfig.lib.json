@@ -1,0 +1,4 @@
+{
+  // used by all files but do not includes paths
+  "extends": "@1stg/tsconfig/node"
+}

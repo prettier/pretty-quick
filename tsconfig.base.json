@@ -1,0 +1,10 @@
+{
+  // used by @pkgr/rollup and ESLint
+  "extends": "./tsconfig.lib",
+  "compilerOptions": {
+    "paths": {
+      "pretty-quick": ["./src"],
+      "pretty-quick/*": ["./src/*"]
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import mock from 'mock-fs'
 
-import prettyQuick from '..'
+import prettyQuick from 'pretty-quick'
 
 jest.mock('execa')
 
