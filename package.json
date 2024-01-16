@@ -39,7 +39,7 @@
     "lint": "run-p 'lint:*'",
     "lint:es": "eslint . --cache",
     "lint:tsc": "tsc --noEmit",
-    "prepare": "simple-git-hooks",
+    "prepare": "patch-package && simple-git-hooks",
     "release": "yarn build && clean-pkg-json && changeset publish",
     "test": "jest"
   },
@@ -63,6 +63,7 @@
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/jest": "^29.5.11",
     "@types/mock-fs": "^4.13.4",
+    "@unts/patch-package": "^8.0.0",
     "clean-pkg-json": "^1.2.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",

@@ -1,0 +1,28 @@
+diff --git a/node_modules/@pkgr/core/lib/helpers.js b/node_modules/@pkgr/core/lib/helpers.js
+index 806148f..770d272 100644
+--- a/node_modules/@pkgr/core/lib/helpers.js
++++ b/node_modules/@pkgr/core/lib/helpers.js
+@@ -1,5 +1,5 @@
+-import fs from 'node:fs';
+-import path from 'node:path';
++import fs from 'fs';
++import path from 'path';
+ import { CWD, EXTENSIONS, cjsRequire } from './constants.js';
+ export const tryPkg = (pkg) => {
+     try {
+diff --git a/node_modules/@pkgr/core/lib/index.cjs b/node_modules/@pkgr/core/lib/index.cjs
+index 6c7375a..2602d12 100644
+--- a/node_modules/@pkgr/core/lib/index.cjs
++++ b/node_modules/@pkgr/core/lib/index.cjs
+@@ -1,8 +1,8 @@
+ 'use strict';
+ 
+-var node_module = require('node:module');
+-var fs = require('node:fs');
+-var path = require('node:path');
++var node_module = require('module');
++var fs = require('fs');
++var path = require('path');
+ 
+ const import_meta = {};
+ const CWD = process.cwd();
