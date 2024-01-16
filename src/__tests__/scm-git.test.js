@@ -23,7 +23,7 @@ const mockGitFs = (additionalUnstaged = '', additionalFiles = {}) => {
       additionalFiles,
     ),
   );
-  execa.sync.mockImplementation((command, args) => {
+  execa.mockImplementation(async (command, args) => {
     if (command !== 'git') {
       throw new Error(`unexpected command: ${command}`);
     }
@@ -43,135 +43,139 @@ const mockGitFs = (additionalUnstaged = '', additionalFiles = {}) => {
 };
 
 describe('with git', () => {
-  test('calls `git merge-base`', () => {
+  test('calls `git merge-base`', async () => {
     mock({
       '/.git': {},
     });
 
-    prettyQuick('root');
+    await prettyQuick('/');
 
-    expect(execa.sync).toHaveBeenCalledWith(
+    expect(execa).toHaveBeenCalledWith(
       'git',
       ['merge-base', 'HEAD', 'master'],
       { cwd: '/' },
     );
   });
 
-  test('calls `git merge-base` with root git directory', () => {
+  test('calls `git merge-base` with root git directory', async () => {
     mock({
       '/.git': {},
       '/other-dir': {},
     });
 
-    prettyQuick('/other-dir');
+    await prettyQuick('/other-dir');
 
-    expect(execa.sync).toHaveBeenCalledWith(
+    expect(execa).toHaveBeenCalledWith(
       'git',
       ['merge-base', 'HEAD', 'master'],
       { cwd: '/' },
     );
   });
 
-  test('with --staged does NOT call `git merge-base`', () => {
+  test('with --staged does NOT call `git merge-base`', async () => {
     mock({
       '/.git': {},
     });
 
-    prettyQuick('root');
+    await prettyQuick('/');
 
-    expect(execa.sync).not.toHaveBeenCalledWith('git', [
+    expect(execa).not.toHaveBeenCalledWith('git', [
       'merge-base',
       'HEAD',
       'master',
     ]);
   });
 
-  test('with --staged calls diff without revision', () => {
+  test('with --staged calls diff without revision', async () => {
     mock({
       '/.git': {},
     });
 
-    prettyQuick('root', { since: 'banana', staged: true });
+    await prettyQuick('/', { since: 'banana', staged: true });
 
-    expect(execa.sync).toHaveBeenCalledWith(
+    expect(execa).toHaveBeenCalledWith(
       'git',
       ['diff', '--name-only', '--diff-filter=ACMRTUB'],
       { cwd: '/' },
     );
   });
 
-  test('calls `git diff --name-only` with revision', () => {
+  test('calls `git diff --name-only` with revision', async () => {
     mock({
       '/.git': {},
     });
 
-    prettyQuick('root', { since: 'banana' });
+    await prettyQuick('/', { since: 'banana' });
 
-    expect(execa.sync).toHaveBeenCalledWith(
+    expect(execa).toHaveBeenCalledWith(
       'git',
       ['diff', '--name-only', '--diff-filter=ACMRTUB', 'banana'],
       { cwd: '/' },
     );
   });
 
-  test('calls `git ls-files`', () => {
+  test('calls `git ls-files`', async () => {
     mock({
       '/.git': {},
     });
 
-    prettyQuick('root', { since: 'banana' });
+    await prettyQuick('/', { since: 'banana' });
 
-    expect(execa.sync).toHaveBeenCalledWith(
+    expect(execa).toHaveBeenCalledWith(
       'git',
       ['ls-files', '--others', '--exclude-standard'],
       { cwd: '/' },
     );
   });
 
-  test('calls onFoundSinceRevision with return value from `git merge-base`', () => {
+  test('calls onFoundSinceRevision with return value from `git merge-base`', async () => {
     const onFoundSinceRevision = jest.fn();
 
     mock({
       '/.git': {},
     });
-    execa.sync.mockReturnValue({ stdout: 'banana' });
+    execa.mockReturnValue(Promise.resolve({ stdout: 'banana' }));
 
-    prettyQuick('root', { onFoundSinceRevision });
+    await prettyQuick('/', { onFoundSinceRevision });
 
     expect(onFoundSinceRevision).toHaveBeenCalledWith('git', 'banana');
   });
 
-  test('calls onFoundChangedFiles with changed files', () => {
+  test('calls onFoundChangedFiles with changed files', async () => {
     const onFoundChangedFiles = jest.fn();
     mockGitFs();
 
-    prettyQuick('root', { since: 'banana', onFoundChangedFiles });
+    await prettyQuick('/', { since: 'banana', onFoundChangedFiles });
 
     expect(onFoundChangedFiles).toHaveBeenCalledWith(['./foo.js', './bar.md']);
   });
 
-  test('calls onWriteFile with changed files', () => {
+  test('calls onWriteFile with changed files', async () => {
     const onWriteFile = jest.fn();
     mockGitFs();
 
-    prettyQuick('root', { since: 'banana', onWriteFile });
+    await prettyQuick('/', { since: 'banana', onWriteFile });
 
     expect(onWriteFile).toHaveBeenCalledWith('./foo.js');
     expect(onWriteFile).toHaveBeenCalledWith('./bar.md');
     expect(onWriteFile.mock.calls.length).toBe(2);
   });
 
-  test('calls onWriteFile with changed files for the given pattern', () => {
+  test('calls onWriteFile with changed files for the given pattern', async () => {
     const onWriteFile = jest.fn();
     mockGitFs();
-    prettyQuick('root', { pattern: '*.md', since: 'banana', onWriteFile });
+    await prettyQuick('/', {
+      pattern: '*.md',
+      since: 'banana',
+      onWriteFile,
+    });
     expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
   });
 
-  test('calls onWriteFile with changed files for the given globstar pattern', () => {
+  test('calls onWriteFile with changed files for the given globstar pattern', async () => {
     const onWriteFile = jest.fn();
     mockGitFs();
-    prettyQuick('root', {
+    await prettyQuick('/', {
       pattern: '**/*.md',
       since: 'banana',
       onWriteFile,
@@ -179,10 +183,10 @@ describe('with git', () => {
     expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
   });
 
-  test('calls onWriteFile with changed files for the given extglob pattern', () => {
+  test('calls onWriteFile with changed files for the given extglob pattern', async () => {
     const onWriteFile = jest.fn();
     mockGitFs();
-    prettyQuick('root', {
+    await prettyQuick('/', {
       pattern: '*.*(md|foo|bar)',
       since: 'banana',
       onWriteFile,
@@ -190,10 +194,10 @@ describe('with git', () => {
     expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
   });
 
-  test('calls onWriteFile with changed files for an array of globstar patterns', () => {
+  test('calls onWriteFile with changed files for an array of globstar patterns', async () => {
     const onWriteFile = jest.fn();
     mockGitFs();
-    prettyQuick('root', {
+    await prettyQuick('/', {
       pattern: ['**/*.foo', '**/*.md', '**/*.bar'],
       since: 'banana',
       onWriteFile,
@@ -201,144 +205,155 @@ describe('with git', () => {
     expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
   });
 
-  test('writes formatted files to disk', () => {
+  test('writes formatted files to disk', async () => {
     const onWriteFile = jest.fn();
 
     mockGitFs();
 
-    prettyQuick('root', { since: 'banana', onWriteFile });
+    await prettyQuick('/', { since: 'banana', onWriteFile });
 
     expect(fs.readFileSync('/foo.js', 'utf8')).toEqual('formatted:foo()');
     expect(fs.readFileSync('/bar.md', 'utf8')).toEqual('formatted:# foo');
   });
 
-  test('succeeds if a file was changed and bail is not set', () => {
+  test('succeeds if a file was changed and bail is not set', async () => {
     mockGitFs();
 
-    const result = prettyQuick('root', { since: 'banana' });
+    const result = await prettyQuick('/', { since: 'banana' });
 
     expect(result).toEqual({ errors: [], success: true });
   });
 
-  test('fails if a file was changed and bail is set to true', () => {
+  test('fails if a file was changed and bail is set to true', async () => {
     mockGitFs();
 
-    const result = prettyQuick('root', { since: 'banana', bail: true });
+    const result = await prettyQuick('/', { since: 'banana', bail: true });
 
     expect(result).toEqual({ errors: ['BAIL_ON_WRITE'], success: false });
   });
 
-  test('with --staged stages fully-staged files', () => {
+  test('with --staged stages fully-staged files', async () => {
     mockGitFs();
 
-    prettyQuick('root', { since: 'banana', staged: true });
+    await prettyQuick('/', { since: 'banana', staged: true });
 
-    expect(execa.sync).toHaveBeenCalledWith('git', ['add', './raz.js'], {
+    expect(execa).toHaveBeenCalledWith('git', ['add', './raz.js'], {
       cwd: '/',
     });
-    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
+    expect(execa).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
       cwd: '/',
     });
-    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
+    expect(execa).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
       cwd: '/',
     });
   });
 
-  test('with --staged AND --no-restage does not re-stage any files', () => {
+  test('with --staged AND --no-restage does not re-stage any files', async () => {
     mockGitFs();
 
-    prettyQuick('root', { since: 'banana', staged: true, restage: false });
+    await prettyQuick('/', {
+      since: 'banana',
+      staged: true,
+      restage: false,
+    });
 
-    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './raz.js'], {
+    expect(execa).not.toHaveBeenCalledWith('git', ['add', './raz.js'], {
       cwd: '/',
     });
-    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
+    expect(execa).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
       cwd: '/',
     });
-    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
+    expect(execa).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
       cwd: '/',
     });
   });
 
-  test('with --staged does not stage previously partially staged files AND aborts commit', () => {
+  test('with --staged does not stage previously partially staged files AND aborts commit', async () => {
     const additionalUnstaged = './raz.js\n'; // raz.js is partly staged and partly not staged
     mockGitFs(additionalUnstaged);
 
-    prettyQuick('root', { since: 'banana', staged: true });
+    await prettyQuick('/', { since: 'banana', staged: true });
 
-    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './raz.js'], {
+    expect(execa).not.toHaveBeenCalledWith('git', ['add', './raz.js'], {
       cwd: '/',
     });
   });
 
-  test('with --staged returns false', () => {
+  test('with --staged returns false', async () => {
     const additionalUnstaged = './raz.js\n'; // raz.js is partly staged and partly not staged
     mockGitFs(additionalUnstaged);
 
-    const result = prettyQuick('root', { since: 'banana', staged: true });
+    const result = await prettyQuick('/', { since: 'banana', staged: true });
     expect(result).toEqual({
       errors: ['PARTIALLY_STAGED_FILE'],
       success: false,
     });
   });
 
-  test('without --staged does NOT stage changed files', () => {
+  test('without --staged does NOT stage changed files', async () => {
     mockGitFs();
 
-    prettyQuick('root', { since: 'banana' });
+    await prettyQuick('/', { since: 'banana' });
 
-    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
+    expect(execa).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
       cwd: '/',
     });
-    expect(execa.sync).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
+    expect(execa).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
       cwd: '/',
     });
   });
 
-  test('with --verbose calls onExamineFile', () => {
+  test('with --verbose calls onExamineFile', async () => {
     const onExamineFile = jest.fn();
     mockGitFs();
 
-    prettyQuick('root', { since: 'banana', verbose: true, onExamineFile });
+    await prettyQuick('/', {
+      since: 'banana',
+      verbose: true,
+      onExamineFile,
+    });
 
     expect(onExamineFile).toHaveBeenCalledWith('./foo.js');
     expect(onExamineFile).toHaveBeenCalledWith('./bar.md');
   });
 
-  test('without --verbose does NOT call onExamineFile', () => {
+  test('without --verbose does NOT call onExamineFile', async () => {
     const onExamineFile = jest.fn();
     mockGitFs();
 
-    prettyQuick('root', { since: 'banana', onExamineFile });
+    await prettyQuick('/', { since: 'banana', onExamineFile });
 
     expect(onExamineFile).not.toHaveBeenCalledWith('./foo.js');
     expect(onExamineFile).not.toHaveBeenCalledWith('./bar.md');
   });
 
-  test('ignore files matching patterns from the repositories root .prettierignore', () => {
+  test('ignore files matching patterns from the repositories root .prettierignore', async () => {
     const onWriteFile = jest.fn();
     mockGitFs('', {
       '/.prettierignore': '*.md',
     });
-    prettyQuick('/sub-directory/', { since: 'banana', onWriteFile });
+    await prettyQuick('/sub-directory/', { since: 'banana', onWriteFile });
     expect(onWriteFile.mock.calls).toEqual([['./foo.js']]);
   });
 
-  test('ignore files matching patterns from the working directories .prettierignore', () => {
+  test('ignore files matching patterns from the working directories .prettierignore', async () => {
     const onWriteFile = jest.fn();
     mockGitFs('', {
       '/sub-directory/.prettierignore': '*.md',
     });
-    prettyQuick('/sub-directory/', { since: 'banana', onWriteFile });
+    await prettyQuick('/sub-directory/', {
+      since: 'banana',
+      onWriteFile,
+    });
     expect(onWriteFile.mock.calls).toEqual([['./foo.js']]);
   });
 
-  test('with --ignore-path to ignore files matching patterns from the repositories root .ignorePath', () => {
+  test('with --ignore-path to ignore files matching patterns from the repositories root .ignorePath', async () => {
     const onWriteFile = jest.fn();
     mockGitFs('', {
       '/.ignorePath': '*.md',
     });
-    prettyQuick('/sub-directory/', {
+    await prettyQuick('/sub-directory/', {
       since: 'banana',
       onWriteFile,
       ignorePath: '/.ignorePath',
@@ -346,12 +361,12 @@ describe('with git', () => {
     expect(onWriteFile.mock.calls).toEqual([['./foo.js']]);
   });
 
-  test('with --ignore-path to ignore files matching patterns from the working directories .ignorePath', () => {
+  test('with --ignore-path to ignore files matching patterns from the working directories .ignorePath', async () => {
     const onWriteFile = jest.fn();
     mockGitFs('', {
       '/sub-directory/.ignorePath': '*.md',
     });
-    prettyQuick('/sub-directory/', {
+    await prettyQuick('/sub-directory/', {
       since: 'banana',
       onWriteFile,
       ignorePath: '/.ignorePath',

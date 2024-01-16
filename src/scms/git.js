@@ -5,12 +5,12 @@ import * as fs from 'fs';
 
 export const name = 'git';
 
-export const detect = (directory) => {
+export const detect = async (directory) => {
   if (fs.existsSync(join(directory, '.git'))) {
     return directory;
   }
 
-  const gitDirectory = findUp.sync('.git', {
+  const gitDirectory = await findUp('.git', {
     cwd: directory,
     type: 'directory',
   });
@@ -18,7 +18,7 @@ export const detect = (directory) => {
     return dirname(gitDirectory);
   }
 
-  const gitWorktreeFile = findUp.sync('.git', {
+  const gitWorktreeFile = await findUp('.git', {
     cwd: directory,
     type: 'file',
   });
@@ -28,23 +28,23 @@ export const detect = (directory) => {
   }
 };
 
-const runGit = (directory, args) =>
-  execa.sync('git', args, {
+const runGit = async (directory, args) =>
+  await execa('git', args, {
     cwd: directory,
   });
 
 const getLines = (execaResult) => execaResult.stdout.split('\n');
 
-export const getSinceRevision = (directory, { staged, branch }) => {
+export const getSinceRevision = async (directory, { staged, branch }) => {
   try {
     const revision = staged
       ? 'HEAD'
-      : runGit(directory, [
-          'merge-base',
-          'HEAD',
-          branch || 'master',
-        ]).stdout.trim();
-    return runGit(directory, ['rev-parse', '--short', revision]).stdout.trim();
+      : (
+          await runGit(directory, ['merge-base', 'HEAD', branch || 'master'])
+        ).stdout.trim();
+    return (
+      await runGit(directory, ['rev-parse', '--short', revision])
+    ).stdout.trim();
   } catch (error) {
     if (
       /HEAD/.test(error.message) ||
@@ -56,10 +56,10 @@ export const getSinceRevision = (directory, { staged, branch }) => {
   }
 };
 
-export const getChangedFiles = (directory, revision, staged) => {
+export const getChangedFiles = async (directory, revision, staged) => {
   return [
     ...getLines(
-      runGit(
+      await runGit(
         directory,
         [
           'diff',
@@ -73,15 +73,34 @@ export const getChangedFiles = (directory, revision, staged) => {
     ...(staged
       ? []
       : getLines(
-          runGit(directory, ['ls-files', '--others', '--exclude-standard']),
+          await runGit(directory, [
+            'ls-files',
+            '--others',
+            '--exclude-standard',
+          ]),
         )),
   ].filter(Boolean);
 };
 
-export const getUnstagedChangedFiles = (directory) => {
-  return getChangedFiles(directory, null, false);
+export const getUnstagedChangedFiles = async (directory) => {
+  return await getChangedFiles(directory, null, false);
 };
 
-export const stageFile = (directory, file) => {
-  runGit(directory, ['add', file]);
+export const stageFiles = async (directory, files) => {
+  const maxArguments = 100;
+  const result = files.reduce((resultArray, file, index) => {
+    const chunkIndex = Math.floor(index / maxArguments);
+
+    if (!resultArray[chunkIndex]) {
+      resultArray[chunkIndex] = []; // start a new chunk
+    }
+
+    resultArray[chunkIndex].push(file);
+
+    return resultArray;
+  }, []);
+
+  for (let batchedFiles of result) {
+    await runGit(directory, ['add', ...batchedFiles]);
+  }
 };

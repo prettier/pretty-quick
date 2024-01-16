@@ -22,7 +22,7 @@ const mockHgFs = (additionalFiles = {}) => {
       additionalFiles,
     ),
   );
-  execa.sync.mockImplementation((command, args) => {
+  execa.mockImplementation(async (command, args) => {
     if (command !== 'hg') {
       throw new Error(`unexpected command: ${command}`);
     }
@@ -42,91 +42,95 @@ const mockHgFs = (additionalFiles = {}) => {
 };
 
 describe('with hg', () => {
-  test('calls `hg debugancestor`', () => {
+  test('calls `hg debugancestor`', async () => {
     mock({
       '/.hg': {},
     });
 
-    prettyQuick('root');
+    await prettyQuick('/');
 
-    expect(execa.sync).toHaveBeenCalledWith(
+    expect(execa).toHaveBeenCalledWith(
       'hg',
       ['debugancestor', 'tip', 'default'],
       { cwd: '/' },
     );
   });
 
-  test('calls `hg debugancestor` with root hg directory', () => {
+  test('calls `hg debugancestor` with root hg directory', async () => {
     mock({
       '/.hg': {},
       '/other-dir': {},
     });
 
-    prettyQuick('/other-dir');
-    expect(execa.sync).toHaveBeenCalledWith(
+    await prettyQuick('/other-dir');
+    expect(execa).toHaveBeenCalledWith(
       'hg',
       ['debugancestor', 'tip', 'default'],
       { cwd: '/' },
     );
   });
 
-  test('calls `hg status` with revision', () => {
+  test('calls `hg status` with revision', async () => {
     mock({
       '/.hg': {},
     });
 
-    prettyQuick('root', { since: 'banana' });
+    await prettyQuick('/', { since: 'banana' });
 
-    expect(execa.sync).toHaveBeenCalledWith(
+    expect(execa).toHaveBeenCalledWith(
       'hg',
       ['status', '-n', '-a', '-m', '--rev', 'banana'],
       { cwd: '/' },
     );
   });
 
-  test('calls onFoundSinceRevision with return value from `hg debugancestor`', () => {
+  test('calls onFoundSinceRevision with return value from `hg debugancestor`', async () => {
     const onFoundSinceRevision = jest.fn();
 
     mock({
       '/.hg': {},
     });
-    execa.sync.mockReturnValue({ stdout: 'banana' });
+    execa.mockReturnValue(Promise.resolve({ stdout: 'banana' }));
 
-    prettyQuick('root', { onFoundSinceRevision });
+    await prettyQuick('/', { onFoundSinceRevision });
 
     expect(onFoundSinceRevision).toHaveBeenCalledWith('hg', 'banana');
   });
 
-  test('calls onFoundChangedFiles with changed files', () => {
+  test('calls onFoundChangedFiles with changed files', async () => {
     const onFoundChangedFiles = jest.fn();
     mockHgFs();
 
-    prettyQuick('root', { since: 'banana', onFoundChangedFiles });
+    await prettyQuick('/', { since: 'banana', onFoundChangedFiles });
 
     expect(onFoundChangedFiles).toHaveBeenCalledWith(['./foo.js', './bar.md']);
   });
 
-  test('calls onWriteFile with changed files', () => {
+  test('calls onWriteFile with changed files', async () => {
     const onWriteFile = jest.fn();
     mockHgFs();
 
-    prettyQuick('root', { since: 'banana', onWriteFile });
+    await prettyQuick('/', { since: 'banana', onWriteFile });
 
     expect(onWriteFile).toHaveBeenCalledWith('./foo.js');
     expect(onWriteFile).toHaveBeenCalledWith('./bar.md');
   });
 
-  test('calls onWriteFile with changed files for the given pattern', () => {
+  test('calls onWriteFile with changed files for the given pattern', async () => {
     const onWriteFile = jest.fn();
     mockHgFs();
-    prettyQuick('root', { pattern: '*.md', since: 'banana', onWriteFile });
+    await prettyQuick('/', {
+      pattern: '*.md',
+      since: 'banana',
+      onWriteFile,
+    });
     expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
   });
 
-  test('calls onWriteFile with changed files for the given globstar pattern', () => {
+  test('calls onWriteFile with changed files for the given globstar pattern', async () => {
     const onWriteFile = jest.fn();
     mockHgFs();
-    prettyQuick('root', {
+    await prettyQuick('/', {
       pattern: '**/*.md',
       since: 'banana',
       onWriteFile,
@@ -134,10 +138,10 @@ describe('with hg', () => {
     expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
   });
 
-  test('calls onWriteFile with changed files for the given extglob pattern', () => {
+  test('calls onWriteFile with changed files for the given extglob pattern', async () => {
     const onWriteFile = jest.fn();
     mockHgFs();
-    prettyQuick('root', {
+    await prettyQuick('/', {
       pattern: '*.*(md|foo|bar)',
       since: 'banana',
       onWriteFile,
@@ -145,37 +149,37 @@ describe('with hg', () => {
     expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
   });
 
-  test('writes formatted files to disk', () => {
+  test('writes formatted files to disk', async () => {
     const onWriteFile = jest.fn();
 
     mockHgFs();
 
-    prettyQuick('root', { since: 'banana', onWriteFile });
+    await prettyQuick('/', { since: 'banana', onWriteFile });
 
     expect(fs.readFileSync('/foo.js', 'utf8')).toEqual('formatted:foo()');
     expect(fs.readFileSync('/bar.md', 'utf8')).toEqual('formatted:# foo');
   });
 
-  test('succeeds if a file was changed and bail is not set', () => {
+  test('succeeds if a file was changed and bail is not set', async () => {
     mockHgFs();
 
-    const result = prettyQuick('root', { since: 'banana' });
+    const result = await prettyQuick('/', { since: 'banana' });
 
     expect(result).toEqual({ errors: [], success: true });
   });
 
-  test('fails if a file was changed and bail is set to true', () => {
+  test('fails if a file was changed and bail is set to true', async () => {
     mockHgFs();
 
-    const result = prettyQuick('root', { since: 'banana', bail: true });
+    const result = await prettyQuick('/', { since: 'banana', bail: true });
 
     expect(result).toEqual({ errors: ['BAIL_ON_WRITE'], success: false });
   });
 
-  test('calls onWriteFile with changed files for an array of globstar patterns', () => {
+  test('calls onWriteFile with changed files for an array of globstar patterns', async () => {
     const onWriteFile = jest.fn();
     mockHgFs();
-    prettyQuick('root', {
+    await prettyQuick('/', {
       pattern: ['**/*.foo', '**/*.md', '**/*.bar'],
       since: 'banana',
       onWriteFile,
@@ -183,61 +187,66 @@ describe('with hg', () => {
     expect(onWriteFile.mock.calls).toEqual([['./bar.md']]);
   });
 
-  test('without --staged does NOT stage changed files', () => {
+  test('without --staged does NOT stage changed files', async () => {
     mockHgFs();
 
-    prettyQuick('root', { since: 'banana' });
+    await prettyQuick('/', { since: 'banana' });
 
-    expect(execa.sync).not.toHaveBeenCalledWith('hg', ['add', './foo.js'], {
+    expect(execa).not.toHaveBeenCalledWith('hg', ['add', './foo.js'], {
       cwd: '/',
     });
-    expect(execa.sync).not.toHaveBeenCalledWith('hg', ['add', './bar.md'], {
+    expect(execa).not.toHaveBeenCalledWith('hg', ['add', './bar.md'], {
       cwd: '/',
     });
   });
 
-  test('with --verbose calls onExamineFile', () => {
+  test('with --verbose calls onExamineFile', async () => {
     const onExamineFile = jest.fn();
     mockHgFs();
-    prettyQuick('root', { since: 'banana', verbose: true, onExamineFile });
+    await prettyQuick('/', {
+      since: 'banana',
+      verbose: true,
+      onExamineFile,
+    });
 
     expect(onExamineFile).toHaveBeenCalledWith('./foo.js');
     expect(onExamineFile).toHaveBeenCalledWith('./bar.md');
   });
 
-  test('without --verbose does NOT call onExamineFile', () => {
+  test('without --verbose does NOT call onExamineFile', async () => {
     const onExamineFile = jest.fn();
     mockHgFs();
-    prettyQuick('root', { since: 'banana', onExamineFile });
+    await prettyQuick('/', { since: 'banana', onExamineFile });
 
     expect(onExamineFile).not.toHaveBeenCalledWith('./foo.js');
     expect(onExamineFile).not.toHaveBeenCalledWith('./bar.md');
   });
 
-  test('ignore files matching patterns from the repositories root .prettierignore', () => {
+  test('ignore files matching patterns from the repositories root .prettierignore', async () => {
     const onWriteFile = jest.fn();
     mockHgFs({
       '/.prettierignore': '*.md',
     });
-    prettyQuick('/sub-directory/', { since: 'banana', onWriteFile });
+    await prettyQuick('/sub-directory/', { since: 'banana', onWriteFile });
     expect(onWriteFile.mock.calls).toEqual([['./foo.js']]);
   });
 
-  test('ignore files matching patterns from the working directories .prettierignore', () => {
+  test('ignore files matching patterns from the working directories .prettierignore', async () => {
     const onWriteFile = jest.fn();
     mockHgFs({
       '/sub-directory/.prettierignore': '*.md',
     });
-    prettyQuick('/sub-directory/', { since: 'banana', onWriteFile });
+
+    await prettyQuick('/sub-directory/', { since: 'banana', onWriteFile });
     expect(onWriteFile.mock.calls).toEqual([['./foo.js']]);
   });
 
-  test('with --ignore-path to ignore files matching patterns from the repositories root .ignorePath', () => {
+  test('with --ignore-path to ignore files matching patterns from the repositories root .ignorePath', async () => {
     const onWriteFile = jest.fn();
     mockHgFs({
       '/.ignorePath': '*.md',
     });
-    prettyQuick('/sub-directory/', {
+    await prettyQuick('/sub-directory/', {
       since: 'banana',
       onWriteFile,
       ignorePath: '/.ignorePath',
@@ -245,12 +254,12 @@ describe('with hg', () => {
     expect(onWriteFile.mock.calls).toEqual([['./foo.js']]);
   });
 
-  test('with --ignore-path to ignore files matching patterns from the working directories .ignorePath', () => {
+  test('with --ignore-path to ignore files matching patterns from the working directories .ignorePath', async () => {
     const onWriteFile = jest.fn();
     mockHgFs({
       '/.ignorePath': '*.md',
     });
-    prettyQuick('/sub-directory/', {
+    await prettyQuick('/sub-directory/', {
       since: 'banana',
       onWriteFile,
       ignorePath: '/.ignorePath',

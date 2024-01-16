@@ -1,11 +1,16 @@
 import findUp from 'find-up';
 import execa from 'execa';
-import { dirname } from 'path';
+import { dirname, join } from 'path';
+import * as fs from 'fs';
 
 export const name = 'hg';
 
-export const detect = (directory) => {
-  const hgDirectory = findUp.sync('.hg', {
+export const detect = async (directory) => {
+  if (fs.existsSync(join(directory, '.hg'))) {
+    return directory;
+  }
+
+  const hgDirectory = await findUp('.hg', {
     cwd: directory,
     type: 'directory',
   });
@@ -14,26 +19,24 @@ export const detect = (directory) => {
   }
 };
 
-const runHg = (directory, args) =>
-  execa.sync('hg', args, {
+const runHg = async (directory, args) =>
+  await execa('hg', args, {
     cwd: directory,
   });
 
 const getLines = (execaResult) => execaResult.stdout.split('\n');
 
-export const getSinceRevision = (directory, { branch }) => {
-  const revision = runHg(directory, [
-    'debugancestor',
-    'tip',
-    branch || 'default',
-  ]).stdout.trim();
-  return runHg(directory, ['id', '-i', '-r', revision]).stdout.trim();
+export const getSinceRevision = async (directory, { branch }) => {
+  const revision = (
+    await runHg(directory, ['debugancestor', 'tip', branch || 'default'])
+  ).stdout.trim();
+  return (await runHg(directory, ['id', '-i', '-r', revision])).stdout.trim();
 };
 
-export const getChangedFiles = (directory, revision) => {
+export const getChangedFiles = async (directory, revision) => {
   return [
     ...getLines(
-      runHg(directory, ['status', '-n', '-a', '-m', '--rev', revision]),
+      await runHg(directory, ['status', '-n', '-a', '-m', '--rev', revision]),
     ),
   ].filter(Boolean);
 };
@@ -42,6 +45,21 @@ export const getUnstagedChangedFiles = () => {
   return [];
 };
 
-export const stageFile = (directory, file) => {
-  runHg(directory, ['add', file]);
+export const stageFiles = async (directory, files) => {
+  const maxArguments = 100;
+  const result = files.reduce((resultArray, file, index) => {
+    const chunkIndex = Math.floor(index / maxArguments);
+
+    if (!resultArray[chunkIndex]) {
+      resultArray[chunkIndex] = []; // start a new chunk
+    }
+
+    resultArray[chunkIndex].push(file);
+
+    return resultArray;
+  }, []);
+
+  for (let batchedFiles of result) {
+    await runHg(directory, ['add', ...batchedFiles]);
+  }
 };
