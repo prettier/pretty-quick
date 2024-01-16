@@ -69,6 +69,9 @@
     "size-limit": "^11.0.1",
     "size-limit-preset-node-lib": "^0.3.0"
   },
+  "jest": {
+    "collectCoverage": true
+  },
   "prettier": "@1stg/prettier-config",
   "simple-git-hooks": {
     "pre-commit": "./bin/pretty-quick.js --staged"
