@@ -1,5 +1,11 @@
 # pretty-quick
 
+## 3.2.1
+
+### Patch Changes
+
+- [#178](https://github.com/prettier/pretty-quick/pull/178) [`1929cc9`](https://github.com/prettier/pretty-quick/commit/1929cc96fe0210c6fc44015c996ccd9c7eabd7fc) Thanks [@JounQin](https://github.com/JounQin)! - fix: add tslib as dependency
+
 ## 3.2.0
 
 ### Minor Changes
