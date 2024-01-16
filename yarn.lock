@@ -17900,24 +17900,10 @@ typescript@~4.4.4:
   languageName: node
   linkType: hard
 
-"yaml@npm:2.3.1":
-  version: 2.3.1
-  resolution: "yaml@npm:2.3.1"
-  checksum: e21f54ba57dcdbd8a2ed6460e5175fc5797c1b6ebdab99258a8d7fdb142f870d89481bcbdb955c090ba686032e004e16edb62f82bb92d7ce01097fc3ae5e3d2b
-  languageName: node
-  linkType: hard
-
-"yaml@npm:^1.10.0, yaml@npm:^1.10.2":
+"yaml@npm:^1.10.2":
   version: 1.10.2
   resolution: "yaml@npm:1.10.2"
   checksum: 8d72062ea3dbfd8fae3d6ddd5b741c2aeb5835a31b0719bf14fac71dd84adde0829763d6fbac46387309da00af1440194c796da5efc349b0baf9de39d82ae69e
-  languageName: node
-  linkType: hard
-
-"yaml@npm:^2.0.0, yaml@npm:^2.2.2":
-  version: 2.3.4
-  resolution: "yaml@npm:2.3.4"
-  checksum: c5f378790e172f8951d94c9076e16c3e678e2d3e93db6726fd6312b4e8c039fd02ed29ba3961fc634ceea6ddfe71d0bb75c6d16bdded02b50d91ee75d1df72ce
   languageName: node
   linkType: hard
 
