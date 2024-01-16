@@ -39,7 +39,7 @@
     "test": "jest"
   },
   "peerDependencies": {
-    "prettier": ">=2.0.0"
+    "prettier": "^2.0.0"
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -68,6 +68,9 @@
     "simple-git-hooks": "^2.9.0",
     "size-limit": "^11.0.1",
     "size-limit-preset-node-lib": "^0.3.0"
+  },
+  "jest": {
+    "collectCoverage": true
   },
   "prettier": "@1stg/prettier-config",
   "simple-git-hooks": {
