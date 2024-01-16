@@ -8,16 +8,18 @@ const mockStream = () => ({
 const mockExeca = jest.fn().mockReturnValue({
   stdout: mockStream(),
   stderr: mockStream(),
-  // eslint-disable-next-line no-empty-function
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   kill: () => {},
 })
 
 const mockExecaSync = jest.fn().mockReturnValue({
   stdout: '',
   stderr: '',
-  // eslint-disable-next-line no-empty-function
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   kill: () => {},
 })
 
-module.exports = mockExeca
-module.exports.sync = mockExecaSync
+export = mockExeca
+
+// @ts-expect-error -- intended
+mockExeca.sync = mockExecaSync

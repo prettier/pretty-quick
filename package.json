@@ -121,7 +121,7 @@
   "prettier": "@1stg/prettier-config",
   "size-limit": [
     {
-      "path": "src/index.js",
+      "path": "src/index.ts",
       "limit": "1KB"
     }
   ]
