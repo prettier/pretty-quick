@@ -1,7 +1,5 @@
 import mock from 'mock-fs'
 
-// eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
-// @ts-ignore -- No idea how to fix
 import prettyQuick from 'pretty-quick'
 
 jest.mock('execa')

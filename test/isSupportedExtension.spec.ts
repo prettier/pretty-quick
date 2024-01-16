@@ -2,8 +2,6 @@
 
 import prettier from 'prettier'
 
-// eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
-// @ts-ignore -- No idea how to fix
 import isSupportedExtension from 'pretty-quick/isSupportedExtension'
 
 afterEach(() => jest.clearAllMocks())

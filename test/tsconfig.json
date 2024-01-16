@@ -1,7 +1,0 @@
-{
-  "extends": "../tsconfig.lib",
-  "compilerOptions": {
-    "composite": true,
-    "outDir": "../test-dist"
-  }
-}

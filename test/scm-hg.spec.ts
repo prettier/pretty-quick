@@ -6,8 +6,6 @@ import execa from 'execa'
 import mock from 'mock-fs'
 import type FileSystem from 'mock-fs/lib/filesystem'
 
-// eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
-// @ts-ignore -- No idea how to fix
 import prettyQuick from 'pretty-quick'
 
 jest.mock('execa')
