@@ -1,5 +1,11 @@
 # pretty-quick
 
+## 3.3.1
+
+### Patch Changes
+
+- [#185](https://github.com/prettier/pretty-quick/pull/185) [`ca4d269`](https://github.com/prettier/pretty-quick/commit/ca4d269328fa6cbca651060f9af5a7e48c3abc02) Thanks [@JounQin](https://github.com/JounQin)! - fix: remove unexpected .tsbuildinfo file
+
 ## 3.3.0
 
 ### Minor Changes
