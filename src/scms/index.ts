@@ -1,10 +1,10 @@
-import * as gitScm from './git'
-import * as hgScm from './hg'
+import * as gitScm from './git.js'
+import * as hgScm from './hg.js'
 
-const scms = [gitScm, hgScm]
+const scmList = [gitScm, hgScm]
 
 export default (directory: string) => {
-  for (const scm of scms) {
+  for (const scm of scmList) {
     const rootDirectory = scm.detect(directory)
     if (rootDirectory) {
       return {

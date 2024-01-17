@@ -1,11 +1,12 @@
-import createIgnorer from './createIgnorer'
-import createMatcher from './createMatcher'
-import isSupportedExtension from './isSupportedExtension'
-import processFiles from './processFiles'
-import scms from './scms'
-import { PrettyQuickOptions } from './types'
+import createIgnorer from './createIgnorer.js'
+import createMatcher from './createMatcher.js'
+import isSupportedExtension from './isSupportedExtension.js'
+import processFiles from './processFiles.js'
+import scms from './scms/index.js'
+import { PrettyQuickOptions } from './types.js'
+import { filterAsync } from './utils.js'
 
-export = (
+export = async (
   currentDirectory: string,
   {
     config,
@@ -44,33 +45,37 @@ export = (
       ? () => true
       : createIgnorer(currentDirectory, ignorePath)
 
-  const changedFiles = scm
-    .getChangedFiles(directory, revision, staged)
-    .filter(createMatcher(pattern))
-    .filter(rootIgnorer)
-    .filter(cwdIgnorer)
-    .filter(isSupportedExtension(resolveConfig))
+  const patternMatcher = createMatcher(pattern)
+
+  const isFileSupportedExtension = isSupportedExtension(resolveConfig)
+
+  const changedFiles = await filterAsync(
+    scm
+      .getChangedFiles(directory, revision, staged)
+      .filter(patternMatcher)
+      .filter(rootIgnorer)
+      .filter(cwdIgnorer),
+    isFileSupportedExtension,
+  )
 
   const unstagedFiles = staged
-    ? scm
-        .getUnstagedChangedFiles(
-          directory,
-          // @ts-expect-error -- TODO: check
-          revision,
-        )
-        .filter(isSupportedExtension(resolveConfig))
-        .filter(createMatcher(pattern))
-        .filter(rootIgnorer)
-        .filter(cwdIgnorer)
+    ? await filterAsync(
+        scm
+          .getUnstagedChangedFiles(directory)
+          .filter(patternMatcher)
+          .filter(rootIgnorer)
+          .filter(cwdIgnorer),
+        isFileSupportedExtension,
+      )
     : []
 
-  const wasFullyStaged = (f: string) => !unstagedFiles.includes(f)
+  const wasFullyStaged = (file: string) => !unstagedFiles.includes(file)
 
   onFoundChangedFiles?.(changedFiles)
 
-  const failReasons = new Set()
+  const failReasons = new Set<string>()
 
-  processFiles(directory, changedFiles, {
+  await processFiles(directory, changedFiles, {
     check,
     config,
     onWriteFile(file: string) {

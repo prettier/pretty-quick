@@ -3,7 +3,7 @@
 import mri from 'mri'
 import picocolors from 'picocolors'
 
-import prettyQuick from '.'
+import prettyQuick from './index.js'
 
 const args = mri(process.argv.slice(2), {
   alias: {
@@ -12,7 +12,7 @@ const args = mri(process.argv.slice(2), {
   },
 })
 
-const prettyQuickResult = prettyQuick(process.cwd(), {
+const prettyQuickResult = await prettyQuick(process.cwd(), {
   ...args,
   onFoundSinceRevision: (scm, revision) => {
     console.log(
