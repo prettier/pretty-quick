@@ -1,5 +1,11 @@
 # pretty-quick
 
+## 4.0.0
+
+### Major Changes
+
+- [#182](https://github.com/prettier/pretty-quick/pull/182) [`f1cacb2`](https://github.com/prettier/pretty-quick/commit/f1cacb21c3a69cb50c34b716f59db4d746849c60) Thanks [@JounQin](https://github.com/JounQin)! - feat!: support prettier v3
+
 ## 3.3.1
 
 ### Patch Changes
