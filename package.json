@@ -19,7 +19,8 @@
   "files": [
     "bin",
     "dist",
-    "img"
+    "img",
+    "!**/*.tsbuildinfo"
   ],
   "keywords": [
     "git",
