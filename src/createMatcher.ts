@@ -2,7 +2,7 @@
 
 import path from 'path'
 
-import multimatch from 'multimatch'
+import picomatch from 'picomatch'
 
 export default (pattern: string[] | string | undefined) => {
   // Match everything if no pattern was given
@@ -10,6 +10,7 @@ export default (pattern: string[] | string | undefined) => {
     return () => true
   }
   const patterns = Array.isArray(pattern) ? pattern : [pattern]
-  return (file: string) =>
-    multimatch(path.normalize(file), patterns, { dot: true }).length > 0
+
+  const isMatch = picomatch(patterns, { dot: true })
+  return (file: string) => isMatch(path.normalize(file))
 }
