@@ -16,18 +16,31 @@ export const detect = (directory: string) => {
     type: 'directory',
   })
 
-  if (gitDirectory) {
-    return path.dirname(gitDirectory)
-  }
-
   const gitWorkTreeFile = findUp.sync('.git', {
     cwd: directory,
     type: 'file',
   })
 
-  if (gitWorkTreeFile) {
+  // if both of these are null then return null
+  if (!gitDirectory && !gitWorkTreeFile) {
+    return null
+  }
+
+  // if only one of these exists then return it
+  if (gitDirectory && !gitWorkTreeFile) {
+    return path.dirname(gitDirectory)
+  }
+
+  if (gitWorkTreeFile && !gitDirectory) {
     return path.dirname(gitWorkTreeFile)
   }
+
+  const gitRepoDirectory = path.dirname(gitDirectory!)
+  const gitWorkTreeDirectory = path.dirname(gitWorkTreeFile!)
+  // return the deeper of these two
+  return gitRepoDirectory.length > gitWorkTreeDirectory.length
+    ? gitRepoDirectory
+    : gitWorkTreeDirectory
 }
 
 const runGit = (directory: string, args: string[]) =>
