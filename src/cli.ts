@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import chalk from 'chalk'
 import mri from 'mri'
+import picocolors from 'picocolors'
 
 import prettyQuick from '.'
 
@@ -16,36 +16,36 @@ const prettyQuickResult = prettyQuick(process.cwd(), {
   ...args,
   onFoundSinceRevision: (scm, revision) => {
     console.log(
-      `🔍  Finding changed files since ${chalk.bold(scm)} revision ${chalk.bold(
-        revision,
-      )}.`,
+      `🔍  Finding changed files since ${picocolors.bold(
+        scm,
+      )} revision ${picocolors.bold(revision)}.`,
     )
   },
 
   onFoundChangedFiles: changedFiles => {
     console.log(
-      `🎯  Found ${chalk.bold(changedFiles.length)} changed ${
+      `🎯  Found ${picocolors.bold(changedFiles.length)} changed ${
         changedFiles.length === 1 ? 'file' : 'files'
       }.`,
     )
   },
 
   onPartiallyStagedFile: file => {
-    console.log(`✗ Found ${chalk.bold('partially')} staged file ${file}.`)
+    console.log(`✗ Found ${picocolors.bold('partially')} staged file ${file}.`)
   },
 
   onWriteFile: file => {
-    console.log(`✍️  Fixing up ${chalk.bold(file)}.`)
+    console.log(`✍️  Fixing up ${picocolors.bold(file)}.`)
   },
 
   onCheckFile: (file, isFormatted) => {
     if (!isFormatted) {
-      console.log(`⛔️  Check failed: ${chalk.bold(file)}`)
+      console.log(`⛔️  Check failed: ${picocolors.bold(file)}`)
     }
   },
 
   onExamineFile: file => {
-    console.log(`🔍  Examining ${chalk.bold(file)}.`)
+    console.log(`🔍  Examining ${picocolors.bold(file)}.`)
   },
 })
 
@@ -55,7 +55,7 @@ if (prettyQuickResult.success) {
   if (prettyQuickResult.errors.includes('PARTIALLY_STAGED_FILE')) {
     console.log(
       '✗ Partially staged files were fixed up.' +
-        ` ${chalk.bold('Please update stage before committing')}.`,
+        ` ${picocolors.bold('Please update stage before committing')}.`,
     )
   }
   if (prettyQuickResult.errors.includes('BAIL_ON_WRITE')) {

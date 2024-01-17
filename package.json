@@ -47,12 +47,12 @@
     "prettier": "^2.0.0"
   },
   "dependencies": {
-    "chalk": "^4.1.2",
     "execa": "^4.1.0",
     "find-up": "^4.1.0",
     "ignore": "^5.3.0",
     "mri": "^1.2.0",
     "multimatch": "^5.0.0",
+    "picocolors": "^1.0.0",
     "tslib": "^2.6.2"
   },
   "devDependencies": {

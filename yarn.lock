@@ -13730,7 +13730,6 @@ __metadata:
     "@types/jest": ^29.5.11
     "@types/mock-fs": ^4.13.4
     "@unts/patch-package": ^8.0.0
-    chalk: ^4.1.2
     clean-pkg-json: ^1.2.0
     eslint: ^8.56.0
     eslint-config-prettier: ^9.1.0
@@ -13745,6 +13744,7 @@ __metadata:
     mri: ^1.2.0
     multimatch: ^5.0.0
     npm-run-all: ^4.1.5
+    picocolors: ^1.0.0
     prettier: ^2.8.8
     pretty-quick: "link:."
     simple-git-hooks: ^2.9.0
