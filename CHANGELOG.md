@@ -1,5 +1,15 @@
 # pretty-quick
 
+## 3.3.0
+
+### Minor Changes
+
+- [#180](https://github.com/prettier/pretty-quick/pull/180) [`93924ab`](https://github.com/prettier/pretty-quick/commit/93924ab962ea94cc21f0ea6464a01b9f65543eb6) Thanks [@SukkaW](https://github.com/SukkaW)! - refactor: replace `chalk` and `multimatch` with their lightweight and performant alternatives
+
+### Patch Changes
+
+- [#183](https://github.com/prettier/pretty-quick/pull/183) [`71aab56`](https://github.com/prettier/pretty-quick/commit/71aab568495773cb3b9a683b79e6f20294ed585a) Thanks [@JounQin](https://github.com/JounQin)! - fix: more robust computation of git directory
+
 ## 3.2.1
 
 ### Patch Changes
