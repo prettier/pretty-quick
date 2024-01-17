@@ -2,7 +2,7 @@
   "extends": "../tsconfig.lib",
   "compilerOptions": {
     "composite": true,
-    "outDir": "../dist"
+    "outDir": "../lib"
   },
   "include": ["../shim.d.ts", "."]
 }

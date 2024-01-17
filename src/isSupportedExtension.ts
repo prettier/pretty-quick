@@ -1,12 +1,16 @@
 /* eslint-disable unicorn/filename-case */
 
-import * as prettier from 'prettier'
+import {
+  type FileInfoOptions,
+  getFileInfo,
+  resolveConfig as prettierResolveConfig,
+} from 'prettier'
 
-export default (resolveConfig?: boolean) => (file: string) => {
-  const config = prettier.resolveConfig.sync(file, {
+export default (resolveConfig?: boolean) => async (file: string) => {
+  const config = (await prettierResolveConfig(file, {
     editorconfig: true,
-  }) as prettier.FileInfoOptions
-  const fileInfo = prettier.getFileInfo.sync(file, {
+  })) as FileInfoOptions
+  const fileInfo = await getFileInfo(file, {
     resolveConfig,
     ...config,
   })

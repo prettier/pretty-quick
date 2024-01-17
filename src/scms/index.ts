@@ -1,5 +1,5 @@
-import * as gitScm from './git'
-import * as hgScm from './hg'
+import * as gitScm from './git.js'
+import * as hgScm from './hg.js'
 
 const scms = [gitScm, hgScm]
 

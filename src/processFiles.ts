@@ -3,11 +3,11 @@
 import fs from 'fs'
 import path from 'path'
 
-import prettier from 'prettier'
+import { format, check as prettierCheck, resolveConfig } from 'prettier'
 
-import { PrettyQuickOptions } from './types'
+import type { PrettyQuickOptions } from './types.js'
 
-export default (
+export default async (
   directory: string,
   files: string[],
   {
@@ -22,21 +22,21 @@ export default (
     onExamineFile?.(relative)
     const file = path.join(directory, relative)
     const options = {
-      ...prettier.resolveConfig.sync(file, {
+      ...(await resolveConfig(file, {
         config,
         editorconfig: true,
-      }),
+      })),
       filepath: file,
     }
     const input = fs.readFileSync(file, 'utf8')
 
     if (check) {
-      const isFormatted = prettier.check(input, options)
+      const isFormatted = await prettierCheck(input, options)
       onCheckFile?.(relative, isFormatted)
       continue
     }
 
-    const output = prettier.format(input, options)
+    const output = await format(input, options)
 
     if (output !== input) {
       fs.writeFileSync(file, output)
