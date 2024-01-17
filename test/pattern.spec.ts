@@ -22,7 +22,7 @@ describe('match pattern', () => {
       '/src/should-not-be-included/hello/zoo.js': "export const zoo = 'zoo'",
     })
 
-    // @ts-expect-error -- Need to find a better way to moch this
+    // @ts-expect-error -- Need to find a better way to mock this
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     execa.sync.mockImplementation((_command: string, args: string[]) => {
       switch (args[0]) {
