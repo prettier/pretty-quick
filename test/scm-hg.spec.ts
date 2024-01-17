@@ -18,7 +18,7 @@ const mockHgFs = (additionalFiles?: FileSystem.DirectoryItems) => {
     ...additionalFiles,
   })
 
-  // @ts-expect-error -- Need to find a better way
+  // @ts-expect-error -- Need to find a better way to mock this
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   execa.sync.mockImplementation((command: string, args: string[]) => {
     if (command !== 'hg') {

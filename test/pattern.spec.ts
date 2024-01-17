@@ -11,7 +11,7 @@ afterEach(() => {
 })
 
 describe('match pattern', () => {
-  it('issue #73 #125 - regex grouping (round pattern)', () => {
+  it('issue #73 #125 - regex grouping (round pattern)', async () => {
     const onFoundChangedFiles = jest.fn()
 
     mock({
@@ -47,7 +47,7 @@ describe('match pattern', () => {
       }
     })
 
-    prettyQuick('root', {
+    await prettyQuick('root', {
       pattern: '**/(apps|libs|tools)/**/*',
       since: 'fox', // This is required to prevent `scm.getSinceRevision` call
       onFoundChangedFiles,
