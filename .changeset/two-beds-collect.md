@@ -1,5 +1,5 @@
 ---
-'pretty-quick': patch
+'pretty-quick': minor
 ---
 
-Replaces `chalk` and `multimatch` with their lightweight and performant alternative.
+refactor: replace `chalk` and `multimatch` with their lightweight and performant alternatives
