@@ -10,7 +10,7 @@
   "license": "MIT",
   "packageManager": "yarn@3.6.4",
   "engines": {
-    "node": ">=14.8.0"
+    "node": ">=14"
   },
   "bin": "lib/cli.mjs",
   "main": "lib/index.js",
