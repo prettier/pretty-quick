@@ -4146,13 +4146,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/minimatch@npm:^3.0.3":
-  version: 3.0.5
-  resolution: "@types/minimatch@npm:3.0.5"
-  checksum: 517a8ea1bfad4cc9d2563fc70c3ecd9afb13f9ef2b2cb06f8910989baf199d24f2fc6a8ccaae16a27c856e022b311042ca67ff42ffbda48750f2f84a5bf48716
-  languageName: node
-  linkType: hard
-
 "@types/minimist@npm:^1.2.0":
   version: 1.2.5
   resolution: "@types/minimist@npm:1.2.5"
@@ -4226,6 +4219,13 @@ __metadata:
   version: 4.0.2
   resolution: "@types/parse-json@npm:4.0.2"
   checksum: c523cc4bd1cc5a07af85df9ed5dc2cc24d017aad794f9f7a635a3bafec8c20398a09d9c818725acabed04ffbb58e48d303f5168cae38a765354e2472c57d8476
+  languageName: node
+  linkType: hard
+
+"@types/picomatch@npm:^2.3.3":
+  version: 2.3.3
+  resolution: "@types/picomatch@npm:2.3.3"
+  checksum: 761493d528c5dcfeab4a82637d833d6154bac5a5ed4af1cc30fe6f0bbe14111e4d30413414151d842484dad75368194a165f1bc9350289f414f1d0fa2311d77c
   languageName: node
   linkType: hard
 
@@ -4983,13 +4983,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"array-differ@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "array-differ@npm:3.0.0"
-  checksum: 6d87a752b56b9e9b29b617d7092173ac3b418d77621077eb7d7637a143b8df6019d59fe98cb3ba8ceba2677ad9904220dabd816f762c1cd5afaa3eec14db3b92
-  languageName: node
-  linkType: hard
-
 "array-ify@npm:^1.0.0":
   version: 1.0.0
   resolution: "array-ify@npm:1.0.0"
@@ -5080,13 +5073,6 @@ __metadata:
   version: 1.0.1
   resolution: "arrify@npm:1.0.1"
   checksum: f1d3bae819f49f51a09da5f5c5ce282e79ca69bbdb32db1d9f6c62b151ef801b74398d007cfe89686e2c5aeb62576a398b9068e5172b7f4e20157aa3284076d3
-  languageName: node
-  linkType: hard
-
-"arrify@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "arrify@npm:2.0.1"
-  checksum: 2a19726815590d829e07998aefa2c352bd9061e58bf4391ffffa227129995841a710bef2d8b4c9408a6b0679d96c96bd23764bdbcc29bb21666c976816093972
   languageName: node
   linkType: hard
 
@@ -12572,19 +12558,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"multimatch@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "multimatch@npm:5.0.0"
-  dependencies:
-    "@types/minimatch": "npm:^3.0.3"
-    array-differ: "npm:^3.0.0"
-    array-union: "npm:^2.1.0"
-    arrify: "npm:^2.0.1"
-    minimatch: "npm:^3.0.4"
-  checksum: 93fcf94313d5a62c9eac21cda21201651af7ad4fdb89c3e35d8b6031568d656f0a7a79c7275bdb2e3446994e9b7ee317b8a8cdf81c74d30e52dc8d92a2aba48b
-  languageName: node
-  linkType: hard
-
 "mustache@npm:^4.2.0":
   version: 4.2.0
   resolution: "mustache@npm:4.2.0"
@@ -13437,6 +13410,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"picomatch@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "picomatch@npm:3.0.1"
+  checksum: d8b119f925c16361e4727f2bf651f73f856cc658affae9b8bde33af1c33436fd18f76cfd64c85b841272c2ee93e48d331457c81fd9d43586812b3f6595baa810
+  languageName: node
+  linkType: hard
+
 "pidtree@npm:0.6.0":
   version: 0.6.0
   resolution: "pidtree@npm:0.6.0"
@@ -13729,8 +13709,8 @@ __metadata:
     "@total-typescript/ts-reset": ^0.5.1
     "@types/jest": ^29.5.11
     "@types/mock-fs": ^4.13.4
+    "@types/picomatch": ^2.3.3
     "@unts/patch-package": ^8.0.0
-    chalk: ^4.1.2
     clean-pkg-json: ^1.2.0
     eslint: ^8.56.0
     eslint-config-prettier: ^9.1.0
@@ -13743,8 +13723,9 @@ __metadata:
     lint-staged: ^13.2.2
     mock-fs: ^4.14.0
     mri: ^1.2.0
-    multimatch: ^5.0.0
     npm-run-all: ^4.1.5
+    picocolors: ^1.0.0
+    picomatch: ^3.0.1
     prettier: ^2.8.8
     pretty-quick: "link:."
     simple-git-hooks: ^2.9.0
