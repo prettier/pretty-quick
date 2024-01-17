@@ -44,7 +44,7 @@
   ],
   "scripts": {
     "build": "run-p 'build:*'",
-    "build:r": "r -f esm || exit 0",
+    "build:r": "r -f esm",
     "build:tsc": "tsc -b",
     "lint": "run-p 'lint:*'",
     "lint:es": "eslint . --cache",
