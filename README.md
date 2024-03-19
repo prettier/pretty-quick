@@ -61,7 +61,7 @@ In `package.json`, add:
 
 ```json
 "simple-git-hooks": {
-  "pre-commit": "pretty-quick --staged"
+  "pre-commit": "yarn pretty-quick --staged" // or "npx pretty-quick --staged"
 }
 ```
 
