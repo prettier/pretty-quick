@@ -59,9 +59,9 @@ yarn add -D simple-git-hooks
 
 In `package.json`, add:
 
-```json
+```jsonc
 "simple-git-hooks": {
-  "pre-commit": "pretty-quick --staged"
+  "pre-commit": "yarn pretty-quick --staged" // or "npx pretty-quick --staged"
 }
 ```
 
