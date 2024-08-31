@@ -12911,6 +12911,7 @@ __metadata:
     simple-git-hooks: ^2.9.0
     size-limit: ^11.0.2
     size-limit-preset-node-lib: ^0.3.0
+    tinyexec: ^0.3.0
     ts-jest: ^29.1.1
     ts-node: ^10.9.2
     tslib: ^2.6.2
@@ -15497,6 +15498,13 @@ __metadata:
     es5-ext: ~0.10.46
     next-tick: 1
   checksum: ef3f27a0702a88d885bcbb0317c3e3ecd094ce644da52e7f7d362394a125d9e3578292a8f8966071a980d8abbc3395725333b1856f3ae93835b46589f700d938
+  languageName: node
+  linkType: hard
+
+"tinyexec@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "tinyexec@npm:0.3.0"
+  checksum: e55473d249b8fc94bc5b1461d8e368dfe0ba23dcfca4f9069fe25418b17772e50110a1d33cd7ac8ff26456e5b609e0528cce7660e35246fad9b00bd094f3f444
   languageName: node
   linkType: hard
 

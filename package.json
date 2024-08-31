@@ -63,6 +63,7 @@
     "mri": "^1.2.0",
     "picocolors": "^1.0.0",
     "picomatch": "^3.0.1",
+    "tinyexec": "^0.3.0",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
