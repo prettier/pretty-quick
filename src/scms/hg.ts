@@ -1,7 +1,7 @@
 import path from 'path'
 
-import execa from 'execa'
 import findUp from 'find-up'
+import { Output, x } from 'tinyexec'
 
 export const name = 'hg'
 
@@ -15,34 +15,38 @@ export const detect = (directory: string) => {
   }
 }
 
-const runHg = (directory: string, args: string[]) =>
-  execa.sync('hg', args, {
-    cwd: directory,
+const runHg = async (directory: string, args: string[]) =>
+  x('hg', args, {
+    nodeOptions: {
+      cwd: directory,
+    },
   })
 
-const getLines = (execaResult: execa.ExecaSyncReturnValue) =>
-  execaResult.stdout.split('\n')
+const getLines = (tinyexecOutput: Output) => tinyexecOutput.stdout.split('\n')
 
-export const getSinceRevision = (
+export const getSinceRevision = async (
   directory: string,
   { branch }: { branch?: string },
 ) => {
-  const revision = runHg(directory, [
+  const revisionOutput = await runHg(directory, [
     'debugancestor',
     'tip',
     branch || 'default',
-  ]).stdout.trim()
-  return runHg(directory, ['id', '-i', '-r', revision]).stdout.trim()
+  ])
+  const revision = revisionOutput.stdout.trim()
+
+  const hgOutput = await runHg(directory, ['id', '-i', '-r', revision])
+  return hgOutput.stdout.trim()
 }
 
-export const getChangedFiles = (
+export const getChangedFiles = async (
   directory: string,
   revision: string | null,
   _staged?: boolean,
 ) =>
   [
     ...getLines(
-      runHg(directory, [
+      await runHg(directory, [
         'status',
         '-n',
         '-a',
@@ -54,6 +58,6 @@ export const getChangedFiles = (
 
 export const getUnstagedChangedFiles = () => []
 
-export const stageFile = (directory: string, file: string) => {
-  runHg(directory, ['add', file])
+export const stageFile = async (directory: string, file: string) => {
+  await runHg(directory, ['add', file])
 }

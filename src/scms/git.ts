@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
-import execa from 'execa'
 import findUp from 'find-up'
+import { Output, x } from 'tinyexec'
 
 export const name = 'git'
 
@@ -43,27 +43,36 @@ export const detect = (directory: string) => {
     : gitWorkTreeDirectory
 }
 
-const runGit = (directory: string, args: string[]) =>
-  execa.sync('git', args, {
-    cwd: directory,
+const runGit = async (directory: string, args: string[]) =>
+  x('git', args, {
+    nodeOptions: {
+      cwd: directory,
+    },
   })
 
-const getLines = (execaResult: execa.ExecaSyncReturnValue) =>
-  execaResult.stdout.split('\n')
+const getLines = (tinyexecOutput: Output) => tinyexecOutput.stdout.split('\n')
 
-export const getSinceRevision = (
+export const getSinceRevision = async (
   directory: string,
   { staged, branch }: { staged?: boolean; branch?: string },
 ) => {
   try {
-    const revision = staged
-      ? 'HEAD'
-      : runGit(directory, [
-          'merge-base',
-          'HEAD',
-          branch || 'master',
-        ]).stdout.trim()
-    return runGit(directory, ['rev-parse', '--short', revision]).stdout.trim()
+    let revision = 'HEAD'
+    if (!staged) {
+      const revisionOutput = await runGit(directory, [
+        'merge-base',
+        'HEAD',
+        branch || 'master',
+      ])
+      revision = revisionOutput.stdout.trim()
+    }
+
+    const revParseOutput = await runGit(directory, [
+      'rev-parse',
+      '--short',
+      revision,
+    ])
+    return revParseOutput.stdout.trim()
   } catch (err) {
     const error = err as Error
     if (
@@ -76,14 +85,14 @@ export const getSinceRevision = (
   }
 }
 
-export const getChangedFiles = (
+export const getChangedFiles = async (
   directory: string,
   revision: string | null,
   staged?: boolean | undefined,
 ) =>
   [
     ...getLines(
-      runGit(
+      await runGit(
         directory,
         [
           'diff',
@@ -97,7 +106,11 @@ export const getChangedFiles = (
     ...(staged
       ? []
       : getLines(
-          runGit(directory, ['ls-files', '--others', '--exclude-standard']),
+          await runGit(directory, [
+            'ls-files',
+            '--others',
+            '--exclude-standard',
+          ]),
         )),
   ].filter(Boolean)
 
@@ -105,6 +118,6 @@ export const getUnstagedChangedFiles = (directory: string) => {
   return getChangedFiles(directory, null, false)
 }
 
-export const stageFile = (directory: string, file: string) => {
-  runGit(directory, ['add', file])
+export const stageFile = async (directory: string, file: string) => {
+  await runGit(directory, ['add', file])
 }
