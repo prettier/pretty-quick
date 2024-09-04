@@ -2,7 +2,7 @@ import fs from 'fs'
 
 import mock from 'mock-fs'
 import type FileSystem from 'mock-fs/lib/filesystem'
-import { x } from 'tinyexec'
+import * as tinyexec from 'tinyexec'
 
 import prettyQuick from 'pretty-quick'
 
@@ -18,9 +18,8 @@ const mockGitFs = (
     ...additionalFiles,
   })
 
-  // @ts-expect-error -- Need to find a better way to mock this
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  x.mockImplementation((command: string, args: string[]) => {
+  const xSpy = jest.spyOn(tinyexec, 'x') as jest.Mock
+  xSpy.mockImplementation((command: string, args: string[]) => {
     if (command !== 'git') {
       throw new Error(`unexpected command: ${command}`)
     }
@@ -56,7 +55,7 @@ describe('with git', () => {
 
     await prettyQuick('root')
 
-    expect(x).toHaveBeenCalledWith(
+    expect(tinyexec.x).toHaveBeenCalledWith(
       'git',
       // eslint-disable-next-line sonarjs/no-duplicate-string
       ['merge-base', 'HEAD', 'master'],
@@ -72,9 +71,13 @@ describe('with git', () => {
 
     await prettyQuick('/other-dir')
 
-    expect(x).toHaveBeenCalledWith('git', ['merge-base', 'HEAD', 'master'], {
-      nodeOptions: { cwd: '/' },
-    })
+    expect(tinyexec.x).toHaveBeenCalledWith(
+      'git',
+      ['merge-base', 'HEAD', 'master'],
+      {
+        nodeOptions: { cwd: '/' },
+      },
+    )
   })
 
   test('with --staged does NOT call `git merge-base`', async () => {
@@ -84,7 +87,11 @@ describe('with git', () => {
 
     await prettyQuick('root')
 
-    expect(x).not.toHaveBeenCalledWith('git', ['merge-base', 'HEAD', 'master'])
+    expect(tinyexec.x).not.toHaveBeenCalledWith('git', [
+      'merge-base',
+      'HEAD',
+      'master',
+    ])
   })
 
   test('with --staged calls diff without revision', async () => {
@@ -94,7 +101,7 @@ describe('with git', () => {
 
     await prettyQuick('root', { since: 'banana', staged: true })
 
-    expect(x).toHaveBeenCalledWith(
+    expect(tinyexec.x).toHaveBeenCalledWith(
       'git',
       ['diff', '--name-only', '--diff-filter=ACMRTUB'],
       { nodeOptions: { cwd: '/' } },
@@ -108,7 +115,7 @@ describe('with git', () => {
 
     await prettyQuick('root', { since: 'banana' })
 
-    expect(x).toHaveBeenCalledWith(
+    expect(tinyexec.x).toHaveBeenCalledWith(
       'git',
       ['diff', '--name-only', '--diff-filter=ACMRTUB', 'banana'],
       { nodeOptions: { cwd: '/' } },
@@ -122,7 +129,7 @@ describe('with git', () => {
 
     await prettyQuick('root', { since: 'banana' })
 
-    expect(x).toHaveBeenCalledWith(
+    expect(tinyexec.x).toHaveBeenCalledWith(
       'git',
       ['ls-files', '--others', '--exclude-standard'],
       { nodeOptions: { cwd: '/' } },
@@ -136,9 +143,8 @@ describe('with git', () => {
       '/.git': {},
     })
 
-    // @ts-expect-error -- Need to find a better way
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    x.mockImplementation(() => ({ stdout: 'banana' }))
+    const xSpy = jest.spyOn(tinyexec, 'x') as jest.Mock
+    xSpy.mockImplementation(() => ({ stdout: 'banana' }))
 
     await prettyQuick('root', { onFoundSinceRevision })
 
@@ -224,13 +230,13 @@ describe('with git', () => {
   test('with --staged stages fully-staged files', async () => {
     mockGitFs()
     await prettyQuick('root', { since: 'banana', staged: true })
-    expect(x).toHaveBeenCalledWith('git', ['add', './raz.js'], {
+    expect(tinyexec.x).toHaveBeenCalledWith('git', ['add', './raz.js'], {
       nodeOptions: { cwd: '/' },
     })
-    expect(x).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
+    expect(tinyexec.x).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
       nodeOptions: { cwd: '/' },
     })
-    expect(x).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
+    expect(tinyexec.x).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
       nodeOptions: { cwd: '/' },
     })
   })
@@ -238,13 +244,13 @@ describe('with git', () => {
   test('with --staged AND --no-restage does not re-stage any files', async () => {
     mockGitFs()
     await prettyQuick('root', { since: 'banana', staged: true, restage: false })
-    expect(x).not.toHaveBeenCalledWith('git', ['add', './raz.js'], {
+    expect(tinyexec.x).not.toHaveBeenCalledWith('git', ['add', './raz.js'], {
       cwd: '/',
     })
-    expect(x).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
+    expect(tinyexec.x).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
       cwd: '/',
     })
-    expect(x).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
+    expect(tinyexec.x).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
       cwd: '/',
     })
   })
@@ -253,7 +259,7 @@ describe('with git', () => {
     const additionalUnstaged = './raz.js\n' // raz.js is partly staged and partly not staged
     mockGitFs(additionalUnstaged)
     await prettyQuick('root', { since: 'banana', staged: true })
-    expect(x).not.toHaveBeenCalledWith('git', ['add', './raz.js'], {
+    expect(tinyexec.x).not.toHaveBeenCalledWith('git', ['add', './raz.js'], {
       cwd: '/',
     })
   })
@@ -271,10 +277,10 @@ describe('with git', () => {
   test('without --staged does NOT stage changed files', async () => {
     mockGitFs()
     await prettyQuick('root', { since: 'banana' })
-    expect(x).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
+    expect(tinyexec.x).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
       cwd: '/',
     })
-    expect(x).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
+    expect(tinyexec.x).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
       cwd: '/',
     })
   })
