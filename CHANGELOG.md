@@ -1,5 +1,11 @@
 # pretty-quick
 
+## 4.1.1
+
+### Patch Changes
+
+- [#200](https://github.com/prettier/pretty-quick/pull/200) [`40b2e55`](https://github.com/prettier/pretty-quick/commit/40b2e55aa45c036d3f1650e2862e1ca0bc186469) Thanks [@ConradHughes](https://github.com/ConradHughes)! - fix: directory symlink handling - close #196
+
 ## 4.1.0
 
 ### Minor Changes
