@@ -1,5 +1,13 @@
 # pretty-quick
 
+## 4.1.0
+
+### Minor Changes
+
+- [#195](https://github.com/prettier/pretty-quick/pull/195) [`dcf5da4`](https://github.com/prettier/pretty-quick/commit/dcf5da46ce517547077f5b2d9b0519e6676361d7) Thanks [@pralkarz](https://github.com/pralkarz)! - feat: replace `execa` with `tinyexec`
+
+- [#198](https://github.com/prettier/pretty-quick/pull/198) [`76c5371`](https://github.com/prettier/pretty-quick/commit/76c5371adbf7956e9514592020759c9cdb16945f) Thanks [@JounQin](https://github.com/JounQin)! - chore: bump upgradable deps without breaking changes
+
 ## 4.0.0
 
 ### Major Changes
