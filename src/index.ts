@@ -35,7 +35,8 @@ export = async (
   }
   const directory = scm.rootDirectory
 
-  const revision = since || scm.getSinceRevision(directory, { staged, branch })
+  const revision =
+    since || (await scm.getSinceRevision(directory, { staged, branch }))
 
   onFoundSinceRevision?.(scm.name, revision)
 
@@ -49,19 +50,23 @@ export = async (
 
   const isFileSupportedExtension = isSupportedExtension(resolveConfig)
 
+  const unfilteredChangedFiles = await scm.getChangedFiles(
+    directory,
+    revision,
+    staged,
+  )
   const changedFiles = await filterAsync(
-    scm
-      .getChangedFiles(directory, revision, staged)
+    unfilteredChangedFiles
       .filter(patternMatcher)
       .filter(rootIgnorer)
       .filter(cwdIgnorer),
     isFileSupportedExtension,
   )
 
+  const unfilteredStagedFiles = await scm.getUnstagedChangedFiles(directory)
   const unstagedFiles = staged
     ? await filterAsync(
-        scm
-          .getUnstagedChangedFiles(directory)
+        unfilteredStagedFiles
           .filter(patternMatcher)
           .filter(rootIgnorer)
           .filter(cwdIgnorer),
@@ -78,14 +83,14 @@ export = async (
   await processFiles(directory, changedFiles, {
     check,
     config,
-    onWriteFile(file: string) {
-      onWriteFile?.(file)
+    onWriteFile: async (file: string) => {
+      await onWriteFile?.(file)
       if (bail) {
         failReasons.add('BAIL_ON_WRITE')
       }
       if (staged && restage) {
         if (wasFullyStaged(file)) {
-          scm.stageFile(directory, file)
+          await scm.stageFile(directory, file)
         } else {
           onPartiallyStagedFile?.(file)
           failReasons.add('PARTIALLY_STAGED_FILE')

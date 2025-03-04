@@ -1,9 +1,7 @@
-import execa from 'execa'
 import mock from 'mock-fs'
+import * as tinyexec from 'tinyexec'
 
 import prettyQuick from 'pretty-quick'
-
-jest.mock('execa')
 
 afterEach(() => {
   mock.restore()
@@ -22,9 +20,8 @@ describe('match pattern', () => {
       '/src/should-not-be-included/hello/zoo.js': "export const zoo = 'zoo'",
     })
 
-    // @ts-expect-error -- Need to find a better way to mock this
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    execa.sync.mockImplementation((_command: string, args: string[]) => {
+    const execSpy = jest.spyOn(tinyexec, 'exec') as jest.Mock
+    execSpy.mockImplementation((_command: string, args: string[]) => {
       switch (args[0]) {
         case 'ls-files': {
           return { stdout: '' }

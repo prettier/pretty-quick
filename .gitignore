@@ -4,3 +4,5 @@ node_modules
 /.yarn/*
 !/.yarn/plugins
 !/.yarn/releases
+coverage
+.eslintcache

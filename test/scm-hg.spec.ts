@@ -1,14 +1,12 @@
-/* eslint-disable @typescript-eslint/unbound-method */
-
 import fs from 'fs'
 
-import execa from 'execa'
 import mock from 'mock-fs'
 import type FileSystem from 'mock-fs/lib/filesystem'
+import * as tinyexec from 'tinyexec'
 
 import prettyQuick from 'pretty-quick'
 
-jest.mock('execa')
+jest.mock('tinyexec')
 
 const mockHgFs = (additionalFiles?: FileSystem.DirectoryItems) => {
   mock({
@@ -18,9 +16,8 @@ const mockHgFs = (additionalFiles?: FileSystem.DirectoryItems) => {
     ...additionalFiles,
   })
 
-  // @ts-expect-error -- Need to find a better way to mock this
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  execa.sync.mockImplementation((command: string, args: string[]) => {
+  const execSpy = jest.spyOn(tinyexec, 'exec') as jest.Mock
+  execSpy.mockImplementation((command: string, args: string[]) => {
     if (command !== 'hg') {
       throw new Error(`unexpected command: ${command}`)
     }
@@ -55,10 +52,12 @@ describe('with hg', () => {
       '/.hg': {},
     })
     await prettyQuick('root')
-    expect(execa.sync).toHaveBeenCalledWith(
+    expect(tinyexec.exec).toHaveBeenCalledWith(
       'hg',
       ['debugancestor', 'tip', 'default'],
-      { cwd: '/' },
+      {
+        nodeOptions: { cwd: '/' },
+      },
     )
   })
 
@@ -68,10 +67,12 @@ describe('with hg', () => {
       '/other-dir': {},
     })
     await prettyQuick('/other-dir')
-    expect(execa.sync).toHaveBeenCalledWith(
+    expect(tinyexec.exec).toHaveBeenCalledWith(
       'hg',
       ['debugancestor', 'tip', 'default'],
-      { cwd: '/' },
+      {
+        nodeOptions: { cwd: '/' },
+      },
     )
   })
 
@@ -80,10 +81,10 @@ describe('with hg', () => {
       '/.hg': {},
     })
     await prettyQuick('root', { since: 'banana' })
-    expect(execa.sync).toHaveBeenCalledWith(
+    expect(tinyexec.exec).toHaveBeenCalledWith(
       'hg',
       ['status', '-n', '-a', '-m', '--rev', 'banana'],
-      { cwd: '/' },
+      { nodeOptions: { cwd: '/' } },
     )
   })
 
@@ -94,9 +95,8 @@ describe('with hg', () => {
       '/.hg': {},
     })
 
-    // @ts-expect-error -- Need to find a better way
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    execa.sync.mockImplementation(() => ({ stdout: 'banana' }))
+    const execSpy = jest.spyOn(tinyexec, 'exec') as jest.Mock
+    execSpy.mockImplementation(() => ({ stdout: 'banana' }))
 
     await prettyQuick('root', { onFoundSinceRevision })
 
@@ -183,11 +183,11 @@ describe('with hg', () => {
   test('without --staged does NOT stage changed files', async () => {
     mockHgFs()
     await prettyQuick('root', { since: 'banana' })
-    expect(execa.sync).not.toHaveBeenCalledWith('hg', ['add', './foo.js'], {
-      cwd: '/',
+    expect(tinyexec.exec).not.toHaveBeenCalledWith('hg', ['add', './foo.js'], {
+      nodeOptions: { cwd: '/' },
     })
-    expect(execa.sync).not.toHaveBeenCalledWith('hg', ['add', './bar.md'], {
-      cwd: '/',
+    expect(tinyexec.exec).not.toHaveBeenCalledWith('hg', ['add', './bar.md'], {
+      nodeOptions: { cwd: '/' },
     })
   })
 

@@ -40,7 +40,7 @@ export default async (
 
     if (output !== input) {
       fs.writeFileSync(file, output)
-      onWriteFile?.(relative)
+      await onWriteFile?.(relative)
     }
   }
 }

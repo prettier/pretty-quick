@@ -15,5 +15,5 @@ export interface PrettyQuickOptions {
   onPartiallyStagedFile(file: string): void
   onExamineFile(relative: string): void
   onCheckFile(relative: string, isFormatted: boolean): void
-  onWriteFile(relative: string): void
+  onWriteFile(relative: string): Promise<void> | void
 }
