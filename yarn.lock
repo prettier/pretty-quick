@@ -12946,6 +12946,7 @@ __metadata:
     picomatch: ^4.0.2
     prettier: ^3.5.3
     pretty-quick: "link:."
+    simple-git-hooks: ^2.9.0
     size-limit: ^11.2.0
     size-limit-preset-node-lib: ^0.3.0
     tinyexec: ^0.3.2
