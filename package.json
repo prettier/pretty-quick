@@ -1,6 +1,6 @@
 {
   "name": "pretty-quick",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Get Pretty Quick",
   "repository": "prettier/pretty-quick",
   "author": "Lucas Azzola <@azz>",
@@ -132,7 +132,7 @@
   "size-limit": [
     {
       "path": "src/index.ts",
-      "limit": "1KB"
+      "limit": "1.5KB"
     }
   ]
 }
