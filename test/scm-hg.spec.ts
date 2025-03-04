@@ -16,8 +16,8 @@ const mockHgFs = (additionalFiles?: FileSystem.DirectoryItems) => {
     ...additionalFiles,
   })
 
-  const xSpy = jest.spyOn(tinyexec, 'x') as jest.Mock
-  xSpy.mockImplementation((command: string, args: string[]) => {
+  const execSpy = jest.spyOn(tinyexec, 'exec') as jest.Mock
+  execSpy.mockImplementation((command: string, args: string[]) => {
     if (command !== 'hg') {
       throw new Error(`unexpected command: ${command}`)
     }
@@ -52,7 +52,7 @@ describe('with hg', () => {
       '/.hg': {},
     })
     await prettyQuick('root')
-    expect(tinyexec.x).toHaveBeenCalledWith(
+    expect(tinyexec.exec).toHaveBeenCalledWith(
       'hg',
       ['debugancestor', 'tip', 'default'],
       {
@@ -67,7 +67,7 @@ describe('with hg', () => {
       '/other-dir': {},
     })
     await prettyQuick('/other-dir')
-    expect(tinyexec.x).toHaveBeenCalledWith(
+    expect(tinyexec.exec).toHaveBeenCalledWith(
       'hg',
       ['debugancestor', 'tip', 'default'],
       {
@@ -81,7 +81,7 @@ describe('with hg', () => {
       '/.hg': {},
     })
     await prettyQuick('root', { since: 'banana' })
-    expect(tinyexec.x).toHaveBeenCalledWith(
+    expect(tinyexec.exec).toHaveBeenCalledWith(
       'hg',
       ['status', '-n', '-a', '-m', '--rev', 'banana'],
       { nodeOptions: { cwd: '/' } },
@@ -95,8 +95,8 @@ describe('with hg', () => {
       '/.hg': {},
     })
 
-    const xSpy = jest.spyOn(tinyexec, 'x') as jest.Mock
-    xSpy.mockImplementation(() => ({ stdout: 'banana' }))
+    const execSpy = jest.spyOn(tinyexec, 'exec') as jest.Mock
+    execSpy.mockImplementation(() => ({ stdout: 'banana' }))
 
     await prettyQuick('root', { onFoundSinceRevision })
 
@@ -183,10 +183,10 @@ describe('with hg', () => {
   test('without --staged does NOT stage changed files', async () => {
     mockHgFs()
     await prettyQuick('root', { since: 'banana' })
-    expect(tinyexec.x).not.toHaveBeenCalledWith('hg', ['add', './foo.js'], {
+    expect(tinyexec.exec).not.toHaveBeenCalledWith('hg', ['add', './foo.js'], {
       nodeOptions: { cwd: '/' },
     })
-    expect(tinyexec.x).not.toHaveBeenCalledWith('hg', ['add', './bar.md'], {
+    expect(tinyexec.exec).not.toHaveBeenCalledWith('hg', ['add', './bar.md'], {
       nodeOptions: { cwd: '/' },
     })
   })

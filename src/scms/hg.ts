@@ -1,7 +1,7 @@
 import path from 'path'
 
 import findUp from 'find-up'
-import { Output, x } from 'tinyexec'
+import { Output, exec } from 'tinyexec'
 
 export const name = 'hg'
 
@@ -16,7 +16,7 @@ export const detect = (directory: string) => {
 }
 
 const runHg = async (directory: string, args: string[]) =>
-  x('hg', args, {
+  exec('hg', args, {
     nodeOptions: {
       cwd: directory,
     },

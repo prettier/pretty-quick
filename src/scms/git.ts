@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import findUp from 'find-up'
-import { Output, x } from 'tinyexec'
+import { Output, exec } from 'tinyexec'
 
 export const name = 'git'
 
@@ -44,7 +44,7 @@ export const detect = (directory: string) => {
 }
 
 const runGit = async (directory: string, args: string[]) =>
-  x('git', args, {
+  exec('git', args, {
     nodeOptions: {
       cwd: directory,
     },

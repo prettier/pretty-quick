@@ -20,8 +20,8 @@ describe('match pattern', () => {
       '/src/should-not-be-included/hello/zoo.js': "export const zoo = 'zoo'",
     })
 
-    const xSpy = jest.spyOn(tinyexec, 'x') as jest.Mock
-    xSpy.mockImplementation((_command: string, args: string[]) => {
+    const execSpy = jest.spyOn(tinyexec, 'exec') as jest.Mock
+    execSpy.mockImplementation((_command: string, args: string[]) => {
       switch (args[0]) {
         case 'ls-files': {
           return { stdout: '' }
