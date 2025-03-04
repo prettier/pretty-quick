@@ -15,7 +15,7 @@ export const detect = (directory: string) => {
   }
 }
 
-const runHg = async (directory: string, args: string[]) =>
+const runHg = (directory: string, args: string[]) =>
   exec('hg', args, {
     nodeOptions: {
       cwd: directory,
@@ -58,6 +58,5 @@ export const getChangedFiles = async (
 
 export const getUnstagedChangedFiles = () => []
 
-export const stageFile = async (directory: string, file: string) => {
-  await runHg(directory, ['add', file])
-}
+export const stageFile = (directory: string, file: string) =>
+  runHg(directory, ['add', file])

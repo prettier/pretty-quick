@@ -43,7 +43,7 @@ export const detect = (directory: string) => {
     : gitWorkTreeDirectory
 }
 
-const runGit = async (directory: string, args: string[]) =>
+const runGit = (directory: string, args: string[]) =>
   exec('git', args, {
     nodeOptions: {
       cwd: directory,
@@ -118,6 +118,5 @@ export const getUnstagedChangedFiles = (directory: string) => {
   return getChangedFiles(directory, null, false)
 }
 
-export const stageFile = async (directory: string, file: string) => {
-  await runGit(directory, ['add', file])
-}
+export const stageFile = (directory: string, file: string) =>
+  runGit(directory, ['add', file])

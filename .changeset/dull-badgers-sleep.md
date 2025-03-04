@@ -1,5 +1,5 @@
 ---
-"pretty-quick": patch
+"pretty-quick": minor
 ---
 
-Replace `execa` with `tinyexec`
+feat: replace `execa` with `tinyexec`
