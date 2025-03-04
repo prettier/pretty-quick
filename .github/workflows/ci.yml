@@ -4,6 +4,10 @@ on:
   - push
   - pull_request
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   ci:
     name: Lint and Test with Node.js ${{ matrix.node }} on ${{ matrix.os }}
@@ -13,6 +17,8 @@ jobs:
           - 14
           - 16
           - 18
+          - 20
+          - 22
         os:
           - ubuntu-latest
     runs-on: ${{ matrix.os }}
@@ -34,7 +40,7 @@ jobs:
 
       - name: Lint
         run: yarn lint
-        if: matrix.node == 18
+        if: matrix.node != 14 && matrix.node != 16
         env:
           EFF_NO_LINK_RULES: true
           PARSER_NO_WATCH: true
