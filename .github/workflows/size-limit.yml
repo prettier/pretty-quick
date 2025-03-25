@@ -9,10 +9,10 @@ jobs:
   size-limit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Setup Node.js LTS
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4
         with:
           node-version: lts/*
           cache: yarn
@@ -20,7 +20,7 @@ jobs:
       - name: Install Dependencies
         run: yarn --immutable
 
-      - uses: andresz1/size-limit-action@v1
+      - uses: andresz1/size-limit-action@e7493a72a44b113341c0cf6186ab49c17c4b65c1 # v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           skip_step: install
