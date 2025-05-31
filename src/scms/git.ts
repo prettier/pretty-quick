@@ -1,46 +1,13 @@
-import fs from 'fs'
 import path from 'path'
 
-import findUp from 'find-up'
-import { Output, exec } from 'tinyexec'
+import * as find from 'empathic/find'
+import { exec, Output } from 'tinyexec'
 
 export const name = 'git'
 
 export const detect = (directory: string) => {
-  if (fs.existsSync(path.join(directory, '.git'))) {
-    return directory
-  }
-
-  const gitDirectory = findUp.sync('.git', {
-    cwd: directory,
-    type: 'directory',
-  })
-
-  const gitWorkTreeFile = findUp.sync('.git', {
-    cwd: directory,
-    type: 'file',
-  })
-
-  // if both of these are null then return null
-  if (!gitDirectory && !gitWorkTreeFile) {
-    return null
-  }
-
-  // if only one of these exists then return it
-  if (gitDirectory && !gitWorkTreeFile) {
-    return path.dirname(gitDirectory)
-  }
-
-  if (gitWorkTreeFile && !gitDirectory) {
-    return path.dirname(gitWorkTreeFile)
-  }
-
-  const gitRepoDirectory = path.dirname(gitDirectory!)
-  const gitWorkTreeDirectory = path.dirname(gitWorkTreeFile!)
-  // return the deeper of these two
-  return gitRepoDirectory.length > gitWorkTreeDirectory.length
-    ? gitRepoDirectory
-    : gitWorkTreeDirectory
+  const found = find.up('.git', { cwd: directory })
+  return found ? path.dirname(found) : null
 }
 
 const runGit = (directory: string, args: string[]) =>

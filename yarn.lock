@@ -6625,6 +6625,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"empathic@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "empathic@npm:1.1.0"
+  checksum: 1e41763802f14e5fa2522063f8f93e161c64916698f39e493a3e274356e39aa6f60d60f33063c92f9d5c5426fd33d9cb33baed2885a194648254181ce5495a9c
+  languageName: node
+  linkType: hard
+
 "encoding@npm:^0.1.13":
   version: 0.1.13
   resolution: "encoding@npm:0.1.13"
@@ -12934,8 +12941,8 @@ __metadata:
     "@types/picomatch": ^3.0.2
     "@unts/patch-package": ^8.1.1
     clean-pkg-json: ^1.2.0
+    empathic: ^1.1.0
     eslint: ^8.57.1
-    find-up: ^5.0.0
     ignore: ^7.0.3
     jest: ^29.7.0
     lint-staged: ^15.4.3

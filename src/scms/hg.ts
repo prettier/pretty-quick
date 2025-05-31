@@ -1,18 +1,13 @@
 import path from 'path'
 
-import findUp from 'find-up'
-import { Output, exec } from 'tinyexec'
+import * as find from 'empathic/find'
+import { exec, Output } from 'tinyexec'
 
 export const name = 'hg'
 
 export const detect = (directory: string) => {
-  const hgDirectory = findUp.sync('.hg', {
-    cwd: directory,
-    type: 'directory',
-  })
-  if (hgDirectory) {
-    return path.dirname(hgDirectory)
-  }
+  const found = find.up('.hg', { cwd: directory })
+  if (found) return path.dirname(found)
 }
 
 const runHg = (directory: string, args: string[]) =>
