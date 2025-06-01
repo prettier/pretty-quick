@@ -5,8 +5,11 @@ github:
   - rx-ts
   - un-ts
 patreon: 1stG
-open_collective: unts
+open_collective: pretty-quick
 custom:
+  - https://opencollective.com/prettier-eslint
   - https://opencollective.com/1stG
   - https://opencollective.com/rxts
-  - https://afdian.net/@JounQin
+  - https://opencollective.com/unrs
+  - https://opencollective.com/unts
+  - https://afdian.com/a/JounQin

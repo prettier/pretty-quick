@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/filename-case */
+/* eslint-disable unicorn-x/filename-case */
 
 import fs from 'fs'
 import path from 'path'
@@ -7,7 +7,7 @@ import { format, check as prettierCheck, resolveConfig } from 'prettier'
 
 import type { PrettyQuickOptions } from './types.js'
 
-export default async (
+export default async function processFiles(
   directory: string,
   files: string[],
   {
@@ -17,7 +17,7 @@ export default async (
     onCheckFile,
     onWriteFile,
   }: Partial<PrettyQuickOptions> = {},
-) => {
+) {
   for (const relative of files) {
     onExamineFile?.(relative)
     const file = path.join(directory, relative)

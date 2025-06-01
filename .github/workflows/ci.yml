@@ -35,8 +35,12 @@ jobs:
       - name: Install Dependencies
         run: yarn --immutable
 
-      - name: Build and Test
-        run: yarn run-s build test
+      - name: Build
+        if: matrix.node != 14
+        run: yarn build
+
+      - name: Build Test
+        run: yarn test
 
       - name: Lint
         run: yarn lint

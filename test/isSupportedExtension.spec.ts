@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/filename-case */
+/* eslint-disable unicorn-x/filename-case */
 
 import mock from 'mock-fs'
 import { getFileInfo } from 'prettier'
@@ -30,7 +30,6 @@ test('return true when file with supported extension passed in', async () => {
 })
 
 test('return false when file with not supported extension passed in', async () => {
-  // eslint-disable-next-line sonarjs/no-duplicate-string
   expect(await isSupportedExtension(true)('banana.txt')).toEqual(false)
   expect(getFileInfo).toHaveBeenCalledWith('banana.txt', {
     file: 'banana.txt',
