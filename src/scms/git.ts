@@ -1,7 +1,7 @@
 import path from 'path'
 
 import * as find from 'empathic/find'
-import { exec, Output } from 'tinyexec'
+import { type Output, exec } from 'tinyexec'
 
 export const name = 'git'
 
