@@ -1,3 +1,4 @@
+import fs from 'fs'
 import path from 'path'
 
 import * as find from 'empathic/find'
@@ -7,7 +8,9 @@ export const name = 'hg'
 
 export const detect = (directory: string) => {
   const found = find.up('.hg', { cwd: directory })
-  if (found) return path.dirname(found)
+  if (found && fs.statSync(found).isDirectory()) {
+    return path.dirname(found)
+  }
 }
 
 const runHg = (directory: string, args: string[]) =>
