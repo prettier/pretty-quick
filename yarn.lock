@@ -11492,7 +11492,7 @@ __metadata:
     simple-git-hooks: ^2.13.0
     size-limit: ^11.2.0
     size-limit-preset-node-lib: ^0.4.0
-    tinyexec: ^1.0.1
+    tinyexec: ^0.3.2
     ts-jest: ^29.3.4
     ts-node: ^10.9.2
     tsdown: ^0.12.5
@@ -13727,6 +13727,13 @@ __metadata:
   version: 2.3.8
   resolution: "through@npm:2.3.8"
   checksum: a38c3e059853c494af95d50c072b83f8b676a9ba2818dcc5b108ef252230735c54e0185437618596c790bbba8fcdaef5b290405981ffa09dce67b1f1bf190cbd
+  languageName: node
+  linkType: hard
+
+"tinyexec@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "tinyexec@npm:0.3.2"
+  checksum: bd491923020610bdeadb0d8cf5d70e7cbad5a3201620fd01048c9bf3b31ffaa75c33254e1540e13b993ce4e8187852b0b5a93057bb598e7a57afa2ca2048a35c
   languageName: node
   linkType: hard
 
