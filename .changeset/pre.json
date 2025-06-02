@@ -1,0 +1,8 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "pretty-quick": "4.2.0"
+  },
+  "changesets": []
+}
