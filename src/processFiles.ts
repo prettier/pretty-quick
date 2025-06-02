@@ -1,6 +1,6 @@
 /* eslint-disable unicorn-x/filename-case */
 
-import fs from 'fs'
+import fs from 'fs/promises'
 import path from 'path'
 
 import { format, check as prettierCheck, resolveConfig } from 'prettier'
@@ -18,29 +18,31 @@ export default async function processFiles(
     onWriteFile,
   }: Partial<PrettyQuickOptions> = {},
 ) {
-  for (const relative of files) {
-    onExamineFile?.(relative)
-    const file = path.join(directory, relative)
-    const options = {
-      ...(await resolveConfig(file, {
-        config,
-        editorconfig: true,
-      })),
-      filepath: file,
-    }
-    const input = fs.readFileSync(file, 'utf8')
+  return Promise.all(
+    files.map(async relative => {
+      onExamineFile?.(relative)
+      const file = path.join(directory, relative)
+      const options = {
+        ...(await resolveConfig(file, {
+          config,
+          editorconfig: true,
+        })),
+        filepath: file,
+      }
+      const input = await fs.readFile(file, 'utf8')
 
-    if (check) {
-      const isFormatted = await prettierCheck(input, options)
-      onCheckFile?.(relative, isFormatted)
-      continue
-    }
+      if (check) {
+        const isFormatted = await prettierCheck(input, options)
+        onCheckFile?.(relative, isFormatted)
+        return
+      }
 
-    const output = await format(input, options)
+      const output = await format(input, options)
 
-    if (output !== input) {
-      fs.writeFileSync(file, output)
-      await onWriteFile?.(relative)
-    }
-  }
+      if (output !== input) {
+        await fs.writeFile(file, output)
+        await onWriteFile?.(relative)
+      }
+    }),
+  )
 }

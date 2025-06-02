@@ -25,6 +25,7 @@ export = async function prettyQuick(
     onExamineFile,
     onCheckFile,
     onWriteFile,
+    onStageFiles,
     resolveConfig = true,
   }: Partial<PrettyQuickOptions> = {},
 ) {
@@ -39,11 +40,11 @@ export = async function prettyQuick(
 
   onFoundSinceRevision?.(scm.name, revision)
 
-  const rootIgnorer = createIgnorer(directory, ignorePath)
+  const rootIgnorer = await createIgnorer(directory, ignorePath)
   const cwdIgnorer =
     currentDirectory === directory
       ? () => true
-      : createIgnorer(currentDirectory, ignorePath)
+      : await createIgnorer(currentDirectory, ignorePath)
 
   const patternMatcher = createMatcher(pattern)
 
@@ -79,6 +80,7 @@ export = async function prettyQuick(
 
   const failReasons = new Set<string>()
 
+  const filesToStage: string[] = []
   await processFiles(directory, changedFiles, {
     check,
     config,
@@ -89,7 +91,7 @@ export = async function prettyQuick(
       }
       if (staged && restage) {
         if (wasFullyStaged(file)) {
-          await scm.stageFile(directory, file)
+          filesToStage.push(file)
         } else {
           onPartiallyStagedFile?.(file)
           failReasons.add('PARTIALLY_STAGED_FILE')
@@ -104,6 +106,15 @@ export = async function prettyQuick(
     },
     onExamineFile: verbose ? onExamineFile : undefined,
   })
+
+  if (filesToStage.length > 0) {
+    try {
+      await onStageFiles?.(filesToStage)
+      await scm.stageFiles(directory, filesToStage)
+    } catch {
+      failReasons.add('STAGE_FAILED')
+    }
+  }
 
   return {
     success: failReasons.size === 0,

@@ -10,7 +10,6 @@ export default function createMatcher(pattern: string[] | string | undefined) {
     return () => true
   }
   const patterns = Array.isArray(pattern) ? pattern : [pattern]
-
   const isMatch = picomatch(patterns, { dot: true })
   return (file: string) => isMatch(path.normalize(file))
 }

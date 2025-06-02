@@ -50,6 +50,10 @@ const main = async () => {
     onExamineFile: file => {
       console.log(`🔍  Examining ${picocolors.bold(file)}.`)
     },
+
+    onStageFiles(files) {
+      console.log(`🏗️  Staging changed ${files.length} files.`)
+    },
   })
 
   if (prettyQuickResult.success) {
@@ -71,10 +75,14 @@ const main = async () => {
         '✗ Code style issues found in the above file(s). Forgot to run Prettier?',
       )
     }
+    if (prettyQuickResult.errors.includes('STAGE_FAILED')) {
+      console.log(
+        '✗ Failed to stage some or all of the above file(s). Please stage changes made by Prettier before committing.',
+      )
+    }
     // eslint-disable-next-line n/no-process-exit
     process.exit(1) // ensure git hooks abort
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-main()
+void main()

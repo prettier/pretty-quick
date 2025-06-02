@@ -32,7 +32,6 @@ export const getSinceRevision = async (
     branch || 'default',
   ])
   const revision = revisionOutput.stdout.trim()
-
   const hgOutput = await runHg(directory, ['id', '-i', '-r', revision])
   return hgOutput.stdout.trim()
 }
@@ -56,5 +55,21 @@ export const getChangedFiles = async (
 
 export const getUnstagedChangedFiles = () => []
 
-export const stageFile = (directory: string, file: string) =>
-  runHg(directory, ['add', file])
+export const stageFiles = async (directory: string, files: string[]) => {
+  const maxArguments = 100
+  const result = files.reduce<string[][]>((resultArray, file, index) => {
+    const chunkIndex = Math.floor(index / maxArguments)
+
+    if (!resultArray[chunkIndex]) {
+      resultArray[chunkIndex] = [] // start a new chunk
+    }
+
+    resultArray[chunkIndex].push(file)
+
+    return resultArray
+  }, [])
+
+  for (const batchedFiles of result) {
+    await runHg(directory, ['add', ...batchedFiles])
+  }
+}
