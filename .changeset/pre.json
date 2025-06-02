@@ -5,6 +5,7 @@
     "pretty-quick": "4.2.0"
   },
   "changesets": [
+    "good-cougars-obey",
     "great-panthers-shout"
   ]
 }
