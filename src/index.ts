@@ -6,7 +6,7 @@ import scms from './scms/index.js'
 import { PrettyQuickOptions } from './types.js'
 import { filterAsync } from './utils.js'
 
-export = async (
+export = async function prettyQuick(
   currentDirectory: string,
   {
     config,
@@ -27,8 +27,7 @@ export = async (
     onWriteFile,
     resolveConfig = true,
   }: Partial<PrettyQuickOptions> = {},
-  // eslint-disable-next-line sonarjs/cognitive-complexity
-) => {
+) {
   const scm = scms(currentDirectory)
   if (!scm) {
     throw new Error('Unable to detect a source control manager.')

@@ -1,11 +1,14 @@
-/* eslint-disable unicorn/filename-case */
+/* eslint-disable unicorn-x/filename-case */
 
 import fs from 'fs'
 import path from 'path'
 
 import ignore from 'ignore'
 
-export default (directory: string, filename = '.prettierignore') => {
+export default function createIgnorer(
+  directory: string,
+  filename = '.prettierignore',
+) {
   const file = path.join(directory, filename)
 
   if (fs.existsSync(file)) {

@@ -1,17 +1,15 @@
+import fs from 'fs'
 import path from 'path'
 
-import findUp from 'find-up'
+import { findUp } from '@pkgr/core'
 import { Output, exec } from 'tinyexec'
 
 export const name = 'hg'
 
 export const detect = (directory: string) => {
-  const hgDirectory = findUp.sync('.hg', {
-    cwd: directory,
-    type: 'directory',
-  })
-  if (hgDirectory) {
-    return path.dirname(hgDirectory)
+  const found = findUp(path.resolve(directory), '.hg', true)
+  if (found && fs.statSync(found).isDirectory()) {
+    return path.dirname(found)
   }
 }
 

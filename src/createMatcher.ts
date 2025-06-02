@@ -1,10 +1,10 @@
-/* eslint-disable unicorn/filename-case */
+/* eslint-disable unicorn-x/filename-case */
 
 import path from 'path'
 
 import picomatch from 'picomatch'
 
-export default (pattern: string[] | string | undefined) => {
+export default function createMatcher(pattern: string[] | string | undefined) {
   // Match everything if no pattern was given
   if (typeof pattern !== 'string' && !Array.isArray(pattern)) {
     return () => true

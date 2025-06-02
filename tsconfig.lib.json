@@ -1,4 +1,8 @@
 {
   // used by all files but do not includes paths
-  "extends": "@1stg/tsconfig/node16"
+  "extends": "@1stg/tsconfig/node",
+  "compilerOptions": {
+    // https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping#node-14
+    "target": "ES2020"
+  }
 }

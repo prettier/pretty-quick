@@ -212,7 +212,6 @@ describe('with hg', () => {
     mockHgFs({
       '/.prettierignore': '*.md',
     })
-    // eslint-disable-next-line sonarjs/no-duplicate-string
     await prettyQuick('/sub-directory/', { since: 'banana', onWriteFile })
     expect(onWriteFile.mock.calls).toEqual([['./foo.js']])
   })

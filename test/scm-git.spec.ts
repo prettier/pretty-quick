@@ -57,7 +57,6 @@ describe('with git', () => {
 
     expect(tinyexec.exec).toHaveBeenCalledWith(
       'git',
-      // eslint-disable-next-line sonarjs/no-duplicate-string
       ['merge-base', 'HEAD', 'master'],
       { nodeOptions: { cwd: '/' } },
     )
@@ -306,7 +305,6 @@ describe('with git', () => {
     mockGitFs('', {
       '/.prettierignore': '*.md',
     })
-    // eslint-disable-next-line sonarjs/no-duplicate-string
     await prettyQuick('/sub-directory/', { since: 'banana', onWriteFile })
     expect(onWriteFile.mock.calls).toEqual([['./foo.js']])
   })
