@@ -1,5 +1,11 @@
 # pretty-quick
 
+## 4.2.2
+
+### Patch Changes
+
+- [#214](https://github.com/prettier/pretty-quick/pull/214) [`25ff3be`](https://github.com/prettier/pretty-quick/commit/25ff3be1231c8130a520ecad86b934e9c5448923) Thanks [@JounQin](https://github.com/JounQin)! - fix: v4 should use latest npm tag
+
 ## 4.2.1
 
 ### Patch Changes
