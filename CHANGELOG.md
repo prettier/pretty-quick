@@ -1,5 +1,11 @@
 # pretty-quick
 
+## 5.0.0-next.1
+
+### Patch Changes
+
+- [#216](https://github.com/prettier/pretty-quick/pull/216) [`71ca04e`](https://github.com/prettier/pretty-quick/commit/71ca04ed36aa9da06c333d308f91b64521b761f5) Thanks [@JounQin](https://github.com/JounQin)! - fix: tinyexec v1 is esm only, use 0.x instead temporarily
+
 ## 5.0.0-next.0
 
 ### Major Changes
