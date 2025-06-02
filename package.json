@@ -62,7 +62,7 @@
     "lint:es": "eslint . --cache",
     "lint:tsc": "tsc --noEmit",
     "prepare": "patch-package && simple-git-hooks",
-    "release": "yarn build && clean-pkg-json && changeset publish --tag release-v4",
+    "release": "yarn build && clean-pkg-json && changeset publish",
     "test": "jest"
   },
   "peerDependencies": {
