@@ -4,5 +4,7 @@
   "initialVersions": {
     "pretty-quick": "4.2.0"
   },
-  "changesets": []
+  "changesets": [
+    "great-panthers-shout"
+  ]
 }

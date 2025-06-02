@@ -1,5 +1,11 @@
 # pretty-quick
 
+## 5.0.0-next.0
+
+### Major Changes
+
+- [#208](https://github.com/prettier/pretty-quick/pull/208) [`3ae6b72`](https://github.com/prettier/pretty-quick/commit/3ae6b721e68e599f20bfb4afefaacceaf4071310) Thanks [@JounQin](https://github.com/JounQin)! - feat!: use async and batch stage commands
+
 ## 4.2.0
 
 ### Minor Changes

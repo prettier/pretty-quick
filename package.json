@@ -1,6 +1,6 @@
 {
   "name": "pretty-quick",
-  "version": "4.2.0",
+  "version": "5.0.0-next.0",
   "type": "commonjs",
   "description": "Get Pretty Quick",
   "repository": "prettier/pretty-quick",
