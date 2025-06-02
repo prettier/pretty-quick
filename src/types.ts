@@ -16,4 +16,5 @@ export interface PrettyQuickOptions {
   onExamineFile(relative: string): void
   onCheckFile(relative: string, isFormatted: boolean): void
   onWriteFile(relative: string): Promise<void> | void
+  onStageFiles(files: string[]): Promise<void> | void
 }
