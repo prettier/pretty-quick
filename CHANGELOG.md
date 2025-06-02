@@ -1,5 +1,11 @@
 # pretty-quick
 
+## 4.2.0
+
+### Minor Changes
+
+- [#206](https://github.com/prettier/pretty-quick/pull/206) [`f52440e`](https://github.com/prettier/pretty-quick/commit/f52440e233d9a258d48d73d68493c5d2ed8028d3) Thanks [@JounQin](https://github.com/JounQin)! - chore(deps): cleanup dependencies by migrating `find-up` to `findUp` from [`@pkgr/core`](https://github.com/un-ts/pkgr/tree/master/packages/core)
+
 ## 4.1.1
 
 ### Patch Changes
