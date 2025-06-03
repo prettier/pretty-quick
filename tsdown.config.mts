@@ -1,4 +1,4 @@
-import { defineConfig, UserConfig } from 'tsdown/config'
+import { defineConfig, type UserConfig } from 'tsdown/config'
 
 const sharedConfig: UserConfig = {
   outDir: 'lib',

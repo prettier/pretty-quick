@@ -17,8 +17,6 @@ jobs:
     strategy:
       matrix:
         node:
-          - 14
-          - 16
           - 18
           - 20
           - 22
@@ -41,7 +39,6 @@ jobs:
         run: yarn --immutable
 
       - name: Build
-        if: matrix.node != 14
         run: yarn build
 
       - name: Test
@@ -49,7 +46,6 @@ jobs:
 
       - name: Lint
         run: yarn lint
-        if: matrix.node != 14 && matrix.node != 16
         env:
           EFF_NO_LINK_RULES: true
           PARSER_NO_WATCH: true
