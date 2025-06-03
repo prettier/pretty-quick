@@ -3277,7 +3277,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pkgr/core@npm:^0.2.4, @pkgr/core@npm:^0.2.7":
+"@pkgr/core@npm:^0.2.4":
   version: 0.2.7
   resolution: "@pkgr/core@npm:0.2.7"
   checksum: b16959878940f3d3016b79a4b2c23fd518aaec6b47295baa3154fbcf6574fee644c51023bb69069fa3ea9cdcaca40432818f54695f11acc0ae326cf56676e4d1
@@ -3288,6 +3288,13 @@ __metadata:
   version: 0.3.1
   resolution: "@pkgr/core@npm:0.3.1"
   checksum: 4f26af23a620b5f5c47fc8cabebade7ee9f8428a8c653946edf6c4a926e64cac314893a513ad23d924749ecb20306720409559012bca8424db5eefc33c074556
+  languageName: node
+  linkType: hard
+
+"@pkgr/core@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "@pkgr/core@npm:0.3.3"
+  checksum: 5ca29d6fc007cd60959090201a0f2f926f06ff89ffbc36264a0a97cdb802951fc6d87bec3d63adbc4e932f14a3049a939e110684eabfd64b90391c9d4790690d
   languageName: node
   linkType: hard
 
@@ -11045,7 +11052,7 @@ __metadata:
     "@changesets/changelog-github": ^0.5.1
     "@changesets/cli": ^2.29.4
     "@commitlint/cli": ^19.8.1
-    "@pkgr/core": ^0.2.7
+    "@pkgr/core": ^0.3.3
     "@total-typescript/ts-reset": ^0.6.1
     "@types/jest": ^29.5.14
     "@types/mock-fs": ^4.13.4
@@ -11066,11 +11073,10 @@ __metadata:
     simple-git-hooks: ^2.13.0
     size-limit: ^11.2.0
     size-limit-preset-node-lib: ^0.4.0
-    tinyexec: ^0.3.2
+    tinyexec: ^1.0.1
     ts-jest: ^29.3.4
     ts-node: ^10.9.2
     tsdown: ^0.12.5
-    tslib: ^2.8.1
     typescript: ^5.8.3
   peerDependencies:
     prettier: ^3.0.0
@@ -13258,13 +13264,6 @@ __metadata:
   version: 2.3.8
   resolution: "through@npm:2.3.8"
   checksum: a38c3e059853c494af95d50c072b83f8b676a9ba2818dcc5b108ef252230735c54e0185437618596c790bbba8fcdaef5b290405981ffa09dce67b1f1bf190cbd
-  languageName: node
-  linkType: hard
-
-"tinyexec@npm:^0.3.2":
-  version: 0.3.2
-  resolution: "tinyexec@npm:0.3.2"
-  checksum: bd491923020610bdeadb0d8cf5d70e7cbad5a3201620fd01048c9bf3b31ffaa75c33254e1540e13b993ce4e8187852b0b5a93057bb598e7a57afa2ca2048a35c
   languageName: node
   linkType: hard
 

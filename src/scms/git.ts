@@ -6,7 +6,11 @@ import { Output, exec } from 'tinyexec'
 export const name = 'git'
 
 export const detect = (directory: string) => {
-  const found = findUp(path.resolve(directory), '.git', true)
+  const found = findUp({
+    entry: path.resolve(directory),
+    search: '.git',
+    type: ['file', 'directory'],
+  })
   return found ? path.dirname(found) : null
 }
 

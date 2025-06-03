@@ -2,7 +2,7 @@ import mock from 'mock-fs'
 
 import prettyQuick from 'pretty-quick'
 
-jest.mock('execa')
+jest.mock('tinyexec')
 
 afterEach(() => mock.restore())
 
