@@ -1,5 +1,11 @@
 # pretty-quick
 
+## 5.0.0-next.2
+
+### Major Changes
+
+- [#218](https://github.com/prettier/pretty-quick/pull/218) [`62df46d`](https://github.com/prettier/pretty-quick/commit/62df46d184502820a07e7afa43c1b8b7cbab5057) Thanks [@JounQin](https://github.com/JounQin)! - refactor!: bump `@pkgr/core` and `tinyexec`, drop `tslib`
+
 ## 5.0.0-next.1
 
 ### Patch Changes
