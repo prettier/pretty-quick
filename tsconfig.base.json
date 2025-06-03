@@ -1,5 +1,5 @@
 {
-  // used by @pkgr/rollup and ESLint
+  // used by ESLint
   "extends": "./tsconfig.lib",
   "compilerOptions": {
     "paths": {

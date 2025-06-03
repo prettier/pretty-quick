@@ -2,13 +2,5 @@
   "extends": "./tsconfig.base",
   "compilerOptions": {
     "noEmit": true
-  },
-  "ts-node": {
-    "transpileOnly": true
-  },
-  "references": [
-    {
-      "path": "./src"
-    }
-  ]
+  }
 }
