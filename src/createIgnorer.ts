@@ -6,10 +6,7 @@ import path from 'path'
 import { tryFile } from '@pkgr/core'
 import ignore from 'ignore'
 
-export default async function createIgnorer(
-  directory: string,
-  filename = '.prettierignore',
-) {
+export default async function createIgnorer(directory: string, filename = '.prettierignore') {
   const file = path.join(directory, filename)
 
   if (tryFile(file)) {

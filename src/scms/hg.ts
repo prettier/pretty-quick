@@ -23,15 +23,8 @@ const runHg = (directory: string, args: string[]) =>
 
 const getLines = (tinyexecOutput: Output) => tinyexecOutput.stdout.split('\n')
 
-export const getSinceRevision = async (
-  directory: string,
-  { branch }: { branch?: string },
-) => {
-  const revisionOutput = await runHg(directory, [
-    'debugancestor',
-    'tip',
-    branch || 'default',
-  ])
+export const getSinceRevision = async (directory: string, { branch }: { branch?: string }) => {
+  const revisionOutput = await runHg(directory, ['debugancestor', 'tip', branch || 'default'])
   const revision = revisionOutput.stdout.trim()
   const hgOutput = await runHg(directory, ['id', '-i', '-r', revision])
   return hgOutput.stdout.trim()

@@ -52,13 +52,9 @@ describe('with hg', () => {
       '/.hg': {},
     })
     await prettyQuick('root')
-    expect(tinyexec.exec).toHaveBeenCalledWith(
-      'hg',
-      ['debugancestor', 'tip', 'default'],
-      {
-        nodeOptions: { cwd: '/' },
-      },
-    )
+    expect(tinyexec.exec).toHaveBeenCalledWith('hg', ['debugancestor', 'tip', 'default'], {
+      nodeOptions: { cwd: '/' },
+    })
   })
 
   test('calls `hg debugancestor` with root hg directory', async () => {
@@ -67,13 +63,9 @@ describe('with hg', () => {
       '/other-dir': {},
     })
     await prettyQuick('/other-dir')
-    expect(tinyexec.exec).toHaveBeenCalledWith(
-      'hg',
-      ['debugancestor', 'tip', 'default'],
-      {
-        nodeOptions: { cwd: '/' },
-      },
-    )
+    expect(tinyexec.exec).toHaveBeenCalledWith('hg', ['debugancestor', 'tip', 'default'], {
+      nodeOptions: { cwd: '/' },
+    })
   })
 
   test('calls `hg status` with revision', async () => {
