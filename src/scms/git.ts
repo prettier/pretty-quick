@@ -30,26 +30,15 @@ export const getSinceRevision = async (
   try {
     let revision = 'HEAD'
     if (!staged) {
-      const revisionOutput = await runGit(directory, [
-        'merge-base',
-        'HEAD',
-        branch || 'master',
-      ])
+      const revisionOutput = await runGit(directory, ['merge-base', 'HEAD', branch || 'master'])
       revision = revisionOutput.stdout.trim()
     }
 
-    const revParseOutput = await runGit(directory, [
-      'rev-parse',
-      '--short',
-      revision,
-    ])
+    const revParseOutput = await runGit(directory, ['rev-parse', '--short', revision])
     return revParseOutput.stdout.trim()
   } catch (err) {
     const error = err as Error
-    if (
-      /HEAD/.test(error.message) ||
-      (staged && /Needed a single revision/.test(error.message))
-    ) {
+    if (/HEAD/.test(error.message) || (staged && /Needed a single revision/.test(error.message))) {
       return null
     }
     throw error
@@ -76,13 +65,7 @@ export const getChangedFiles = async (
     ),
     ...(staged
       ? []
-      : getLines(
-          await runGit(directory, [
-            'ls-files',
-            '--others',
-            '--exclude-standard',
-          ]),
-        )),
+      : getLines(await runGit(directory, ['ls-files', '--others', '--exclude-standard']))),
   ].filter(Boolean)
 
 export const getUnstagedChangedFiles = (directory: string) =>

@@ -32,9 +32,7 @@ const main = async () => {
     },
 
     onPartiallyStagedFile: file => {
-      console.log(
-        `✗ Found ${picocolors.bold('partially')} staged file ${file}.`,
-      )
+      console.log(`✗ Found ${picocolors.bold('partially')} staged file ${file}.`)
     },
 
     onWriteFile: file => {
@@ -66,14 +64,10 @@ const main = async () => {
       )
     }
     if (prettyQuickResult.errors.includes('BAIL_ON_WRITE')) {
-      console.log(
-        '✗ File had to be prettified and prettyQuick was set to bail mode.',
-      )
+      console.log('✗ File had to be prettified and prettyQuick was set to bail mode.')
     }
     if (prettyQuickResult.errors.includes('CHECK_FAILED')) {
-      console.log(
-        '✗ Code style issues found in the above file(s). Forgot to run Prettier?',
-      )
+      console.log('✗ Code style issues found in the above file(s). Forgot to run Prettier?')
     }
     if (prettyQuickResult.errors.includes('STAGE_FAILED')) {
       console.log(

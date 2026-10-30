@@ -6,10 +6,7 @@ import * as tinyexec from 'tinyexec'
 
 import prettyQuick from 'pretty-quick'
 
-const mockGitFs = (
-  additionalUnstaged = '',
-  additionalFiles?: FileSystem.DirectoryItems,
-) => {
+const mockGitFs = (additionalUnstaged = '', additionalFiles?: FileSystem.DirectoryItems) => {
   mock({
     '/.git': {},
     '/raz.js': 'raz()',
@@ -55,11 +52,9 @@ describe('with git', () => {
 
     await prettyQuick('root')
 
-    expect(tinyexec.exec).toHaveBeenCalledWith(
-      'git',
-      ['merge-base', 'HEAD', 'master'],
-      { nodeOptions: { cwd: '/' } },
-    )
+    expect(tinyexec.exec).toHaveBeenCalledWith('git', ['merge-base', 'HEAD', 'master'], {
+      nodeOptions: { cwd: '/' },
+    })
   })
 
   test('calls `git merge-base` with root git directory', async () => {
@@ -70,13 +65,9 @@ describe('with git', () => {
 
     await prettyQuick('/other-dir')
 
-    expect(tinyexec.exec).toHaveBeenCalledWith(
-      'git',
-      ['merge-base', 'HEAD', 'master'],
-      {
-        nodeOptions: { cwd: '/' },
-      },
-    )
+    expect(tinyexec.exec).toHaveBeenCalledWith('git', ['merge-base', 'HEAD', 'master'], {
+      nodeOptions: { cwd: '/' },
+    })
   })
 
   test('with --staged does NOT call `git merge-base`', async () => {
@@ -86,11 +77,7 @@ describe('with git', () => {
 
     await prettyQuick('root')
 
-    expect(tinyexec.exec).not.toHaveBeenCalledWith('git', [
-      'merge-base',
-      'HEAD',
-      'master',
-    ])
+    expect(tinyexec.exec).not.toHaveBeenCalledWith('git', ['merge-base', 'HEAD', 'master'])
   })
 
   test('with --staged calls diff without revision', async () => {

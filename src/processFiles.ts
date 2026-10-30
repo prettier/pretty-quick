@@ -10,13 +10,7 @@ import type { PrettyQuickOptions } from './types.js'
 export default async function processFiles(
   directory: string,
   files: string[],
-  {
-    check,
-    config,
-    onExamineFile,
-    onCheckFile,
-    onWriteFile,
-  }: Partial<PrettyQuickOptions> = {},
+  { check, config, onExamineFile, onCheckFile, onWriteFile }: Partial<PrettyQuickOptions> = {},
 ) {
   return Promise.all(
     files.map(async relative => {

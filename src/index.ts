@@ -35,41 +35,28 @@ export = async function prettyQuick(
   }
   const directory = scm.rootDirectory
 
-  const revision =
-    since || (await scm.getSinceRevision(directory, { staged, branch }))
+  const revision = since || (await scm.getSinceRevision(directory, { staged, branch }))
 
   onFoundSinceRevision?.(scm.name, revision)
 
   const rootIgnorer = await createIgnorer(directory, ignorePath)
   const cwdIgnorer =
-    currentDirectory === directory
-      ? () => true
-      : await createIgnorer(currentDirectory, ignorePath)
+    currentDirectory === directory ? () => true : await createIgnorer(currentDirectory, ignorePath)
 
   const patternMatcher = createMatcher(pattern)
 
   const isFileSupportedExtension = isSupportedExtension(resolveConfig)
 
-  const unfilteredChangedFiles = await scm.getChangedFiles(
-    directory,
-    revision,
-    staged,
-  )
+  const unfilteredChangedFiles = await scm.getChangedFiles(directory, revision, staged)
   const changedFiles = await filterAsync(
-    unfilteredChangedFiles
-      .filter(patternMatcher)
-      .filter(rootIgnorer)
-      .filter(cwdIgnorer),
+    unfilteredChangedFiles.filter(patternMatcher).filter(rootIgnorer).filter(cwdIgnorer),
     isFileSupportedExtension,
   )
 
   const unfilteredStagedFiles = await scm.getUnstagedChangedFiles(directory)
   const unstagedFiles = staged
     ? await filterAsync(
-        unfilteredStagedFiles
-          .filter(patternMatcher)
-          .filter(rootIgnorer)
-          .filter(cwdIgnorer),
+        unfilteredStagedFiles.filter(patternMatcher).filter(rootIgnorer).filter(cwdIgnorer),
         isFileSupportedExtension,
       )
     : []
