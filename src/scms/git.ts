@@ -14,8 +14,9 @@ export const detect = (directory: string) => {
   return found ? path.dirname(found) : null
 }
 
-const runGit = (directory: string, args: string[]) =>
+const runGit = (directory: string, args: string[], throwOnError?: boolean) =>
   exec('git', args, {
+    ...(throwOnError ? { throwOnError } : {}),
     nodeOptions: {
       cwd: directory,
     },
@@ -106,6 +107,10 @@ export const stageFiles = async (directory: string, files: string[]) => {
   }, [])
 
   for (const batchedFiles of result) {
-    await runGit(directory, ['add', ...batchedFiles])
+    await runGit(
+      directory,
+      ['--literal-pathspecs', 'add', '--', ...batchedFiles],
+      true,
+    )
   }
 }
