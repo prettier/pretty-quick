@@ -21,7 +21,8 @@ const runGit = (directory: string, args: string[]) =>
     },
   })
 
-const getLines = (tinyexecOutput: Output) => tinyexecOutput.stdout.split('\n')
+const getFilenames = (tinyexecOutput: Output) =>
+  tinyexecOutput.stdout.split('\0')
 
 export const getSinceRevision = async (
   directory: string,
@@ -62,7 +63,7 @@ export const getChangedFiles = async (
   staged?: boolean | undefined,
 ) =>
   [
-    ...getLines(
+    ...getFilenames(
       await runGit(
         directory,
         [
@@ -70,17 +71,19 @@ export const getChangedFiles = async (
           '--name-only',
           staged ? '--cached' : null,
           '--diff-filter=ACMRTUB',
+          '-z',
           revision,
         ].filter(Boolean),
       ),
     ),
     ...(staged
       ? []
-      : getLines(
+      : getFilenames(
           await runGit(directory, [
             'ls-files',
             '--others',
             '--exclude-standard',
+            '-z',
           ]),
         )),
   ].filter(Boolean)

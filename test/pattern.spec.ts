@@ -35,7 +35,7 @@ describe('match pattern', () => {
                   '/src/libs/hello/bar.js',
                   '/src/tools/hello/baz.js',
                   '/src/should-not-be-included/hello/zoo.js',
-                ].join('\n'),
+                ].join('\0'),
               }
         }
         default: {
