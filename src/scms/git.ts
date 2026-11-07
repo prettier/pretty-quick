@@ -14,14 +14,16 @@ export const detect = (directory: string) => {
   return found ? path.dirname(found) : null
 }
 
-const runGit = (directory: string, args: string[]) =>
+const runGit = (directory: string, args: string[], throwOnError?: boolean) =>
   exec('git', args, {
+    ...(throwOnError ? { throwOnError } : {}),
     nodeOptions: {
       cwd: directory,
     },
   })
 
-const getLines = (tinyexecOutput: Output) => tinyexecOutput.stdout.split('\n')
+const getFilenames = (tinyexecOutput: Output) =>
+  tinyexecOutput.stdout.split('\0')
 
 export const getSinceRevision = async (
   directory: string,
@@ -62,7 +64,7 @@ export const getChangedFiles = async (
   staged?: boolean | undefined,
 ) =>
   [
-    ...getLines(
+    ...getFilenames(
       await runGit(
         directory,
         [
@@ -70,17 +72,19 @@ export const getChangedFiles = async (
           '--name-only',
           staged ? '--cached' : null,
           '--diff-filter=ACMRTUB',
+          '-z',
           revision,
         ].filter(Boolean),
       ),
     ),
     ...(staged
       ? []
-      : getLines(
+      : getFilenames(
           await runGit(directory, [
             'ls-files',
             '--others',
             '--exclude-standard',
+            '-z',
           ]),
         )),
   ].filter(Boolean)
@@ -103,6 +107,10 @@ export const stageFiles = async (directory: string, files: string[]) => {
   }, [])
 
   for (const batchedFiles of result) {
-    await runGit(directory, ['add', ...batchedFiles])
+    await runGit(
+      directory,
+      ['--literal-pathspecs', 'add', '--', ...batchedFiles],
+      true,
+    )
   }
 }

@@ -29,10 +29,10 @@ const mockGitFs = (
       }
       case 'diff': {
         return args[2] === '--cached'
-          ? { stdout: './raz.js\n' }
-          : { stdout: './foo.js\n' + './bar.md\n' + additionalUnstaged }
+          ? { stdout: './raz.js\0' }
+          : { stdout: './foo.js\0' + './bar.md\0' + additionalUnstaged }
       }
-      case 'add': {
+      case '--literal-pathspecs': {
         return { stdout: '' }
       }
       default: {
@@ -102,7 +102,7 @@ describe('with git', () => {
 
     expect(tinyexec.exec).toHaveBeenCalledWith(
       'git',
-      ['diff', '--name-only', '--diff-filter=ACMRTUB'],
+      ['diff', '--name-only', '--diff-filter=ACMRTUB', '-z'],
       { nodeOptions: { cwd: '/' } },
     )
   })
@@ -116,7 +116,7 @@ describe('with git', () => {
 
     expect(tinyexec.exec).toHaveBeenCalledWith(
       'git',
-      ['diff', '--name-only', '--diff-filter=ACMRTUB', 'banana'],
+      ['diff', '--name-only', '--diff-filter=ACMRTUB', '-z', 'banana'],
       { nodeOptions: { cwd: '/' } },
     )
   })
@@ -130,7 +130,7 @@ describe('with git', () => {
 
     expect(tinyexec.exec).toHaveBeenCalledWith(
       'git',
-      ['ls-files', '--others', '--exclude-standard'],
+      ['ls-files', '--others', '--exclude-standard', '-z'],
       { nodeOptions: { cwd: '/' } },
     )
   })
@@ -155,6 +155,44 @@ describe('with git', () => {
     mockGitFs()
     await prettyQuick('root', { since: 'banana', onFoundChangedFiles })
     expect(onFoundChangedFiles).toHaveBeenCalledWith(['./foo.js', './bar.md'])
+  })
+
+  describe.each(['unstaged', 'staged', 'untracked'])('%s files', mode => {
+    test.each(['中文.js', 'quote"name.js', 'tab\tname.js', 'line\nname.js'])(
+      'formats %j without altering its name',
+      async file => {
+        const onWriteFile = jest.fn()
+        mock({ '/.git': {}, ['/' + file]: 'example()' })
+        const execSpy = jest.spyOn(tinyexec, 'exec') as jest.Mock
+        execSpy.mockImplementation((_command: string, args: string[]) => {
+          const diffMode = args.includes('--cached') ? 'staged' : 'unstaged'
+          const containsFile =
+            args[0] === 'ls-files'
+              ? mode === 'untracked'
+              : args[0] === 'diff' && mode === diffMode
+          return { stdout: containsFile ? file + '\0' : '' }
+        })
+
+        await prettyQuick('root', {
+          since: 'banana',
+          staged: mode === 'staged',
+          onWriteFile,
+        })
+
+        expect(onWriteFile).toHaveBeenCalledWith(file)
+        expect(fs.readFileSync('/' + file, 'utf8')).toBe('formatted:example()')
+        if (mode === 'staged') {
+          expect(tinyexec.exec).toHaveBeenCalledWith(
+            'git',
+            ['--literal-pathspecs', 'add', '--', file],
+            {
+              throwOnError: true,
+              nodeOptions: { cwd: '/' },
+            },
+          )
+        }
+      },
+    )
   })
 
   test('calls onWriteFile with changed files', async () => {
@@ -229,42 +267,77 @@ describe('with git', () => {
   test('with --staged stages fully-staged files', async () => {
     mockGitFs()
     await prettyQuick('root', { since: 'banana', staged: true })
-    expect(tinyexec.exec).toHaveBeenCalledWith('git', ['add', './raz.js'], {
-      nodeOptions: { cwd: '/' },
-    })
-    expect(tinyexec.exec).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
-      nodeOptions: { cwd: '/' },
-    })
-    expect(tinyexec.exec).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
-      nodeOptions: { cwd: '/' },
-    })
+    expect(tinyexec.exec).toHaveBeenCalledWith(
+      'git',
+      ['--literal-pathspecs', 'add', '--', './raz.js'],
+      {
+        throwOnError: true,
+        nodeOptions: { cwd: '/' },
+      },
+    )
+    expect(tinyexec.exec).not.toHaveBeenCalledWith(
+      'git',
+      ['--literal-pathspecs', 'add', '--', './foo.js'],
+      {
+        throwOnError: true,
+        nodeOptions: { cwd: '/' },
+      },
+    )
+    expect(tinyexec.exec).not.toHaveBeenCalledWith(
+      'git',
+      ['--literal-pathspecs', 'add', '--', './bar.md'],
+      {
+        throwOnError: true,
+        nodeOptions: { cwd: '/' },
+      },
+    )
   })
 
   test('with --staged AND --no-restage does not re-stage any files', async () => {
     mockGitFs()
     await prettyQuick('root', { since: 'banana', staged: true, restage: false })
-    expect(tinyexec.exec).not.toHaveBeenCalledWith('git', ['add', './raz.js'], {
-      cwd: '/',
-    })
-    expect(tinyexec.exec).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
-      cwd: '/',
-    })
-    expect(tinyexec.exec).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
-      cwd: '/',
-    })
+    expect(tinyexec.exec).not.toHaveBeenCalledWith(
+      'git',
+      ['--literal-pathspecs', 'add', '--', './raz.js'],
+      {
+        throwOnError: true,
+        nodeOptions: { cwd: '/' },
+      },
+    )
+    expect(tinyexec.exec).not.toHaveBeenCalledWith(
+      'git',
+      ['--literal-pathspecs', 'add', '--', './foo.js'],
+      {
+        throwOnError: true,
+        nodeOptions: { cwd: '/' },
+      },
+    )
+    expect(tinyexec.exec).not.toHaveBeenCalledWith(
+      'git',
+      ['--literal-pathspecs', 'add', '--', './bar.md'],
+      {
+        throwOnError: true,
+        nodeOptions: { cwd: '/' },
+      },
+    )
   })
 
   test('with --staged does not stage previously partially staged files AND aborts commit', async () => {
-    const additionalUnstaged = './raz.js\n' // raz.js is partly staged and partly not staged
+    const additionalUnstaged = './raz.js\0' // raz.js is partly staged and partly not staged
     mockGitFs(additionalUnstaged)
     await prettyQuick('root', { since: 'banana', staged: true })
-    expect(tinyexec.exec).not.toHaveBeenCalledWith('git', ['add', './raz.js'], {
-      cwd: '/',
-    })
+    expect(tinyexec.exec).not.toHaveBeenCalledWith(
+      'git',
+      ['--literal-pathspecs', 'add', '--', './raz.js'],
+      {
+        throwOnError: true,
+        nodeOptions: { cwd: '/' },
+      },
+    )
   })
 
   test('with --staged returns false', async () => {
-    const additionalUnstaged = './raz.js\n' // raz.js is partly staged and partly not staged
+    const additionalUnstaged = './raz.js\0' // raz.js is partly staged and partly not staged
     mockGitFs(additionalUnstaged)
     const result = await prettyQuick('root', { since: 'banana', staged: true })
     expect(result).toEqual({
@@ -276,12 +349,22 @@ describe('with git', () => {
   test('without --staged does NOT stage changed files', async () => {
     mockGitFs()
     await prettyQuick('root', { since: 'banana' })
-    expect(tinyexec.exec).not.toHaveBeenCalledWith('git', ['add', './foo.js'], {
-      cwd: '/',
-    })
-    expect(tinyexec.exec).not.toHaveBeenCalledWith('git', ['add', './bar.md'], {
-      cwd: '/',
-    })
+    expect(tinyexec.exec).not.toHaveBeenCalledWith(
+      'git',
+      ['--literal-pathspecs', 'add', '--', './foo.js'],
+      {
+        throwOnError: true,
+        nodeOptions: { cwd: '/' },
+      },
+    )
+    expect(tinyexec.exec).not.toHaveBeenCalledWith(
+      'git',
+      ['--literal-pathspecs', 'add', '--', './bar.md'],
+      {
+        throwOnError: true,
+        nodeOptions: { cwd: '/' },
+      },
+    )
   })
 
   test('with --verbose calls onExamineFile', async () => {
